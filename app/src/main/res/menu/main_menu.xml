@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_view_transactions"
+            android:title="View Transactions" />
+        <item
+            android:id="@+id/nav_set_limit"
+            android:title="Set Limit" />
+        <item
+            android:id="@+id/nav_friends"
+            android:title="Friends" />
+        <item
+            android:id="@+id/nav_currency"
+            android:title="Currency" />
+    </group>
+</menu>
