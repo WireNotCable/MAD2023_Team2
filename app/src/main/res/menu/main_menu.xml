@@ -17,5 +17,11 @@
         <item
             android:id="@+id/nav_currency"
             android:title="Currency" />
+        <item
+            android:id="@+id/nav_card"
+            android:title="Card" />
+        <item
+            android:id="@+id/nav_transfer"
+            android:title="Transfer" />
     </group>
 </menu>
