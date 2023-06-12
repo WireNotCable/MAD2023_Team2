@@ -7,7 +7,7 @@
     tools:context=".AboutUs">
 
     <ImageView
-        android:id="@+id/homeAboutUs"
+        android:id="@+id/AboutUs_Home"
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_marginStart="4dp"
