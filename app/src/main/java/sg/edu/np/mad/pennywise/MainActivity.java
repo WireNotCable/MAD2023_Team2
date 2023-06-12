@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AddTransaction.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_card){
+            Intent intent = new Intent(MainActivity.this, ViewCard.class);
+            startActivity(intent);
+        }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
