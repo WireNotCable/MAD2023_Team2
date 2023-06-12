@@ -14,6 +14,7 @@
             android:title="Set Limit" />
         <item
             android:id="@+id/nav_friends"
+            android:icon="@drawable/icon_friends"
             android:title="Friends" />
         <item
             android:id="@+id/nav_currency"
