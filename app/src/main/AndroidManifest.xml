@@ -16,6 +16,9 @@
             android:name=".ViewCard"
             android:exported="false" />
         <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
             android:name=".AddTransaction"
             android:exported="false" />
         <activity
