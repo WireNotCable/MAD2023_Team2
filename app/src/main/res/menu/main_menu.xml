@@ -10,6 +10,9 @@
             android:id="@+id/nav_profile"
             android:title="Profile" />
         <item
+            android:id="@+id/nav_add_transactions"
+            android:title="Add Transactions" />
+        <item
             android:id="@+id/nav_view_transactions"
             android:title="View Transactions" />
         <item

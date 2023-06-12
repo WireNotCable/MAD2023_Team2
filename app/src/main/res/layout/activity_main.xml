@@ -29,5 +29,7 @@
         app:navigationIcon="@drawable/menu"
         ></androidx.appcompat.widget.Toolbar>
 
+    <include layout="@layout/dashboard" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
