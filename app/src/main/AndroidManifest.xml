@@ -16,7 +16,13 @@
             android:name=".addNewCard"
             android:exported="false" />
         <activity
+            android:name=".AboutUs"
+            android:exported="false" />
+        <activity
             android:name=".ViewCard"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
             android:exported="false" />
         <activity
             android:name=".AddTransaction"
