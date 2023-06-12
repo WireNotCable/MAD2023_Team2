@@ -4,6 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:icon="@drawable/home_icon"
             android:title="Home" />
         <item
             android:id="@+id/nav_view_transactions"
@@ -19,6 +20,7 @@
             android:title="Currency" />
         <item
             android:id="@+id/nav_card"
+            android:icon="@drawable/card_icon"
             android:title="Card" />
         <item
             android:id="@+id/nav_transfer"
