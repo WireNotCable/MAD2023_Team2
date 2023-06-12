@@ -14,7 +14,7 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        ImageView homeBtn = findViewById(R.id.homeProfile);
+        ImageView homeBtn = findViewById(R.id.Profile_Home);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
