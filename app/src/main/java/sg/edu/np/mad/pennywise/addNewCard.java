@@ -43,8 +43,18 @@ public class addNewCard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(NameCard.length()==0){
-                    Toast.makeText(getApplicationContext(),"Validation Failed.",Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(getApplicationContext(),"Enter A Name.",Toast.LENGTH_SHORT).show();
+                }
+                else if(bankCardNumber.length()!=16){
+                    Toast.makeText(getApplicationContext(),"Bank Card Number must be 16 digits.",Toast.LENGTH_SHORT).show();
+                }
+                else if(CSVNumber.length()==3){
+                    Toast.makeText(getApplicationContext(),"CSV Number must be 3 digits.",Toast.LENGTH_SHORT).show();
+                }
+                else if(expiryDate.length()!=4){
+                    Toast.makeText(getApplicationContext(),"Expiry date must be 4 digits.",Toast.LENGTH_SHORT).show();
+                }
+                else{
                     Toast.makeText(getApplicationContext(),"Form Validate Successfully!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(addNewCard.this, ViewCard.class);
                     startActivity(intent);
