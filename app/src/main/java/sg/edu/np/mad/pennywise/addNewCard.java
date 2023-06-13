@@ -48,11 +48,14 @@ public class addNewCard extends AppCompatActivity {
                 else if(bankCardNumber.length()!=16){
                     Toast.makeText(getApplicationContext(),"Bank Card Number must be 16 digits.",Toast.LENGTH_SHORT).show();
                 }
-                else if(CSVNumber.length()==3){
+                else if(CSVNumber.length()!=3){
                     Toast.makeText(getApplicationContext(),"CSV Number must be 3 digits.",Toast.LENGTH_SHORT).show();
                 }
                 else if(expiryDate.length()!=4){
                     Toast.makeText(getApplicationContext(),"Expiry date must be 4 digits.",Toast.LENGTH_SHORT).show();
+                }
+                else if(inputAddress.length()==0){
+                    Toast.makeText(getApplicationContext(),"Enter a Billing Address.",Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Form Validate Successfully!", Toast.LENGTH_SHORT).show();
