@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
+
+        else if (item.getItemId() == R.id.nav_currency){
+            Intent intent = new Intent(MainActivity.this, Currency.class);
+
         else if (item.getItemId() == R.id.nav_login){
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (item.getItemId() == R.id.nav_set_limit){
             Intent intent = new Intent(MainActivity.this, SetLimit.class);
+
             startActivity(intent);
         }
 

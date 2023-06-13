@@ -24,6 +24,7 @@
             android:title="Friends" />
         <item
             android:id="@+id/nav_currency"
+            android:icon="@drawable/currency_icon"
             android:title="Currency" />
         <item
             android:id="@+id/nav_card"

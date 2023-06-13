@@ -4,8 +4,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="viewCard1">View Card</string>
     <string name="createBtn">Add New Card</string>
-    <string name ="limit_startdate">##,##,####</string>
-    <string name ="limit_enddate">##,##,####</string>
-    <string name ="limit_spendlimit">Spend Limit</string>
-    <string name ="limit_spend">Spend</string>
+    <string name="currency1">Currency</string>
+    <string name="limit_startdate">##,##,####</string>
+    <string name="limit_enddate">##,##,####</string>
+    <string name="limit_spendlimit">Spend Limit</string>
+    <string name="limit_spend">Spend</string>
 </resources>
