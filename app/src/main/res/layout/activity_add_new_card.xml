@@ -4,188 +4,170 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@android:color/white"
     tools:context=".addNewCard">
 
-    <ImageView
-        android:id="@+id/makecardBtn"
-        android:layout_width="38dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/home_icon" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="ScrollView"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="60dp">
 
-    <TextView
-        android:id="@+id/addCardTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="127dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="182dp"
-        android:layout_marginBottom="46dp"
-        android:text="@string/addCard"
-        app:layout_constraintBottom_toTopOf="@+id/bankCardNum"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/makecardBtn"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/bankCardNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="49dp"
-        android:ems="10"
-        android:hint="Bank Card Number"
-        android:inputType="numberPassword"
-        android:maxLength="16"
-        app:layout_constraintBottom_toTopOf="@+id/CSVNum"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cardNumTitle"
-        app:layout_constraintTop_toBottomOf="@+id/addCardTitle" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="341dp"
+            app:cardElevation="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/cardNumTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/cardNumber"
-        app:layout_constraintBottom_toTopOf="@+id/expiryDateTitle"
-        app:layout_constraintEnd_toStartOf="@+id/bankCardNum"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/border"
+                android:orientation="vertical"
+                android:padding="20dp">
+                <ImageView
+                    android:id="@+id/makecardBtn"
+                    android:layout_width="38dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/home_icon" />
 
-    <EditText
-        android:id="@+id/CSVNum"
-        android:layout_width="70dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginBottom="32dp"
-        android:ems="10"
-        android:maxLength="3"
-        android:inputType="numberPassword"
-        app:layout_constraintBottom_toTopOf="@+id/inputNameCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/CSVTitle"
-        app:layout_constraintTop_toBottomOf="@+id/bankCardNum" />
+                <TextView
+                    android:id="@+id/addCardTitle"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="138dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginEnd="177dp"
+                    android:text="@string/addCard"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/makecardBtn"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/add1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="148dp"
-        android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputAddr" />
+                <TextView
+                    android:id="@+id/cardNumTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/cardNumber"
+                    android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/CSVTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="32dp"
-        android:text="@string/CSV"
-        app:layout_constraintBottom_toTopOf="@+id/inputNameCard"
-        app:layout_constraintEnd_toStartOf="@+id/CSVNum"
-        app:layout_constraintStart_toEndOf="@+id/expiryDate1"
-        app:layout_constraintTop_toBottomOf="@+id/bankCardNum" />
+                <EditText
+                    android:id="@+id/bankCardNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:hint="Bank Card Number"
+                    android:inputType="numberPassword"
+                    android:maxLength="16"
+                    android:padding="16dp" />
 
-    <EditText
-        android:id="@+id/expiryDate1"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="9dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="32dp"
-        android:ems="10"
-        android:inputType="numberPassword"
-        app:layout_constraintBottom_toTopOf="@+id/inputNameCard"
-        app:layout_constraintEnd_toStartOf="@+id/CSVTitle"
-        app:layout_constraintStart_toEndOf="@+id/expiryDateTitle"
-        app:layout_constraintTop_toBottomOf="@+id/bankCardNum" />
+                <TextView
+                    android:id="@+id/CSVTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/CSV"
+                    android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/expiryDateTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:text="@string/expiryDate"
-        app:layout_constraintBottom_toTopOf="@+id/NameCardTitle"
-        app:layout_constraintEnd_toStartOf="@+id/expiryDate1"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardNumTitle" />
+                <EditText
+                    android:id="@+id/CSVNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:inputType="numberPassword"
+                    android:maxLength="3"
+                    android:padding="16dp" />
 
-    <EditText
-        android:id="@+id/inputNameCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="49dp"
-        android:layout_marginBottom="30dp"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/inputAddr"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/NameCardTitle"
-        app:layout_constraintTop_toBottomOf="@+id/CSVNum" />
+                <TextView
+                    android:id="@+id/expiryDateTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/expiryDate"
+                    android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/NameCardTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="39dp"
-        android:layout_marginEnd="19dp"
-        android:text="@string/cardName"
-        app:layout_constraintBottom_toTopOf="@+id/billingAddrTitle"
-        app:layout_constraintEnd_toStartOf="@+id/inputNameCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expiryDate1" />
+                <EditText
+                    android:id="@+id/expiryDate1"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="9dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="21dp"
+                    android:layout_marginBottom="32dp"
+                    android:ems="10"
+                    android:inputType="numberPassword" />
 
-    <EditText
-        android:id="@+id/inputAddr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="150dp"
-        android:ems="10"
-        android:inputType="textPostalAddress"
-        app:layout_constraintBottom_toTopOf="@+id/add1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/billingAddrTitle"
-        app:layout_constraintTop_toBottomOf="@+id/inputNameCard" />
+                <TextView
+                    android:id="@+id/NameCardTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/cardName"
+                    android:textSize="20dp" />
 
-    <TextView
-        android:id="@+id/billingAddrTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="77dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="260dp"
-        android:text="@string/billingAddr"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/inputAddr"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameCardTitle" />
+                <EditText
+                    android:id="@+id/inputNameCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/border"
+                    android:ems="10"
+                    android:gravity="start|center_vertical"
+                    android:inputType="text"
+                    android:padding="16dp" />
+
+                <TextView
+                    android:id="@+id/billingAddrTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/billingAddr"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/inputAddr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="46dp"
+                    android:layout_marginBottom="150dp"
+                    android:ems="10"
+                    android:inputType="textPostalAddress" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/add1"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/submit"
+                        android:textSize="18sp"
+                        app:cornerRadius="20dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
