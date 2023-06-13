@@ -18,6 +18,9 @@
             android:name=".EditProfile"
             android:exported="false" />
         <activity
+            android:name=".EditSetLimit"
+            android:exported="false" />
+        <activity
             android:name=".Currency"
             android:exported="false" />
         <activity
