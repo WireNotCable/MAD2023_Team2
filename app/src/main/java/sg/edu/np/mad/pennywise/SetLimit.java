@@ -2,8 +2,12 @@ package sg.edu.np.mad.pennywise;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -28,9 +32,13 @@ public class SetLimit extends AppCompatActivity {
         EditLimit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
                 startActivity(intent);
             }
         });
     }
+
+
+
 }
