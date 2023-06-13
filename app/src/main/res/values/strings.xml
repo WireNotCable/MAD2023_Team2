@@ -16,4 +16,9 @@
     <string name="limit_enddate">##,##,####</string>
     <string name="limit_spendlimit">Spend Limit</string>
     <string name="limit_spend">Spend</string>
+    <string name="invalid_banknumber">Please Enter Valid Number</string>
+    <string name="invalid_CSV">Enter Valid Number</string>
+    <string name="invalid_expiryDate">Enter Valid Expiry Date</string>
+    <string name="invalid_Address">Enter valid Billing Address</string>
+    <string name="invalid_Name">Enter Valid Name</string>
 </resources>
