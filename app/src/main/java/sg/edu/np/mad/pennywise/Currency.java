@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-/*
+
 public class Currency extends AppCompatActivity {
 
     @Override
@@ -24,4 +24,3 @@ public class Currency extends AppCompatActivity {
     }
 }
 
- */
