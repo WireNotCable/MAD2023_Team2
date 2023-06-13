@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
 
-        else if (item.getItemId() == R.id.nav_currency){
+        else if (item.getItemId() == R.id.nav_currency) {
             Intent intent = new Intent(MainActivity.this, Currency.class);
-
+        }
         else if (item.getItemId() == R.id.nav_login){
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
