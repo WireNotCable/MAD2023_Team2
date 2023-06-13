@@ -20,6 +20,7 @@
             android:title="View Transactions" />
         <item
             android:id="@+id/nav_set_limit"
+            android:icon="@drawable/bell"
             android:title="Set Limit" />
         <item
             android:id="@+id/nav_friends"
