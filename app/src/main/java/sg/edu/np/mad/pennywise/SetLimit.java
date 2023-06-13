@@ -23,5 +23,14 @@ public class SetLimit extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        ImageView EditLimit = findViewById(R.id.setlimit_icon);
+        EditLimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
+                startActivity(intent);
+            }
+        });
     }
 }
