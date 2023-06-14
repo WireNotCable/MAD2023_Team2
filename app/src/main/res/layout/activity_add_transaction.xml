@@ -46,14 +46,30 @@
             android:background="@drawable/border"
             android:orientation="vertical"
             android:padding="20dp">
-
-            <TextView
-                android:id="@+id/selectDateText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
-                android:text="Select Date :"
-                android:textSize="20dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Select Date :"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/selectDateText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:textSize="20dp"
+                    android:layout_marginRight="10dp" />
+
+            </LinearLayout>
+
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,19 +126,26 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/incomeSelected"
+                <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:text="Income" />
+                    android:id="@+id/typeRadio"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/expenseSelected"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:text="Expense" />
+                    <RadioButton
+                        android:id="@+id/incomeSelected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:text="Income" />
+
+                    <RadioButton
+                        android:id="@+id/expenseSelected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:text="Expense" />
+                </RadioGroup>
             </LinearLayout>
 
             <Button
