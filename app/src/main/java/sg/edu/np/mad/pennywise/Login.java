@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -23,6 +24,12 @@ public class Login extends AppCompatActivity {
     private EditText loginEmail, loginPassword;
     private TextView signupRedirectText;
     private Button loginButton;
+
+    // Shared preferences
+    public String GLOBAL_PREFS = "myPrefs";
+    public String MY_EMAIL = "MyEmail";
+    public String MY_PASSWORD = "MyPassword";
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +41,8 @@ public class Login extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         signupRedirectText = findViewById(R.id.signupRedirectText);
 
+
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +53,13 @@ public class Login extends AppCompatActivity {
                         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
+                                // save email into shared preference
+                                sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(MY_EMAIL, email);
+                                editor.putString(MY_PASSWORD, password);
+                                editor.commit();
+                                //Redirect to login
                                 Toast.makeText(Login.this,"Login Successful",Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(Login.this,MainActivity.class));
                                 finish();

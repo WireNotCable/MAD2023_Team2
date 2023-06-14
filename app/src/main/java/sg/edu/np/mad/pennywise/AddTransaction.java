@@ -1,39 +1,84 @@
 package sg.edu.np.mad.pennywise;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-
-import org.w3c.dom.Text;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class AddTransaction extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
 
+    //Shared preference
+    public String GLOBAL_PREFS = "myPrefs";
+    public String MY_EMAIL = "MyEmail";
+    SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
+
+        // TESTING FIREBASE (TO BE DELETED)
+//        String title = "Expense Title 1";
+//        double amount = 10.99;
+//        String date = "2023-06-13";
+//        String type = "expense";
+//        Transaction transaction1 = new Transaction(title, date, amount, type);
+//        Transaction transaction2 = new Transaction("Expense Title 2", "2023-06-06", 9.99, "expense");
+
+//        List<Transaction> transactions = new ArrayList<>();
+//        transactions.add(transaction1);
+//        transactions.add(transaction2);
+
+
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        int count = 1;
+//        for (Transaction transaction : transactions) {
+//            Map<String, Object> transactionData = new HashMap<>();
+//            transactionData.put("title", transaction.getTransTitle());
+//            transactionData.put("date", transaction.getTransDate());
+//            transactionData.put("amount", transaction.getTransAmt());
+//            transactionData.put("type", transaction.getTransType());
+//            String transactionNum = "transaction" + count;
+//            db.collection("users").document(sharedEmail).collection("alltransaction").document(transactionNum).set(transactionData);
+//            count = count + 1;
+//        }
+
 
         // Home icon to go back to Main Page
         ImageView homeBtn = findViewById(R.id.homeBtn);
@@ -45,6 +90,7 @@ public class AddTransaction extends AppCompatActivity {
             }
         });
 
+        // Date Picker
         MaterialButton button = findViewById(R.id.datePicker);
         TextView textView = findViewById(R.id.selectDateText);
         button.setOnClickListener(new View.OnClickListener() {
@@ -58,66 +104,50 @@ public class AddTransaction extends AppCompatActivity {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
                         String date = new SimpleDateFormat("dd-MMM-yyy", Locale.getDefault()).format(new Date(selection));
-                        textView.setText(MessageFormat.format("Selected Date: {0}", date));
+                        textView.setText(date);
+
                     }
                 });
-                materialDatePicker.show(getSupportFragmentManager(),"tag");
+                materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
-    }
 
-//    private String getCurrentDate(){
-//        Calendar cal = Calendar.getInstance();
-//        int year = cal.get(Calendar.YEAR);
-//        int month = cal.get(Calendar.MONTH);
-//        month += 1;
-//        int day = cal.get(Calendar.DAY_OF_MONTH);
-//        return makeDateString(day, month, year);
-//    }
-
-
-
-    //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-
-
-
-    private String getMonthFormat(int month){
-        if(month == 1){
-            return "JAN";
-        }
-        if(month == 2){
-            return "FEB";
-        }
-        if(month == 3){
-            return "MAR";
-        }
-        if(month == 4){
-            return "APR";
-        }
-        if(month == 5){
-            return "MAY";
-        }
-        if(month == 6){
-            return "JUN";
-        }
-        if(month == 7){
-            return "JUL";
-        }
-        if(month == 8){
-            return "AUG";
-        }
-        if(month == 9){
-            return "SEP";
-        }
-        if(month == 10){
-            return "OCT";
-        }
-        if(month == 11){
-            return "NOV";
-        }
-        if(month == 12){
-            return "DEC";
-        }
-        return "JAN";
+        Button saveTrans = findViewById(R.id.saveTransBtn);
+        saveTrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get transaction data
+                TextView dateTextView = findViewById(R.id.selectDateText);
+                String date = dateTextView.getText().toString();
+                EditText titleEt = findViewById(R.id.addTransDesc);
+                String title = titleEt.getText().toString();
+                EditText amtEt = findViewById(R.id.addTransAmount);
+                String amountstr = amtEt.getText().toString();
+                double amount = Double.parseDouble(amountstr);
+                String type = "";
+                RadioGroup radioGroup = findViewById(R.id.typeRadio);
+                int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                if (selectedRadioButtonId == R.id.incomeSelected) {
+                    type = "income";
+                } else if (selectedRadioButtonId == R.id.expenseSelected) {
+                    type = "expense";
+                }
+                if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
+                    Transaction transaction = new Transaction(title, date, amount, type);
+                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> transactionData = new HashMap<>();
+                    transactionData.put("title", transaction.getTransTitle());
+                    transactionData.put("date", transaction.getTransDate());
+                    transactionData.put("amount", transaction.getTransAmt());
+                    transactionData.put("type", transaction.getTransType());
+                    String id = db.collection("users").document(sharedEmail).collection("alltransactions").document().getId();
+                    db.collection("users").document(sharedEmail).collection("alltransaction").document(id).set(transactionData);
+                    Intent intent = new Intent(AddTransaction.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
