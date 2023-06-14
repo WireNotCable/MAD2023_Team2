@@ -55,7 +55,6 @@ public class Login extends AppCompatActivity {
                         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-
                                 // save email into shared preference
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
