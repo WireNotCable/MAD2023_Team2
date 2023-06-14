@@ -56,12 +56,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Transactions"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textSize="25sp"
             android:gravity="end"
             android:text="See All" />
     </LinearLayout>

@@ -1,5 +1,6 @@
 package sg.edu.np.mad.pennywise;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,14 @@ public class DashboardAdaptor extends RecyclerView.Adapter<dashboardViewHolder> 
         holder.txt1.setText(list_transactions.getTransTitle());
         holder.txt2.setText(list_transactions.getTransDate());
         holder.txt3.setText("$"+String.valueOf(list_transactions.getTransAmt()));
+
+        if (list_transactions.getTransType().equals("income")){
+            holder.txt3.setTextColor(Color.parseColor("#06A94D"));
+        }
+        else{
+            holder.txt3.setTextColor(Color.parseColor("#FF0000"));
+            holder.txt3.setTextColor(Color.parseColor("#FF0000"));
+        }
     }
 
     public int getItemCount(){
