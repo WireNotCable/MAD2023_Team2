@@ -4,6 +4,12 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,12 +21,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EditProfile extends AppCompatActivity {
 
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
     public String MY_PASSWORD = "MyPassword";
     SharedPreferences sharedPreferences;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,7 @@ public class EditProfile extends AppCompatActivity {
         EditProfile_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                auth = FirebaseAuth.getInstance();
                 // Get the text from the EditText fields
                 String newEmail = editEmail.getText().toString();
                 String oldPassword = editOldPassword.getText().toString();
@@ -51,6 +63,16 @@ public class EditProfile extends AppCompatActivity {
                 if (!oldPassword.isEmpty()) {
                     if (oldPassword.equals(password)) {
                         if (!newPassword.isEmpty()) {
+                            FirebaseUser currentUser = auth.getCurrentUser();
+                            currentUser.updateEmail(newEmail);
+
+                            // Reauthenticate
+                            AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
+                            currentUser.reauthenticate(credential);
+
+                            currentUser.updatePassword(newPassword);
+
+                            //Update Shared Preferences
                             SharedPreferences.Editor editor = prefs.edit();
                             editor.putString(MY_EMAIL, newEmail);
                             editor.putString(MY_PASSWORD, newPassword);
