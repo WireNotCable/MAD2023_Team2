@@ -6,20 +6,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Profile extends AppCompatActivity {
+    public String GLOBAL_PREFS = "myPrefs";
 
+    public String MY_PASSWORD = "MyUserPassword";
+    public String MY_USERNAME = "MyUserName";
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
         ImageView homeBtn = findViewById(R.id.Profile_Home);
+
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,8 +60,19 @@ public class Profile extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.profilepic, null);
         builder.setView(dialogView);
 
+        // Retrieve the username from the shared prefs
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String username = prefs.getString("Username", "");
+        Log.v("Username",username);
+
+
+        // Pass the username to the dialogView
+        TextView profilepic_username= dialogView.findViewById(R.id.profilepic_email);
+        profilepic_username.setText(username);
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
 }
