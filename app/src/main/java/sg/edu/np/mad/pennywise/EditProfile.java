@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,11 @@ import android.widget.Toast;
 
 public class EditProfile extends AppCompatActivity {
 
+    public String GLOBAL_PREFS = "myPrefs";
+    public String MY_EMAIL = "MyEmail";
+    public String MY_PASSWORD = "MyPassword";
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,44 +30,46 @@ public class EditProfile extends AppCompatActivity {
         EditText editEmail = findViewById(R.id.editprofile_email);
         EditText editOldPassword = findViewById(R.id.editprofile_password);
         EditText editNewPassword = findViewById(R.id.editprofile_newpassword);
+
+        // Retrieve the email and password from the shared prefs
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String email = prefs.getString(MY_EMAIL, "");
+        String password = prefs.getString(MY_PASSWORD, "");
+
+        editEmail.setText(email);
+
         Button EditProfile_Button = findViewById(R.id.editprofile_button);
-
-
 
         EditProfile_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get the text from the EditText field
-                String email = editEmail.getText().toString();
-                String OldPassword = editOldPassword.getText().toString();
-                String NewPassword = editNewPassword.getText().toString();
-                if(!OldPassword.isEmpty())
-                {
-                    if(OldPassword.matches(OldPassword))
-                    {
-                        if(!NewPassword.isEmpty())
-                        {
-                            Toast.makeText(EditProfile.this,"Profile Sucessfully Updated",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(EditProfile.this,Profile.class));
+                // Get the text from the EditText fields
+                String newEmail = editEmail.getText().toString();
+                String oldPassword = editOldPassword.getText().toString();
+                String newPassword = editNewPassword.getText().toString();
+
+                if (!oldPassword.isEmpty()) {
+                    if (oldPassword.equals(password)) {
+                        if (!newPassword.isEmpty()) {
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString(MY_EMAIL, newEmail);
+                            editor.putString(MY_PASSWORD, newPassword);
+                            editor.apply(); // Apply the changes to SharedPreferences
+                            Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(EditProfile.this, Profile.class));
                             finish();
+                        } else {
+                            editNewPassword.setError("Please Enter New Password");
                         }
-                        else
-                        {
-                            editNewPassword.setError("PLease Enter New Password");
-                        }
-                    }
-                    else
-                    {
+                    } else {
                         editOldPassword.setError("Password does not match");
                     }
-                }
-                else
-                {
+                } else {
                     editOldPassword.setError("Please Enter Old Password");
                 }
-
             }
         });
+
         ImageView backButton = findViewById(R.id.editprofile_back);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,14 +77,7 @@ public class EditProfile extends AppCompatActivity {
                 Intent intent = new Intent(EditProfile.this, Profile.class);
                 startActivity(intent);
                 finish();
-                Log.v(TAG, "On Destroy");
-
             }
         });
-
-
-
-
     }
-
 }

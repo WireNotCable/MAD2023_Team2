@@ -26,10 +26,6 @@ public class Login extends AppCompatActivity {
     private TextView signupRedirectText;
     private Button loginButton;
 
-
-
-
-
     // Shared preferences
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";

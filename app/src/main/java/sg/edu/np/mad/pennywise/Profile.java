@@ -62,7 +62,7 @@ public class Profile extends AppCompatActivity {
 
         // Retrieve the username from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString("MY_EMAIL", "");
+        String username = prefs.getString(MY_EMAIL, "");
         Log.v("Usernmae",username);
 
 
