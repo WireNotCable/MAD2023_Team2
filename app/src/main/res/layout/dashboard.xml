@@ -71,7 +71,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dashboardRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="401dp"
+        android:layout_height="410dp"
         android:layout_marginHorizontal="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -81,11 +81,15 @@
         android:id="@+id/addTransBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="188dp"
-        android:layout_marginTop="672dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="7dp"
         android:contentDescription="Add Transaction"
         android:src="@drawable/add"
+        app:layout_anchor="@id/dashboardRecyclerView"
+        app:layout_anchorGravity="top|end"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.935" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
