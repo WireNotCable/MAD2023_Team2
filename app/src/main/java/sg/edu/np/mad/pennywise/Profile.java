@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Profile extends AppCompatActivity {
+    // Shared preferences
     public String GLOBAL_PREFS = "myPrefs";
-
-    public String MY_PASSWORD = "MyUserPassword";
-    public String MY_USERNAME = "MyUserName";
+    public String MY_EMAIL = "MyEmail";
+    public String MY_PASSWORD = "MyPassword";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,8 @@ public class Profile extends AppCompatActivity {
 
         // Retrieve the username from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString("Username", "");
-        Log.v("Username",username);
+        String username = prefs.getString("MY_EMAIL", "");
+        Log.v("Usernmae",username);
 
 
         // Pass the username to the dialogView
