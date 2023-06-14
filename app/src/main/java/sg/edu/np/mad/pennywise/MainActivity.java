@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
         getBalance();
         getDashboardItems();
-        addNewTrans();
     }
 
     public void getDashboardItems(){
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Log.v("email",sharedEmail);
         CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
@@ -118,22 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     totalBalance -= amount;
                 }
             }
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            String roundedBalance = decimalFormat.format(totalBalance);
             TextView balanceTxt = findViewById(R.id.balanceText);
-            Log.v("balance", roundedBalance);
-            balanceTxt.setText("$" + roundedBalance);
-        });
-    }
-
-    public void addNewTrans(){
-        FloatingActionButton fab = findViewById(R.id.addTransBtn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
-                startActivity(intent);
-            }
+            balanceTxt.setText("$"+totalBalance);
         });
     }
 
@@ -165,10 +149,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_currency) {
-            Intent intent = new Intent(MainActivity.this, Currency.class);
-            startActivity(intent);
-        }
+//        else if (item.getItemId() == R.id.nav_currency) {
+//            Intent intent = new Intent(MainActivity.this, Currency.class);
+//            startActivity(intent);
+//        }
         else if (item.getItemId() == R.id.nav_login){
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
