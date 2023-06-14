@@ -18,4 +18,5 @@ public class dashboardViewHolder extends RecyclerView.ViewHolder{
         txt2 = itemView.findViewById(R.id.dashDate);
         txt3 = itemView.findViewById(R.id.dashAmt);
     }
+
 }
