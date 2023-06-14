@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
@@ -57,10 +60,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
-
         getBalance();
+        getDashboardItems();
     }
 
+    public void getDashboardItems(){
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        transactionRef.get().addOnCompleteListener(task -> {
+            QuerySnapshot querySnapshot = task.getResult();
+            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+            ArrayList<Transaction> transactionList = new ArrayList<>();
+            for (DocumentSnapshot document : documents){
+                Map<String, Object> data = document.getData();
+
+                //Extract data
+                String title = (String) data.get("title");
+                String date = (String) data.get("date");
+                double amount = (double) data.get("amount");
+                String type = (String) data.get("type");
+                Transaction transaction = new Transaction(title, date, amount, type);
+                transactionList.add(transaction);
+            }
+            RecyclerView recyclerView = findViewById(R.id.dashboardRecyclerView);
+            DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);
+            LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(myLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(dashboardAdaptor);
+        });
+    }
 
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
@@ -70,19 +101,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-//            List<Transaction> transactionList = new ArrayList<>();
             double totalBalance = 0;
             for (DocumentSnapshot document : documents){
                 Map<String, Object> data = document.getData();
-
-                // Extract the relevant fields from the document data
-//                String title = (String) data.get("title");
-//                String date = (String) data.get("date");
                 double amount = (double) data.get("amount");
                 String type = (String) data.get("type");
-//                Transaction transaction = new Transaction(title, date, amount, type);
-//                transactionList.add(transaction);
-                Log.v("type", type);
                 if (type.equals("income")){
                     totalBalance += amount;
                 }
@@ -105,8 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
-    // NAVBAR
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions){
@@ -125,10 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_currency) {
-            Intent intent = new Intent(MainActivity.this, Currency.class);
-            startActivity(intent);
-        }
+//        else if (item.getItemId() == R.id.nav_currency) {
+//            Intent intent = new Intent(MainActivity.this, Currency.class);
+//            startActivity(intent);
+//        }
         else if (item.getItemId() == R.id.nav_login){
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
