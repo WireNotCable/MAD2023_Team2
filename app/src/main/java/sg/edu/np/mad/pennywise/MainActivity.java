@@ -295,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
 
-       else if (item.getItemId() == R.id.nav_currency) {
 
         else if (item.getItemId() == R.id.nav_currency) {
 
