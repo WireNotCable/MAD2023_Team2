@@ -28,11 +28,20 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,12 +81,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        TextView monthText = findViewById(R.id.sbtextView);
+        String currentMonth = getCurrentMonthMMM();
+        monthText.setText("Your Balance : "+"("+currentMonth+")");
+
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
         getBalance();
         getDashboardItems();
+        addNewTrans();
     }
 
+    //Get dashboard items for recycler view
     public void getDashboardItems(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -95,9 +110,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String date = (String) data.get("date");
                 double amount = (double) data.get("amount");
                 String type = (String) data.get("type");
+                String currentMonth = getCurrentMonthMMM();
+                String extractMonth = extractMonthFromDate(date);
+                String currentYear = getCurrentYear();
+                String extractYear = extractYearFromDate(date);
                 Transaction transaction = new Transaction(title, date, amount, type);
-                transactionList.add(transaction);
+                if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
+                    transactionList.add(transaction);
+                    Log.v("extract",extractMonth);
+                }
             }
+            // Sort transactionList based on date
+            Collections.sort(transactionList, new Comparator<Transaction>() {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+
+                @Override
+                public int compare(Transaction t1, Transaction t2) {
+                    try {
+                        Date date1 = dateFormat.parse(t1.getTransDate());
+                        Date date2 = dateFormat.parse(t2.getTransDate());
+                        return date2.compareTo(date1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return 0;
+                }
+            });
             RecyclerView recyclerView = findViewById(R.id.dashboardRecyclerView);
             DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);
             LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
@@ -107,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    // Get balance for the card
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -114,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.v("email",sharedEmail);
         CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
@@ -125,27 +165,85 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 double amount = (double) data.get("amount");
                 String type = (String) data.get("type");
                 String date = (String) data.get("date");
-
+                String currentMonth = getCurrentMonthMMM();
+                String extractMonth = extractMonthFromDate(date);
+                String currentYear = getCurrentYear();
+                String extractYear = extractYearFromDate(date);
+                if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
+                    if (type.equals("income")){
+                        totalBalance += amount;
+                    }
+                    else{
+                        totalBalance -= amount;
+                    }
+                }
                 if (type.equals("income")){
                     totalBalance += amount;
 
                 }
                 else{
                     totalBalance -= amount;
-                     if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
-                     {
+                    if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
+                    {
 
                         TotalSpend+=amount;
                     }
 
                 }
             }
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            String roundedBalance = decimalFormat.format(totalBalance);
             SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
             editor.apply(); // Apply the changes to SharedPreferences
             TextView balanceTxt = findViewById(R.id.balanceText);
-            balanceTxt.setText("$"+totalBalance);
+            balanceTxt.setText("$" + roundedBalance);
+        });
+    }
+
+    private String getCurrentMonthMMM() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM", Locale.getDefault());
+        return sdf.format(calendar.getTime());
+    }
+    private String getCurrentYear() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.getDefault());
+        return sdf.format(calendar.getTime());
+    }
+    private String extractMonthFromDate(String dateString) {
+        DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        DateFormat outputDateFormat = new SimpleDateFormat("MMM", Locale.getDefault());
+        try {
+            Date date = inputDateFormat.parse(dateString);
+            return outputDateFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    private String extractYearFromDate(String dateString) {
+        DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        DateFormat outputDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
+        try {
+            Date date = inputDateFormat.parse(dateString);
+            return outputDateFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Redirect to AddTransaction Page
+    public void addNewTrans(){
+        FloatingActionButton fab = findViewById(R.id.addTransBtn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+                startActivity(intent);
+            }
         });
     }
 
@@ -159,10 +257,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+    // NAVBAR
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions){
             Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_view_transactions){
+            Intent intent = new Intent(MainActivity.this, ViewAllTransactions.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_card){
@@ -177,10 +281,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
-//        else if (item.getItemId() == R.id.nav_currency) {
-//            Intent intent = new Intent(MainActivity.this, Currency.class);
-//            startActivity(intent);
-//        }
+        else if (item.getItemId() == R.id.nav_currency) {
+            Intent intent = new Intent(MainActivity.this, Currency.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_login){
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
