@@ -29,8 +29,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
+
+    public String MY_EXPENSE= "myExpense";
+
+    public String MY_STARTDATE = "myStartDate";
+
+    public String MY_ENDDATE = "myEndDate";
     SharedPreferences sharedPreferences;
 
     @Override
@@ -99,23 +110,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String TotalExpense = sharedPreferences.getString(MY_EXPENSE, "");
+        String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
+        String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
             double totalBalance = 0;
+            double TotalSpend = 0;
             for (DocumentSnapshot document : documents){
                 Map<String, Object> data = document.getData();
                 double amount = (double) data.get("amount");
                 String type = (String) data.get("type");
+                String date = (String) data.get("date");
+
                 if (type.equals("income")){
                     totalBalance += amount;
+
                 }
                 else{
                     totalBalance -= amount;
+                     if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
+                     {
+                        TotalSpend+=amount;
+                    }
+
                 }
             }
+            SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
+            editor.apply(); // Apply the changes to SharedPreferences
             TextView balanceTxt = findViewById(R.id.balanceText);
             balanceTxt.setText("$"+totalBalance);
         });

@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,8 +28,11 @@ public class SetLimit extends AppCompatActivity {
     // Shared preference
     public static final String GLOBAL_PREFS = "myPrefs";
     public static final String MY_EMAIL = "MyEmail";
-
     public String MY_EXPENSE= "myExpense";
+
+    public String MY_STARTDATE = "myStartDate";
+
+    public String MY_ENDDATE = "myEndDate";
     SharedPreferences sharedPreferences;
     private ImageView homeBtn;
     private ImageView EditLimit;
@@ -57,23 +62,36 @@ public class SetLimit extends AppCompatActivity {
                 if (querySnapshot != null) {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
+                    int index = 0;
+                    ArrayList<LimitObject> limit_list = new ArrayList<>();
                     for (DocumentSnapshot document : documents) {
                         Map<String, Object> data = document.getData();
                         if (data != null) {
+                            index+=1;
                             // Extract data
                             String Getstartdate = (String) data.get("startdate");
                             String Getenddate = (String) data.get("enddate");
                             double Getlimit = ((Number) data.get("limit")).doubleValue();
                             double Getwarning = ((Number) data.get("warning")).doubleValue();
                             limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
+                            limit_list.add(limit);
+//                            Log.v("START DATE",limit.getStartdate());
                         }
                     }
                     if (limit != null) {
+                        limit = limit_list.get(index-1);
+                        Log.v("START DATE",limit.getStartdate());
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
                         SpendLimit.setText(Expense +"/"+ String.valueOf(limit.getSpendlimit()));
                         FallsBelow.setText(String.valueOf(limit.getFallsbelow()));
+                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(MY_STARTDATE,limit.getStartdate());
+                        editor.putString(MY_ENDDATE,limit.getEnddate());
+                        editor.apply(); // Apply the changes to SharedPreferences
                     }
+
                 }
             }
         });
@@ -94,6 +112,8 @@ public class SetLimit extends AppCompatActivity {
                 Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
                 intent.putExtra("StartDate", StartDate.getText().toString());
                 intent.putExtra("EndDate",EndDate.getText().toString());
+                intent.putExtra("SpendLimit",SpendLimit.getText().toString());
+                intent.putExtra("FallsBelow",FallsBelow.getText().toString());
                 startActivity(intent);
             }
         });

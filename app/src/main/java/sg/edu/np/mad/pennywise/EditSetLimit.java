@@ -117,7 +117,6 @@ public class EditSetLimit extends AppCompatActivity {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 String startDate = selectedStartDate.getText().toString();
                 String endDate = selectedEndDate.getText().toString();
                 Log.v("startDate", startDate);
@@ -128,7 +127,7 @@ public class EditSetLimit extends AppCompatActivity {
                 int compareDate = startDate.compareTo(endDate);
                 double spendLimit = Double.parseDouble(EtSpendLimit.getText().toString());
                 double fallsbelow = Double.parseDouble(EtFallsBelow.getText().toString());
-                if(compareDate < 0){
+                if(compareDate <= 0){
                     if(!TextUtils.isEmpty(EtSpendLimit.getText()) && !TextUtils.isEmpty(EtFallsBelow.getText())) {
                         if (spendLimit > 0 && fallsbelow > 0) {
                             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
@@ -163,10 +162,6 @@ public class EditSetLimit extends AppCompatActivity {
                 }
                 else if(compareDate > 0){
                     selectedEndDate.setError("End Date must be greater than start date");
-                }
-                else{
-                    selectedEndDate.setError("End Date should not equal to start date");
-                    selectedStartDate.setError("Start Date should not be equals to end date");
                 }
 
             }
