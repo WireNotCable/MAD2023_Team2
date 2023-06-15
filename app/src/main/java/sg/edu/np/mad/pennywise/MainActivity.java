@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     totalBalance -= amount;
                      if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
                      {
+
                         TotalSpend+=amount;
                     }
 

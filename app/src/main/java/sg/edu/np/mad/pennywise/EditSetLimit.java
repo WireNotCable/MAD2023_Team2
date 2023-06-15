@@ -71,6 +71,8 @@ public class EditSetLimit extends AppCompatActivity {
         Intent intent = getIntent();
         selectedStartDate.setText(intent.getStringExtra("StartDate"));
         selectedEndDate.setText(intent.getStringExtra("EndDate"));
+        EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
+        EtFallsBelow.setText(intent.getStringExtra("FallsBelow"));
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,11 +121,6 @@ public class EditSetLimit extends AppCompatActivity {
             public void onClick(View v) {
                 String startDate = selectedStartDate.getText().toString();
                 String endDate = selectedEndDate.getText().toString();
-                Log.v("startDate", startDate);
-                Log.v("startDate", endDate);
-
-
-
                 int compareDate = startDate.compareTo(endDate);
                 double spendLimit = Double.parseDouble(EtSpendLimit.getText().toString());
                 double fallsbelow = Double.parseDouble(EtFallsBelow.getText().toString());
@@ -140,8 +137,8 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("enddate",endDate);
                             limitData.put("limit",spendLimit);
                             limitData.put("warning",fallsbelow);
-                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document().getId();//Getting Document ID
-                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData, SetOptions.merge());//Set Data to Document
+                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue").getId();//Getting Document ID
+                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
                             Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                             startActivity(intent);

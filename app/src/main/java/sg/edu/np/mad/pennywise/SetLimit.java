@@ -62,24 +62,24 @@ public class SetLimit extends AppCompatActivity {
                 if (querySnapshot != null) {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
-                    int index = 0;
-                    ArrayList<LimitObject> limit_list = new ArrayList<>();
+                    //int index = 0;
+                    //ArrayList<LimitObject> limit_list = new ArrayList<>();
                     for (DocumentSnapshot document : documents) {
                         Map<String, Object> data = document.getData();
                         if (data != null) {
-                            index+=1;
+                            //index+=1;
                             // Extract data
                             String Getstartdate = (String) data.get("startdate");
                             String Getenddate = (String) data.get("enddate");
                             double Getlimit = ((Number) data.get("limit")).doubleValue();
                             double Getwarning = ((Number) data.get("warning")).doubleValue();
                             limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
-                            limit_list.add(limit);
+//                            limit_list.add(limit);
 //                            Log.v("START DATE",limit.getStartdate());
                         }
                     }
                     if (limit != null) {
-                        limit = limit_list.get(index-1);
+//                        limit = limit_list.get(index-1);
                         Log.v("START DATE",limit.getStartdate());
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
@@ -112,7 +112,7 @@ public class SetLimit extends AppCompatActivity {
                 Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
                 intent.putExtra("StartDate", StartDate.getText().toString());
                 intent.putExtra("EndDate",EndDate.getText().toString());
-                intent.putExtra("SpendLimit",SpendLimit.getText().toString());
+                intent.putExtra("SpendLimit",SpendLimit.getText().toString().split("/")[1]);
                 intent.putExtra("FallsBelow",FallsBelow.getText().toString());
                 startActivity(intent);
             }
