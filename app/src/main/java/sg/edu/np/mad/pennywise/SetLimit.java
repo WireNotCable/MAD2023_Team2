@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -41,16 +40,48 @@ public class SetLimit extends AppCompatActivity {
     private TextView SpendLimit;
     private TextView FallsBelow;
 
+    private  TextView AvailableBalnce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_limit);
 
         StartDate = findViewById(R.id.limit_startdate);
-        EndDate = findViewById(R.id.limit_enddate);
-        SpendLimit = findViewById(R.id.limit_spendlimit);
+        EndDate = findViewById(R.id.textview20);
+        SpendLimit = findViewById(R.id.limit_amount);
         FallsBelow = findViewById(R.id.limit_spend);
+        AvailableBalnce = findViewById(R.id.balanceText);
 
+
+
+        homeBtn = findViewById(R.id.limit_home);
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SetLimit.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        EditLimit = findViewById(R.id.limit_icon);
+        EditLimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
+                intent.putExtra("StartDate", StartDate.getText().toString());
+                intent.putExtra("EndDate",EndDate.getText().toString());
+                intent.putExtra("SpendLimit",SpendLimit.getText().toString().split("/")[1]);
+                intent.putExtra("FallsBelow",FallsBelow.getText().toString());
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+
+    protected void onStart() {
+        super.onStart();
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         String Expense = sharedPreferences.getString(MY_EXPENSE,"");
@@ -83,8 +114,10 @@ public class SetLimit extends AppCompatActivity {
                         Log.v("START DATE",limit.getStartdate());
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
-                        SpendLimit.setText(Expense +"/"+ String.valueOf(limit.getSpendlimit()));
-                        FallsBelow.setText(String.valueOf(limit.getFallsbelow()));
+                        SpendLimit.setText("$"+Expense +" / "+ String.valueOf(limit.getSpendlimit()));
+                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+                        double balance = limit.getSpendlimit()-Double.valueOf(Expense);
+                        AvailableBalnce.setText(String.valueOf(balance));
                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(MY_STARTDATE,limit.getStartdate());
@@ -93,28 +126,6 @@ public class SetLimit extends AppCompatActivity {
                     }
 
                 }
-            }
-        });
-
-        homeBtn = findViewById(R.id.limit_home);
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SetLimit.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        EditLimit = findViewById(R.id.setlimit_icon);
-        EditLimit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
-                intent.putExtra("StartDate", StartDate.getText().toString());
-                intent.putExtra("EndDate",EndDate.getText().toString());
-                intent.putExtra("SpendLimit",SpendLimit.getText().toString().split("/")[1]);
-                intent.putExtra("FallsBelow",FallsBelow.getText().toString());
-                startActivity(intent);
             }
         });
     }
@@ -137,4 +148,7 @@ public class SetLimit extends AppCompatActivity {
         String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
         return selectedDate;
     }
+
+
+
 }

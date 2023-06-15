@@ -139,6 +139,8 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("warning",fallsbelow);
                             String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue").getId();//Getting Document ID
                             db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
+
+
                             Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                             startActivity(intent);
