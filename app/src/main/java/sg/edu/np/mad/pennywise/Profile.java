@@ -65,7 +65,10 @@ public class Profile extends AppCompatActivity {
         String username = prefs.getString(MY_EMAIL, "");
         Log.v("Usernmae",username);
 
-
+        // Pass the name to the dialovview
+        TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
+        String name = username.split("@")[0];
+        profilepic_name.setText(name);
         // Pass the username to the dialogView
         TextView profilepic_username= dialogView.findViewById(R.id.profilepic_email);
         profilepic_username.setText(username);
