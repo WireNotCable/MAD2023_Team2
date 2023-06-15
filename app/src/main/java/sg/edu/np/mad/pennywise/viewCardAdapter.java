@@ -1,5 +1,6 @@
 package sg.edu.np.mad.pennywise;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,26 +10,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class viewCardAdapter extends RecyclerView.Adapter<CardViewImgHolder>{
-    private ArrayList<cardObject> list_objects;
-    public viewCardAdapter(ArrayList<cardObject> obj){
-        this.list_objects = obj;
+    ArrayList<Card>listOfCards;
+    public viewCardAdapter(ArrayList<Card>listOfCards){
+        this.listOfCards = listOfCards;
     }
 
-    public CardViewImgHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public CardViewImgHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_view_card, parent, false);
         CardViewImgHolder holder = new CardViewImgHolder(view);
         return holder;
     }
 
-    public void onBindViewHolder(CardViewImgHolder holder, int position) {
-        cardObject list_items = list_objects.get(position);
-        holder.txt.setText(list_items.getMyText());
-        holder.image.setImageResource(list_items.getMyImageID());
+    public void onBindViewHolder(CardViewImgHolder holder, int position){
+        Card list_Cards = listOfCards.get(position);
+        holder.txt1.setText(list_Cards.getNumCard());
+        holder.txt2.setText(list_Cards.getXpDate());
+        holder.txt3.setText(list_Cards.getThreeDigitNum());
+        holder.txt4.setText(list_Cards.getCardNaming());
+        holder.txt5.setText(list_Cards.getHouseAddr());
 
     }
 
-    public int getItemCount() {
-
-        return list_objects.size();
+    public int getItemCount(){
+        return listOfCards.size();
     }
 }

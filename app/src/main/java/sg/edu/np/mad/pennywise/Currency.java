@@ -42,6 +42,8 @@ public class Currency extends AppCompatActivity {
     Button convertButton;
     String convertFromValue, convertToValue, conversionValue;
     String[] country = {"AFN","EUR"};
+    private static final String API_KEY = "0675ebc65257b3241fe03de7d9759945";
+    private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +168,8 @@ public class Currency extends AppCompatActivity {
         });
     }
     public String getConversionRate(String convertFrom, String convertTo, Double amountToConvert){
+
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://free.currconv.com/api/v7/convert?q="+convertFrom+"_"+convertTo+"&compact=ultra&apiKey=22e91ab924eb2aa6f9a4";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

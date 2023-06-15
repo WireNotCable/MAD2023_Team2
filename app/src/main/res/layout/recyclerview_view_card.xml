@@ -7,20 +7,95 @@
 
     <TextView
         android:id="@+id/cardinfo"
-        android:layout_width="275dp"
-        android:layout_height="135dp"
+        android:layout_width="153dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="28dp"
         android:text="@string/card_info"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardimg"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/Exp_Title" />
 
     <ImageView
         android:id="@+id/cardimg"
-        android:layout_width="104dp"
-        android:layout_height="134dp"
-        android:layout_marginStart="2dp"
-        app:layout_constraintEnd_toStartOf="@+id/cardinfo"
+        android:layout_width="86dp"
+        android:layout_height="241dp"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/card_icon" />
+
+    <TextView
+        android:id="@+id/adapCardName"
+        android:layout_width="147dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="3dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adapCSV" />
+
+    <TextView
+        android:id="@+id/adapAddress"
+        android:layout_width="213dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="4dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/adapCSV"
+        android:layout_width="72dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="4dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/CSV_Title"
+        app:layout_constraintTop_toBottomOf="@+id/adapAddress" />
+
+    <TextView
+        android:id="@+id/adapDate"
+        android:layout_width="67dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/Exp_Title"
+        app:layout_constraintTop_toBottomOf="@+id/adapAddress" />
+
+    <TextView
+        android:id="@+id/Exp_Title"
+        android:layout_width="80dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/exp_Title"
+        app:layout_constraintStart_toEndOf="@+id/cardimg"
+        app:layout_constraintTop_toBottomOf="@+id/num_title" />
+
+    <TextView
+        android:id="@+id/CSV_Title"
+        android:layout_width="52dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/csv_Title"
+        app:layout_constraintBottom_toTopOf="@+id/adapCardName"
+        app:layout_constraintStart_toEndOf="@+id/adapDate"
+        app:layout_constraintTop_toBottomOf="@+id/adapAddress" />
+
+    <TextView
+        android:id="@+id/num_title"
+        android:layout_width="82dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="9dp"
+        android:text="@string/num_Title"
+        app:layout_constraintEnd_toStartOf="@+id/adapAddress"
+        app:layout_constraintStart_toEndOf="@+id/cardimg"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
