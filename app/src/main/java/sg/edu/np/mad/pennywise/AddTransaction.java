@@ -52,33 +52,6 @@ public class AddTransaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
-        // TESTING FIREBASE (TO BE DELETED)
-//        String title = "Expense Title 1";
-//        double amount = 10.99;
-//        String date = "2023-06-13";
-//        String type = "expense";
-//        Transaction transaction1 = new Transaction(title, date, amount, type);
-//        Transaction transaction2 = new Transaction("Expense Title 2", "2023-06-06", 9.99, "expense");
-
-//        List<Transaction> transactions = new ArrayList<>();
-//        transactions.add(transaction1);
-//        transactions.add(transaction2);
-
-
-
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        int count = 1;
-//        for (Transaction transaction : transactions) {
-//            Map<String, Object> transactionData = new HashMap<>();
-//            transactionData.put("title", transaction.getTransTitle());
-//            transactionData.put("date", transaction.getTransDate());
-//            transactionData.put("amount", transaction.getTransAmt());
-//            transactionData.put("type", transaction.getTransType());
-//            String transactionNum = "transaction" + count;
-//            db.collection("users").document(sharedEmail).collection("alltransaction").document(transactionNum).set(transactionData);
-//            count = count + 1;
-//        }
-
 
         // Home icon to go back to Main Page
         ImageView homeBtn = findViewById(R.id.homeBtn);
