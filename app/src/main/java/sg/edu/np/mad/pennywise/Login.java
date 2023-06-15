@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity {
                                 // save email into shared preference
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(MY_EMAIL, email);
+                                editor.putString(MY_EMAIL, email.toLowerCase());
                                 editor.putString(MY_PASSWORD, password);
                                 editor.commit();
                                 //Redirect to login

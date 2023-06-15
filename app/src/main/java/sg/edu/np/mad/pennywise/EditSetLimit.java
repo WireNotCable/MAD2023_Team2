@@ -71,6 +71,8 @@ public class EditSetLimit extends AppCompatActivity {
         Intent intent = getIntent();
         selectedStartDate.setText(intent.getStringExtra("StartDate"));
         selectedEndDate.setText(intent.getStringExtra("EndDate"));
+        EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
+        EtFallsBelow.setText(intent.getStringExtra("FallsBelow"));
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,18 +119,12 @@ public class EditSetLimit extends AppCompatActivity {
         setButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                 String startDate = selectedStartDate.getText().toString();
                 String endDate = selectedEndDate.getText().toString();
-                Log.v("startDate", startDate);
-                Log.v("startDate", endDate);
-
-
-
                 int compareDate = startDate.compareTo(endDate);
                 double spendLimit = Double.parseDouble(EtSpendLimit.getText().toString());
                 double fallsbelow = Double.parseDouble(EtFallsBelow.getText().toString());
-                if(compareDate < 0){
+                if(compareDate <= 0){
                     if(!TextUtils.isEmpty(EtSpendLimit.getText()) && !TextUtils.isEmpty(EtFallsBelow.getText())) {
                         if (spendLimit > 0 && fallsbelow > 0) {
                             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
@@ -141,8 +137,8 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("enddate",endDate);
                             limitData.put("limit",spendLimit);
                             limitData.put("warning",fallsbelow);
-                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document().getId();//Getting Document ID
-                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData, SetOptions.merge());//Set Data to Document
+                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue").getId();//Getting Document ID
+                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
                             Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                             startActivity(intent);
@@ -163,10 +159,6 @@ public class EditSetLimit extends AppCompatActivity {
                 }
                 else if(compareDate > 0){
                     selectedEndDate.setError("End Date must be greater than start date");
-                }
-                else{
-                    selectedEndDate.setError("End Date should not equal to start date");
-                    selectedStartDate.setError("Start Date should not be equals to end date");
                 }
 
             }
