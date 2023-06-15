@@ -7,12 +7,20 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CardViewImgHolder extends RecyclerView.ViewHolder {
-    TextView txt;
+    TextView txt1;
+    TextView txt2;
+    TextView txt3;
+    TextView txt4;
+    TextView txt5;
     ImageView image;
 
     public CardViewImgHolder(View itemView){
         super(itemView);
-        txt = itemView.findViewById(R.id.cardinfo);
+        txt1 = itemView.findViewById(R.id.cardinfo);
+        txt2 = itemView.findViewById(R.id.adapDate);
+        txt3 = itemView.findViewById(R.id.adapCSV);
+        txt4 = itemView.findViewById(R.id.adapCardName);
+        txt5 = itemView.findViewById(R.id.adapAddress);
         image = itemView.findViewById(R.id.cardimg);
 
     }

@@ -3,15 +3,28 @@ package sg.edu.np.mad.pennywise;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.checkerframework.checker.units.qual.C;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class addNewCard extends AppCompatActivity {
     EditText NameCard,bankCardNumber,expiryDate,CSVNumber,inputAddress;
+    public String GLOBAL_PREFS = "myPrefs";
+    public String MY_EMAIL = "MyEmail";
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +72,41 @@ public class addNewCard extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Form Validate Successfully!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        addNewCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get transaction data
+                EditText cardNumberTitle = findViewById(R.id.bankCardNum);
+                String Number = cardNumberTitle.getText().toString();
+                EditText CSVNumber = findViewById(R.id.CSVNum);
+                String CSV = CSVNumber.getText().toString();
+                EditText ExpiryDate = findViewById(R.id.expiryDate1);
+                String ExpDate = ExpiryDate.getText().toString();
+                EditText NameOnCard = findViewById(R.id.inputNameCard);
+                String CardName = NameOnCard.getText().toString();
+                EditText BillingAddress = findViewById(R.id.inputAddr);
+                String Address = BillingAddress.getText().toString();
+                String type = "";
+                if (Number!=null&&!Number.isEmpty() && !CSV.isEmpty() && !ExpDate.isEmpty() && !CardName.isEmpty() && !Address.isEmpty()){
+                    Card card = new Card(Number, ExpDate, CSV, CardName, Address);
+                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> cardData = new HashMap<>();
+                    cardData.put("number", card.getNumCard());
+                    cardData.put("exp", card.getXpDate());
+                    cardData.put("csv", card.getThreeDigitNum());
+                    cardData.put("name", card.getCardNaming());
+                    cardData.put("address", card.getHouseAddr());
+                    String id = db.collection("users").document(sharedEmail).collection("addCard").document().getId();
+                    db.collection("users").document(sharedEmail).collection("addCard").document(id).set(cardData);
                     Intent intent = new Intent(addNewCard.this, ViewCard.class);
                     startActivity(intent);
                 }
-
             }
         });
     }
