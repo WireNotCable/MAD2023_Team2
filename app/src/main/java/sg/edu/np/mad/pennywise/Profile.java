@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class Profile extends AppCompatActivity {
     // Shared preferences
     public String GLOBAL_PREFS = "myPrefs";
@@ -71,7 +73,7 @@ public class Profile extends AppCompatActivity {
         profilepic_name.setText(name);
         // Pass the username to the dialogView
         TextView profilepic_username= dialogView.findViewById(R.id.profilepic_email);
-        profilepic_username.setText(username);
+        profilepic_username.setText(username.toLowerCase(Locale.ROOT));
 
         AlertDialog dialog = builder.create();
         dialog.show();
