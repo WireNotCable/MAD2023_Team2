@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getBalance();
         getDashboardItems();
         addNewTrans();
+        viewAllTrans();
     }
 
     //Get dashboard items for recycler view
@@ -242,6 +243,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    // Redirect to View All Transaction Page
+    public void viewAllTrans(){
+        TextView tv = findViewById(R.id.viewAllTrans);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ViewAllTransactions.class);
                 startActivity(intent);
             }
         });
