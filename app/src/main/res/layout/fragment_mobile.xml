@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     tools:context=".fragments.Mobile">
 
+
+    <EditText
+        android:id="@+id/MobileNumber"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="7dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Mobile no."
+        android:inputType="phone" />
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/Warning"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mobile Fragment"/>
-</RelativeLayout>
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="Think twice before you pay/transfer! There has been an increase in scams lately - be extra sure you are sending money to someone you trust." />
+
+    <EditText
+        android:id="@+id/Amount"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Amount "
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/Note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Up to 20,000 per day." />
+
+    <EditText
+        android:id="@+id/Comments"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="Comments (optional)"
+        android:inputType="text" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Transfer" />
+
+</LinearLayout>

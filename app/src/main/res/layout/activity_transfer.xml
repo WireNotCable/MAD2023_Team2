@@ -4,31 +4,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/darkblue"
     tools:context=".Transfer">
-    <com.google.android.material.tabs.TabLayout
+
+    <ImageView
+        android:id="@+id/makecardBtn2"
+        android:layout_width="38dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/home_icon" />
+
+    <TextView
+        android:id="@+id/PageTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id = "@+id/tab_layout">
+        android:layout_below="@id/makecardBtn2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:text="Transfer"
+        android:textColor="#FBF6F6"
+        android:textSize="30dp" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PageTitle"
+        android:background="@color/darkblue"
+        app:tabIndicatorColor="#FFFFFF"
+        app:tabTextColor="#FFFFFF">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "Mobile"/>
+            android:text="Mobile" />
+
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "NRIC/FIN"/>
+            android:text="NRIC/FIN" />
+
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "UEN"/>
-        
+            android:text="UEN" />
+
     </com.google.android.material.tabs.TabLayout>
-    
+
     <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id = "@+id/view_pager"
-        android:layout_below = "@id/tab_layout"/>
+        android:layout_below="@id/tab_layout"
+        android:background="@color/white" />
 </RelativeLayout>
