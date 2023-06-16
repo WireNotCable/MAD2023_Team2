@@ -6,12 +6,20 @@ import com.google.type.Date;
 import com.google.type.DateTime;
 
 public class Transaction {
-
+    private String transId;
     private String transTitle;
     private String transDate;
     private double transAmt;
     private String transType;
 
+    public String getTransId() {
+        return transId;
+    }
+
+
+    public void setTransId(String transTitle) {
+        this.transTitle = transId;
+    }
     public String getTransTitle() {
         return transTitle;
     }
@@ -44,7 +52,8 @@ public class Transaction {
     public void setTransType(String transType) {
         this.transType = transType;
     }
-    public Transaction(String transTitle, String transDate, double transAmt, String transType) {
+    public Transaction(String transId, String transTitle, String transDate, double transAmt, String transType) {
+        this.transId = transId;
         this.transTitle = transTitle;
         this.transDate = transDate;
         this.transAmt = transAmt;

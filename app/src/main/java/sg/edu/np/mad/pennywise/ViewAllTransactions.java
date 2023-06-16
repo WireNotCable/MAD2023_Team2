@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ViewAllTransactions extends AppCompatActivity {
+public class ViewAllTransactions extends AppCompatActivity implements ViewTransRVInterface{
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
@@ -58,7 +58,7 @@ public class ViewAllTransactions extends AppCompatActivity {
         });
     }
 
-
+    ArrayList<Transaction> transactionList = new ArrayList<>();
     // Get transaction data
     public void getTransData(String typeSelected){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
@@ -68,11 +68,11 @@ public class ViewAllTransactions extends AppCompatActivity {
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-            ArrayList<Transaction> transactionList = new ArrayList<>();
             for (DocumentSnapshot document : documents) {
                 Map<String, Object> data = document.getData();
 
                 //Extract data
+                String id = (String) document.getId();
                 String title = (String) data.get("title");
                 String date = (String) data.get("date");
                 double amount = (double) data.get("amount");
@@ -81,18 +81,18 @@ public class ViewAllTransactions extends AppCompatActivity {
                 // check for type selected
                 if (typeSelected.equals("expense")){
                     if (type.equals("expense")){
-                        Transaction transaction = new Transaction(title, date, amount, type);
+                        Transaction transaction = new Transaction(id, title, date, amount, type);
                         transactionList.add(transaction);
                     }
                 }
                 else if (typeSelected.equals("income")){
                     if (type.equals("income")){
-                        Transaction transaction = new Transaction(title, date, amount, type);
+                        Transaction transaction = new Transaction(id, title, date, amount, type);
                         transactionList.add(transaction);
                     }
                 }
                 else{
-                    Transaction transaction = new Transaction(title, date, amount, type);
+                    Transaction transaction = new Transaction(id, title, date, amount, type);
                     transactionList.add(transaction);
                 }
 
@@ -111,7 +111,6 @@ public class ViewAllTransactions extends AppCompatActivity {
                         return 0;
                     }
                 });
-
                 recycler(transactionList);
             }
         });
@@ -120,7 +119,7 @@ public class ViewAllTransactions extends AppCompatActivity {
     // Recycler View
     public void recycler(ArrayList<Transaction> transactionList){
         RecyclerView recyclerView = findViewById(R.id.viewAllTransRecycler);
-        DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);
+        DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList, this);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(myLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -129,6 +128,7 @@ public class ViewAllTransactions extends AppCompatActivity {
 
     // Radio Buttons
     public void onRadioButtonClicked(View v){
+        transactionList.clear();
         boolean isSelected = ((AppCompatRadioButton)v).isChecked();
         if (v.getId() == R.id.radioAllBtn) {
             if(isSelected){
@@ -154,5 +154,18 @@ public class ViewAllTransactions extends AppCompatActivity {
                 getTransData("expense");
             }
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(ViewAllTransactions.this, ViewTransaction.class);
+        intent.putExtra("From","ViewAll");
+        intent.putExtra("Id",transactionList.get(position).getTransId());
+        intent.putExtra("Title",transactionList.get(position).getTransTitle());
+        intent.putExtra("Amount",transactionList.get(position).getTransAmt());
+        intent.putExtra("Date",transactionList.get(position).getTransDate());
+        intent.putExtra("Type",transactionList.get(position).getTransType());
+        Log.v("hmm","Item clicked, Intent send from ViewAllTransactions");
+        startActivity(intent);
     }
 }
