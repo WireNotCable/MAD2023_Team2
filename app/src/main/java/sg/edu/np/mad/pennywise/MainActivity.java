@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_transfer){
-            Intent intent = new Intent(MainActivity.this,Transfer.class);
+            Intent intent = new Intent(MainActivity.this, Transfer.class);
             startActivity(intent);
         }
 
