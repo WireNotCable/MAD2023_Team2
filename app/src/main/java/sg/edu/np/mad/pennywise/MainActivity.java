@@ -176,20 +176,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                     else{
                         totalBalance -= amount;
+                        if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
+                        {
+
+                            TotalSpend+=amount;
+                        }
                     }
-                }
-                if (type.equals("income")){
-                    totalBalance += amount;
-
-                }
-                else{
-                    totalBalance -= amount;
-                    if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
-                    {
-
-                        TotalSpend+=amount;
-                    }
-
                 }
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
