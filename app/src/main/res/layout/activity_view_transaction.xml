@@ -97,6 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="5dp"
+                    android:padding="15dp"
                     android:text="Mala Hotpot"
                     android:textColor="@color/black"
                     android:textSize="30dp"

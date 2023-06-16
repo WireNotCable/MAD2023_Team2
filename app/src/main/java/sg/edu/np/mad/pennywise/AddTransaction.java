@@ -52,6 +52,13 @@ public class AddTransaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
+        // default current date
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String date = dateFormat.format(currentDate);
+        TextView dateTextView = findViewById(R.id.selectDateText);
+        dateTextView.setText(date);
+
 
         // Home icon to go back to Main Page //
         ImageView homeBtn = findViewById(R.id.homeBtn);
