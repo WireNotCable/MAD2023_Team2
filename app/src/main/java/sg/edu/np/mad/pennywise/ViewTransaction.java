@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -40,7 +42,7 @@ public class ViewTransaction extends AppCompatActivity {
         canceltv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancel(from);
+                Redirect(from);
             }
         });
 
@@ -49,7 +51,8 @@ public class ViewTransaction extends AppCompatActivity {
         deletetv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete(from);
+                delete();
+                Redirect(from);
             }
         });
 
@@ -58,34 +61,42 @@ public class ViewTransaction extends AppCompatActivity {
         edittv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edit(from);
+                edit();
+                Redirect(from);
+            }
+        });
+
+        // return to home
+        ImageView homeBtn = findViewById(R.id.viewTHomeBtn);
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ViewTransaction.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
 
+    // Get transaction details
     public void getData(){
         Intent receivingEnd = getIntent();
         TextView titleTV = findViewById(R.id.transTitle);
         titleTV.setText(receivingEnd.getStringExtra("Title"));
         TextView amtTV = findViewById(R.id.transAmt);
-        amtTV.setText(receivingEnd.getStringExtra("Amount"));
+        amtTV.setText("$"+String.valueOf(receivingEnd.getDoubleExtra("Amount",0.0)));
         TextView dateTV = findViewById(R.id.transDate);
         dateTV.setText(receivingEnd.getStringExtra("Date"));
         TextView typeTV = findViewById(R.id.transType);
         typeTV.setText(receivingEnd.getStringExtra("Type"));
-    }
-
-    public void cancel(String from){
-        if(from.equals("Main")){
-            Intent intent = new Intent(ViewTransaction.this, MainActivity.class);
-            startActivity(intent);
+        if (typeTV.getText().toString().equals("income")){
+            amtTV.setTextColor(Color.parseColor("#06A94D"));
         }
         else{
-            Intent intent = new Intent(ViewTransaction.this, ViewAllTransactions.class);
-            startActivity(intent);
+            amtTV.setTextColor(Color.parseColor("#FF0000"));
         }
     }
-    public void delete(String from){
+
+    public void delete(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -95,22 +106,35 @@ public class ViewTransaction extends AppCompatActivity {
 
         DocumentReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction").document(id);
         transactionRef.delete().addOnCompleteListener(task -> {
-            if (from.equals("Main")){
-                Intent intent = new Intent(ViewTransaction.this, MainActivity.class);
-                startActivity(intent);
-            }
-            else{
-                Intent intent = new Intent(ViewTransaction.this, ViewAllTransactions.class);
-                startActivity(intent);
-            }
         });
     }
 
-    public void edit(String from){
+    public void edit(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Intent receivingEnd = getIntent();
+        String id = receivingEnd.getStringExtra("Id");
+        Map<String, Object> transactionData = new HashMap<>();
+        transactionData.put("title", receivingEnd.getStringExtra("Title"));
+        transactionData.put("date", receivingEnd.getStringExtra("Date"));
+        transactionData.put("amount", receivingEnd.getStringExtra("Amount"));
+        transactionData.put("type", receivingEnd.getStringExtra("Type"));
+        db.collection("users").document(sharedEmail).collection("alltransaction").document(id).set(transactionData);
     }
+
+    public void Redirect(String from){
+        if (from.equals("Main")){
+            Intent intent = new Intent(ViewTransaction.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else{
+            Intent intent = new Intent(ViewTransaction.this, ViewAllTransactions.class);
+            startActivity(intent);
+        }
+    }
+
+
+
 }

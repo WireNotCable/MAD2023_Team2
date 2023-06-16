@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    // NAVBAR
+    // NAVBAR //
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions){
@@ -287,8 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
-
-
         else if (item.getItemId() == R.id.nav_currency) {
 
             Intent intent = new Intent(MainActivity.this, Currency.class);

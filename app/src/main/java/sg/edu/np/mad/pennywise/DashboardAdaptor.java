@@ -36,7 +36,6 @@ public class DashboardAdaptor extends RecyclerView.Adapter<dashboardViewHolder> 
         }
         else{
             holder.txt3.setTextColor(Color.parseColor("#FF0000"));
-            holder.txt3.setTextColor(Color.parseColor("#FF0000"));
         }
     }
 
