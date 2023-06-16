@@ -40,7 +40,7 @@ public class SetLimit extends AppCompatActivity {
     private TextView SpendLimit;
     private TextView FallsBelow;
 
-    private  TextView AvailableBalnce;
+    private  TextView AvailableBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class SetLimit extends AppCompatActivity {
         EndDate = findViewById(R.id.textview20);
         SpendLimit = findViewById(R.id.limit_amount);
         FallsBelow = findViewById(R.id.limit_spend);
-        AvailableBalnce = findViewById(R.id.balanceText);
+        AvailableBalance = findViewById(R.id.balanceText);
 
 
 
@@ -93,31 +93,24 @@ public class SetLimit extends AppCompatActivity {
                 if (querySnapshot != null) {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
                     LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
-                    //int index = 0;
-                    //ArrayList<LimitObject> limit_list = new ArrayList<>();
                     for (DocumentSnapshot document : documents) {
                         Map<String, Object> data = document.getData();
                         if (data != null) {
-                            //index+=1;
-                            // Extract data
                             String Getstartdate = (String) data.get("startdate");
                             String Getenddate = (String) data.get("enddate");
                             double Getlimit = ((Number) data.get("limit")).doubleValue();
                             double Getwarning = ((Number) data.get("warning")).doubleValue();
                             limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
-//                            limit_list.add(limit);
-//                            Log.v("START DATE",limit.getStartdate());
                         }
                     }
                     if (limit != null) {
-//                        limit = limit_list.get(index-1);
                         Log.v("START DATE",limit.getStartdate());
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
                         SpendLimit.setText("$"+Expense +" / "+ String.valueOf(limit.getSpendlimit()));
                         FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
                         double balance = limit.getSpendlimit()-Double.valueOf(Expense);
-                        AvailableBalnce.setText(String.valueOf(balance));
+                        AvailableBalance.setText(String.valueOf(balance));
                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(MY_STARTDATE,limit.getStartdate());
