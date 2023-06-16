@@ -62,7 +62,6 @@ public class ViewTransaction extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 edit();
-                Redirect(from);
             }
         });
 
@@ -110,18 +109,11 @@ public class ViewTransaction extends AppCompatActivity {
     }
 
     public void edit(){
-        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         Intent receivingEnd = getIntent();
         String id = receivingEnd.getStringExtra("Id");
-        Map<String, Object> transactionData = new HashMap<>();
-        transactionData.put("title", receivingEnd.getStringExtra("Title"));
-        transactionData.put("date", receivingEnd.getStringExtra("Date"));
-        transactionData.put("amount", receivingEnd.getStringExtra("Amount"));
-        transactionData.put("type", receivingEnd.getStringExtra("Type"));
-        db.collection("users").document(sharedEmail).collection("alltransaction").document(id).set(transactionData);
+        Intent intent = new Intent(ViewTransaction.this, EditTransaction.class);
+        intent.putExtra("Id", id);
+        startActivity(intent);
     }
 
     public void Redirect(String from){

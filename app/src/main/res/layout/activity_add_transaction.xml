@@ -74,8 +74,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Date Picker"
-                android:backgroundTint="@color/design_default_color_primary"
+                android:text="Click to Select Date"
+                android:textStyle="italic"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:backgroundTint="@android:color/darker_gray"
                 android:id="@+id/datePicker"/>
 
             <TextView
