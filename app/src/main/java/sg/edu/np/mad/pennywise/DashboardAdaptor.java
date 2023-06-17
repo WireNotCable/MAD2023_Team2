@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DashboardAdaptor extends RecyclerView.Adapter<dashboardViewHolder> {
     ViewTransRVInterface rvInterface;
     ArrayList<Transaction>listOfTransactions;
+
     public DashboardAdaptor(ArrayList<Transaction>listOfTransactions, ViewTransRVInterface rvInterface){
         this.listOfTransactions = listOfTransactions;
         this.rvInterface = rvInterface;

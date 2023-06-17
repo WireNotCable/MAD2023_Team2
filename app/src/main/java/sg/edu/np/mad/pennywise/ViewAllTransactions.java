@@ -2,6 +2,7 @@ package sg.edu.np.mad.pennywise;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +48,13 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
 
         getTransData("all");
 
+        // Search //
+        SearchView searchView = findViewById(R.id.search);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocus();
+        search();
+
         // Home icon to go back to Main Page
         ImageView homeBtn = findViewById(R.id.allHomeBtn);
         homeBtn.setOnClickListener(new View.OnClickListener(){
@@ -59,7 +67,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
     }
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
-    // Get transaction data
+    // Get transaction data //
     public void getTransData(String typeSelected){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -136,6 +144,8 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
                 radioExpenseBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.RED);
                 getTransData("all");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
         else if (v.getId() == R.id.radioIncomeBtn){
@@ -144,14 +154,19 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
                 radioAllBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.WHITE);
                 getTransData("income");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
         else if (v.getId() == R.id.radioExpenseBtn){
             if(isSelected){
+
                 radioExpenseBtn.setTextColor(Color.WHITE);
                 radioAllBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.RED);
                 getTransData("expense");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
     }
@@ -167,5 +182,36 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         intent.putExtra("Type",transactionList.get(position).getTransType());
         Log.v("hmm","Item clicked, Intent send from ViewAllTransactions");
         startActivity(intent);
+    }
+
+    // Filter data based on query //
+    private void filter(String text){
+        ArrayList<Transaction> filterList = new ArrayList<>();
+        for (Transaction trans : transactionList){
+            if(trans.getTransTitle().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(trans);
+            }
+        }
+        recycler(filterList);
+    }
+
+    // Listen to query //
+    private Boolean search(){
+        SearchView sv = findViewById(R.id.search);
+        sv.clearFocus();
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return true;
+            }
+        });
+        return null;
     }
 }
