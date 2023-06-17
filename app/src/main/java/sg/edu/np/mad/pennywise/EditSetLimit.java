@@ -183,24 +183,4 @@ public class EditSetLimit extends AppCompatActivity {
         });
     }
 
-    public String getTodaysDate(String dateType) {
-        Calendar calendar = Calendar.getInstance(); // Get current date
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth;
-
-        ArrayList<String> monthList = new ArrayList<>(Arrays.asList(
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
-        if (dateType.equals("Start")) {
-            dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
-        } else if (dateType.equals("End")) {
-            dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        } else {
-            return "";
-        }
-
-        String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
-        return selectedDate;
-    }
-
 }

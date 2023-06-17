@@ -104,13 +104,12 @@ public class SetLimit extends AppCompatActivity {
                         }
                     }
                     if (limit != null) {
+
                         Log.v("START DATE",limit.getStartdate());
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
-                        SpendLimit.setText("$"+Expense +" / "+ String.valueOf(limit.getSpendlimit()));
                         FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
-                        double balance = limit.getSpendlimit()-Double.valueOf(Expense);
-                        AvailableBalance.setText(String.valueOf(balance));
+                        GetTotalExpense(sharedEmail,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit());
                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(MY_STARTDATE,limit.getStartdate());
@@ -140,6 +139,42 @@ public class SetLimit extends AppCompatActivity {
 
         String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
         return selectedDate;
+    }
+
+    private void GetTotalExpense(String sharedEmail, String StartDate, String EndDate, double spendlimit) {
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        transactionRef.get().addOnCompleteListener(task -> {
+            double totalSpend = 0.0;
+            if (task.isSuccessful()) {
+
+                QuerySnapshot querySnapshot = task.getResult();
+                List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+
+                for (DocumentSnapshot document : documents) {
+                    Map<String, Object> data = document.getData();
+                    double amount = (double) data.get("amount");
+                    String type = (String) data.get("type");
+                    String date = (String) data.get("date");
+
+                    if (type.equals("expense")) {
+                        if (date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <= 0) {
+                            totalSpend += amount;
+                        }
+                    }
+                }
+            }
+            else {
+                Log.e("TotalExpense", "Error getting documents: ", task.getException());
+            }
+            SpendLimit.setText("$"+totalSpend +" / "+ spendlimit);
+            double balance = spendlimit-totalSpend;
+            AvailableBalance.setText(String.valueOf(balance));
+
+        });
+
     }
 
 
