@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,10 +43,53 @@ public class SetLimit extends AppCompatActivity {
 
     private  TextView AvailableBalance;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_limit);
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String Expense = sharedPreferences.getString(MY_EXPENSE,"");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
+        LimitRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
+                    for (DocumentSnapshot document : documents) {
+                        Map<String, Object> data = document.getData();
+                        if (data != null) {
+                            String Getstartdate = (String) data.get("startdate");
+                            String Getenddate = (String) data.get("enddate");
+                            double Getlimit = ((Number) data.get("limit")).doubleValue();
+                            double Getwarning = ((Number) data.get("warning")).doubleValue();
+                            limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
+                        }
+                    }
+                    if (limit != null) {
+
+                        Log.v("START DATE",limit.getStartdate());
+                        StartDate.setText(limit.getStartdate());
+                        EndDate.setText(limit.getEnddate());
+                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+                        GetTotalExpense(sharedEmail,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
+                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(MY_STARTDATE,limit.getStartdate());
+                        editor.putString(MY_ENDDATE,limit.getEnddate());
+                        editor.apply(); // Apply the changes to SharedPreferences
+                    }
+
+                }
+            }
+        });
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
 
         StartDate = findViewById(R.id.limit_startdate);
         EndDate = findViewById(R.id.textview20);
@@ -80,47 +124,7 @@ public class SetLimit extends AppCompatActivity {
     }
 
 
-    protected void onStart() {
-        super.onStart();
-        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-        String Expense = sharedPreferences.getString(MY_EXPENSE,"");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
-        LimitRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
-                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
-                    for (DocumentSnapshot document : documents) {
-                        Map<String, Object> data = document.getData();
-                        if (data != null) {
-                            String Getstartdate = (String) data.get("startdate");
-                            String Getenddate = (String) data.get("enddate");
-                            double Getlimit = ((Number) data.get("limit")).doubleValue();
-                            double Getwarning = ((Number) data.get("warning")).doubleValue();
-                            limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
-                        }
-                    }
-                    if (limit != null) {
 
-                        Log.v("START DATE",limit.getStartdate());
-                        StartDate.setText(limit.getStartdate());
-                        EndDate.setText(limit.getEnddate());
-                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
-                        GetTotalExpense(sharedEmail,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit());
-                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(MY_STARTDATE,limit.getStartdate());
-                        editor.putString(MY_ENDDATE,limit.getEnddate());
-                        editor.apply(); // Apply the changes to SharedPreferences
-                    }
-
-                }
-            }
-        });
-    }
     public String getTodaysDate(String dateType) {
         Calendar calendar = Calendar.getInstance(); // Get current date
         int year = calendar.get(Calendar.YEAR);
@@ -141,7 +145,7 @@ public class SetLimit extends AppCompatActivity {
         return selectedDate;
     }
 
-    private void GetTotalExpense(String sharedEmail, String StartDate, String EndDate, double spendlimit) {
+    private void GetTotalExpense(String sharedEmail, String StartDate, String EndDate, double spendlimit,double fallsbelow) {
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -171,7 +175,12 @@ public class SetLimit extends AppCompatActivity {
             }
             SpendLimit.setText("$"+totalSpend +" / "+ spendlimit);
             double balance = spendlimit-totalSpend;
-            AvailableBalance.setText(String.valueOf(balance));
+            if(balance < fallsbelow){
+                AvailableBalance.setTextColor(Color.RED);
+                AvailableBalance.setError("You have reached your spending limit");
+            }
+            AvailableBalance.setText(String.valueOf(balance)+" ");
+
 
         });
 

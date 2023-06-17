@@ -9,20 +9,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 public class ProfilePic extends AppCompatActivity {
-    public String GLOBAL_PREFS = "myPrefs";
 
-    public String MY_PASSWORD = "MyUserPassword";
-    public String MY_USERNAME = "MyUserName";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profilepic);
-        TextView email = findViewById(R.id.profilepic_email);
-//        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-//        String getEmail = prefs.getString(MY_USERNAME,"");
-//        email.setText(getEmail);
-
 
     }
 }
