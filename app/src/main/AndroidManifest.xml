@@ -16,6 +16,12 @@
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
+            android:name=".EditTransaction"
+            android:exported="false" />
+        <activity
+            android:name=".ViewTransaction"
+            android:exported="false" />
+        <activity
             android:name=".ViewAllTransactions"
             android:exported="false" />
         <activity

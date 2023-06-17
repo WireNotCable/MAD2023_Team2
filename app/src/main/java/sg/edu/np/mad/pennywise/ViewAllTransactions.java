@@ -2,6 +2,7 @@ package sg.edu.np.mad.pennywise;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class ViewAllTransactions extends AppCompatActivity {
+public class ViewAllTransactions extends AppCompatActivity implements ViewTransRVInterface{
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
@@ -47,6 +48,13 @@ public class ViewAllTransactions extends AppCompatActivity {
 
         getTransData("all");
 
+        // Search //
+        SearchView searchView = findViewById(R.id.search);
+        searchView.setFocusable(true);
+        searchView.setIconified(false);
+        searchView.requestFocus();
+        search();
+
         // Home icon to go back to Main Page
         ImageView homeBtn = findViewById(R.id.allHomeBtn);
         homeBtn.setOnClickListener(new View.OnClickListener(){
@@ -58,8 +66,8 @@ public class ViewAllTransactions extends AppCompatActivity {
         });
     }
 
-
-    // Get transaction data
+    ArrayList<Transaction> transactionList = new ArrayList<>();
+    // Get transaction data //
     public void getTransData(String typeSelected){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -68,11 +76,11 @@ public class ViewAllTransactions extends AppCompatActivity {
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-            ArrayList<Transaction> transactionList = new ArrayList<>();
             for (DocumentSnapshot document : documents) {
                 Map<String, Object> data = document.getData();
 
                 //Extract data
+                String id = (String) document.getId();
                 String title = (String) data.get("title");
                 String date = (String) data.get("date");
                 double amount = (double) data.get("amount");
@@ -81,18 +89,18 @@ public class ViewAllTransactions extends AppCompatActivity {
                 // check for type selected
                 if (typeSelected.equals("expense")){
                     if (type.equals("expense")){
-                        Transaction transaction = new Transaction(title, date, amount, type);
+                        Transaction transaction = new Transaction(id, title, date, amount, type);
                         transactionList.add(transaction);
                     }
                 }
                 else if (typeSelected.equals("income")){
                     if (type.equals("income")){
-                        Transaction transaction = new Transaction(title, date, amount, type);
+                        Transaction transaction = new Transaction(id, title, date, amount, type);
                         transactionList.add(transaction);
                     }
                 }
                 else{
-                    Transaction transaction = new Transaction(title, date, amount, type);
+                    Transaction transaction = new Transaction(id, title, date, amount, type);
                     transactionList.add(transaction);
                 }
 
@@ -111,7 +119,6 @@ public class ViewAllTransactions extends AppCompatActivity {
                         return 0;
                     }
                 });
-
                 recycler(transactionList);
             }
         });
@@ -120,7 +127,7 @@ public class ViewAllTransactions extends AppCompatActivity {
     // Recycler View
     public void recycler(ArrayList<Transaction> transactionList){
         RecyclerView recyclerView = findViewById(R.id.viewAllTransRecycler);
-        DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);
+        DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList, this);
         LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(myLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -129,6 +136,7 @@ public class ViewAllTransactions extends AppCompatActivity {
 
     // Radio Buttons
     public void onRadioButtonClicked(View v){
+        transactionList.clear();
         boolean isSelected = ((AppCompatRadioButton)v).isChecked();
         if (v.getId() == R.id.radioAllBtn) {
             if(isSelected){
@@ -136,6 +144,8 @@ public class ViewAllTransactions extends AppCompatActivity {
                 radioExpenseBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.RED);
                 getTransData("all");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
         else if (v.getId() == R.id.radioIncomeBtn){
@@ -144,15 +154,64 @@ public class ViewAllTransactions extends AppCompatActivity {
                 radioAllBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.WHITE);
                 getTransData("income");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
         else if (v.getId() == R.id.radioExpenseBtn){
             if(isSelected){
+
                 radioExpenseBtn.setTextColor(Color.WHITE);
                 radioAllBtn.setTextColor(Color.RED);
                 radioIncomeBtn.setTextColor(Color.RED);
                 getTransData("expense");
+                SearchView sv = findViewById(R.id.search);
+                sv.setQuery("", false);
             }
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(ViewAllTransactions.this, ViewTransaction.class);
+        intent.putExtra("From","ViewAll");
+        intent.putExtra("Id",transactionList.get(position).getTransId());
+        intent.putExtra("Title",transactionList.get(position).getTransTitle());
+        intent.putExtra("Amount",transactionList.get(position).getTransAmt());
+        intent.putExtra("Date",transactionList.get(position).getTransDate());
+        intent.putExtra("Type",transactionList.get(position).getTransType());
+        Log.v("hmm","Item clicked, Intent send from ViewAllTransactions");
+        startActivity(intent);
+    }
+
+    // Filter data based on query //
+    private void filter(String text){
+        ArrayList<Transaction> filterList = new ArrayList<>();
+        for (Transaction trans : transactionList){
+            if(trans.getTransTitle().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(trans);
+            }
+        }
+        recycler(filterList);
+    }
+
+    // Listen to query //
+    private Boolean search(){
+        SearchView sv = findViewById(R.id.search);
+        sv.clearFocus();
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                return true;
+            }
+        });
+        return null;
     }
 }

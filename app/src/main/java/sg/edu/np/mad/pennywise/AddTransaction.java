@@ -41,7 +41,7 @@ public class AddTransaction extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
 
-    //Shared preference
+    //Shared preference //
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
     SharedPreferences sharedPreferences;
@@ -52,8 +52,15 @@ public class AddTransaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
 
+        // default current date
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        String date = dateFormat.format(currentDate);
+        TextView dateTextView = findViewById(R.id.selectDateText);
+        dateTextView.setText(date);
 
-        // Home icon to go back to Main Page
+
+        // Home icon to go back to Main Page //
         ImageView homeBtn = findViewById(R.id.homeBtn);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +70,7 @@ public class AddTransaction extends AppCompatActivity {
             }
         });
 
-        // Date Picker
+        // Date Picker //
         MaterialButton button = findViewById(R.id.datePicker);
         TextView textView = findViewById(R.id.selectDateText);
         button.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +96,7 @@ public class AddTransaction extends AppCompatActivity {
         saveTrans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get transaction data
+                // Get transaction data from text views
                 TextView dateTextView = findViewById(R.id.selectDateText);
                 String date = dateTextView.getText().toString();
                 EditText titleEt = findViewById(R.id.addTransDesc);
@@ -106,7 +113,7 @@ public class AddTransaction extends AppCompatActivity {
                     type = "expense";
                 }
                 if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
-                    Transaction transaction = new Transaction(title, date, amount, type);
+                    Transaction transaction = new Transaction("", title, date, amount, type);
                     sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
