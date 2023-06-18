@@ -1,33 +1,59 @@
 package sg.edu.np.mad.pennywise;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Locale;
 
 public class Profile extends AppCompatActivity {
+    private static final String TAG = "ProfileActivity";
+    private static final int REQUEST_IMAGE_GET = 1;
+
+    private ImageView homeBtn;
+    private ImageView EditButton;
+    private ImageView ProfilePic;
+    private Button ShowProfile;
+
     // Shared preferences
-    public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
-    public String MY_PASSWORD = "MyPassword";
-    SharedPreferences sharedPreferences;
+    private static final String GLOBAL_PREFS = "myPrefs";
+    private static final String MY_EMAIL = "MyEmail";
+    private static final String MY_PASSWORD = "MyPassword";
+
+    private Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        ImageView homeBtn = findViewById(R.id.Profile_Home);
+        homeBtn = findViewById(R.id.Profile_Home);
+        EditButton = findViewById(R.id.Profile_Edit);
+        ProfilePic = findViewById(R.id.profile_profilepic);
+        ShowProfile = findViewById(R.id.profile_viewprofile);
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String username = prefs.getString(MY_EMAIL, "");
+        String filename = username + ".jpg";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child("profilepic/" + filename);
+        getDownloadUrl(imageRef);
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,25 +63,105 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        ImageView EditButton = findViewById(R.id.Profile_Edit);
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(TAG, "Editting Profile!!");
+                Log.v(TAG, "Editing Profile!!");
                 Intent intent = new Intent(Profile.this, EditProfile.class);
                 startActivity(intent);
-
             }
         });
 
-        ImageView ProfilePic = findViewById(R.id.profile_profilepic);
-        ProfilePic.setOnClickListener(new View.OnClickListener() {
+        ShowProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showProfile();
             }
         });
+
+        ProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchImagePicker();
+            }
+        });
     }
+//    private void DisplayProfilePic(){
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        StorageReference storageRef = storage.getReference();
+//        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+//        String username = prefs.getString(MY_EMAIL, "");
+//        String filename = username + ".jpg";
+//        StorageReference imageRef = storageRef.child("profilepic/" + filename);
+//        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+//            // Handle the download URL, e.g., save it to a database or display the image
+//            String imageUrl = uri.toString();
+//
+//            // Use Glide to load the image into the ImageView
+//            Glide.with(this)
+//                    .load(imageUrl)
+//                    .into(ProfilePic);
+//
+//    }
+
+    private void launchImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE_GET);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+            if (data != null) {
+                selectedImageUri = data.getData();
+                uploadImage(selectedImageUri);
+            }
+        }
+    }
+
+    private void uploadImage(Uri imageUri) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        // Set a unique filename for the image
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String username = prefs.getString(MY_EMAIL, "");
+        String filename = username + ".jpg";
+        StorageReference imageRef = storageRef.child("profilepic/" + filename);
+
+        UploadTask uploadTask = imageRef.putFile(imageUri);
+
+        // Optional: Listen to the upload progress or handle any errors
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            // Image upload successful, retrieve the download URL
+            getDownloadUrl(imageRef);
+        }).addOnFailureListener(e -> {
+            // Handle any errors
+            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void getDownloadUrl(StorageReference imageRef) {
+        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            // Handle the download URL, e.g., save it to a database or display the image
+            String imageUrl = uri.toString();
+
+            // Use Glide to load the image into the ImageView
+            Glide.with(this)
+                    .load(imageUrl)
+                    .into(ProfilePic);
+
+            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            // Handle any errors
+            Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
     private void showProfile() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -65,19 +171,18 @@ public class Profile extends AppCompatActivity {
         // Retrieve the username from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String username = prefs.getString(MY_EMAIL, "");
-        Log.v("Usernmae",username);
+        Log.v("Username", username);
 
-        // Pass the name to the dialovview
+        // Pass the name to the dialog view
         TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
         String name = username.split("@")[0];
         profilepic_name.setText(name);
-        // Pass the username to the dialogView
-        TextView profilepic_username= dialogView.findViewById(R.id.profilepic_email);
+
+        // Pass the username to the dialog view
+        TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
         profilepic_username.setText(username.toLowerCase(Locale.ROOT));
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 }
