@@ -50,7 +50,18 @@ public class Currency extends AppCompatActivity {
     Dialog toDialog;
     Button convertButton;
     String convertFromValue, convertToValue, conversionValue;
-    String[] country = {"AFN","EUR"};
+    String[] country = {
+            "AFN", "EUR", "ALL", "DZD", "USD", "AOA", "XCD", "ARS", "AMD", "AWG", "AUD", "AZN", "BSD", "BHD", "BDT", "BBD", "BYN", "BZD", "XOF",
+            "BMD", "BTN", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "XOF", "BIF", "CVE", "KHR", "XAF", "CAD", "KYD", "XAF", "CLP", "CNY", "COP",
+            "KMF", "CDF", "NZD", "CRC", "HRK", "CUP", "ANG", "CZK", "DKK", "DJF", "XCD", "DOP", "EGP", "XCD", "ERN", "EEK", "ETB", "EUR", "FKP",
+            "FJD", "EUR", "XPF", "GMD", "GEL", "EUR", "GHS", "GIP", "XCD", "GTQ", "GGP", "GNF", "XOF", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK",
+            "INR", "IDR", "XDR", "IRR", "IQD", "IMP", "ILS", "EUR", "JMD", "JPY", "JEP", "JOD", "KZT", "KES", "AUD", "KPW", "KRW", "KWD", "KGS",
+            "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "CHF", "LTL", "EUR", "MOP", "MKD", "MGA", "MWK", "MYR", "MVR", "XOF", "EUR", "MRO", "MUR",
+            "MXN", "MDL", "MNT", "EUR", "XCD", "MAD", "MZN", "MMK", "NAD", "AUD", "NPR", "EUR", "XPF", "NZD", "NIO", "XOF", "NGN", "NZD", "NOK",
+            "OMR", "PKR", "PAB", "PGK", "PYG", "PEN", "PHP", "NZD", "PLN", "EUR", "QAR", "RON", "RUB", "RWF", "XCD", "EUR", "SHP", "XCD", "XCD",
+            "WST", "EUR", "STD", "SAR", "XOF", "RSD", "SCR", "SLL", "SGD", "EUR", "SBD", "SOS", "ZAR", "GBP", "EUR"
+    };
+
     private static final String API_KEY = "0675ebc65257b3241fe03de7d9759945";
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
