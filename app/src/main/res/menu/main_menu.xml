@@ -39,6 +39,7 @@
             android:title="Transfer" />
         <item
             android:id="@+id/nav_about"
+            android:icon="@drawable/aboutus_icon"
             android:title="About Us" />
         <item
             android:icon="@drawable/logout"
