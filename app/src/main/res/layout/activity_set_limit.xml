@@ -136,8 +136,8 @@
 
             <TextView
                 android:id="@+id/limit_amount"
-                android:layout_width="164dp"
-                android:layout_height="65dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="TextView"
@@ -166,8 +166,8 @@
 
             <TextView
                 android:id="@+id/limit_spend"
-                android:layout_width="164dp"
-                android:layout_height="65dp"
+                android:layout_width="288dp"
+                android:layout_height="61dp"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="TextView"

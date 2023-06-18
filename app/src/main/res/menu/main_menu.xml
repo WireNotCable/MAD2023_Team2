@@ -34,16 +34,16 @@
             android:icon="@drawable/card_icon"
             android:title="Card" />
         <item
+            android:icon="@drawable/transfer"
             android:id="@+id/nav_transfer"
             android:title="Transfer" />
         <item
             android:id="@+id/nav_about"
+            android:icon="@drawable/aboutus_icon"
             android:title="About Us" />
         <item
-            android:id="@+id/nav_login"
-            android:title="Log In" />
-        <item
-            android:id="@+id/nav_signup"
-            android:title="Sign Up" />
+            android:icon="@drawable/logout"
+            android:id="@+id/nav_logout"
+            android:title="Log Out" />
     </group>
 </menu>

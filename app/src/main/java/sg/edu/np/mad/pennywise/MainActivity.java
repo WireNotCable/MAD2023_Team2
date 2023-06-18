@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ViewTransRVInterface{
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewAllTrans();
     }
 
+    ArrayList<Transaction> transactionList = new ArrayList<>();
     //Get dashboard items for recycler view
     public void getDashboardItems(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
@@ -102,11 +103,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-            ArrayList<Transaction> transactionList = new ArrayList<>();
             for (DocumentSnapshot document : documents){
                 Map<String, Object> data = document.getData();
 
                 //Extract data
+                String id = (String) document.getId();
                 String title = (String) data.get("title");
                 String date = (String) data.get("date");
                 double amount = (double) data.get("amount");
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String extractMonth = extractMonthFromDate(date);
                 String currentYear = getCurrentYear();
                 String extractYear = extractYearFromDate(date);
-                Transaction transaction = new Transaction(title, date, amount, type);
+                Transaction transaction = new Transaction(id, title, date, amount, type);
                 if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
                     transactionList.add(transaction);
                     Log.v("extract",extractMonth);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             RecyclerView recyclerView = findViewById(R.id.dashboardRecyclerView);
-            DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);
+            DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList, this);
             LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(myLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -263,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    // NAVBAR
+    // NAVBAR //
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions){
@@ -286,19 +287,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
-
-
         else if (item.getItemId() == R.id.nav_currency) {
 
             Intent intent = new Intent(MainActivity.this, Currency.class);
-            startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_login){
-            Intent intent = new Intent(MainActivity.this, Login.class);
-            startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_signup){
-            Intent intent = new Intent(MainActivity.this, SignUp.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_set_limit){
@@ -309,10 +300,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, Transfer.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_logout){
+            sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            Intent intent = new Intent(MainActivity.this,Login.class);
+            startActivity(intent);
+        }
 
 
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(MainActivity.this, ViewTransaction.class);
+        intent.putExtra("From","Main");
+        intent.putExtra("Id",transactionList.get(position).getTransId());
+        intent.putExtra("Title",transactionList.get(position).getTransTitle());
+        intent.putExtra("Amount",transactionList.get(position).getTransAmt());
+        intent.putExtra("Date",transactionList.get(position).getTransDate());
+        intent.putExtra("Type",transactionList.get(position).getTransType());
+        Log.v("hmm","Item clicked, Intent send from MainActivity");
+        startActivity(intent);
     }
 }

@@ -25,6 +25,8 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.Map;
 import java.util.HashMap;
+
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
@@ -72,7 +74,8 @@ public class EditSetLimit extends AppCompatActivity {
         selectedStartDate.setText(intent.getStringExtra("StartDate"));
         selectedEndDate.setText(intent.getStringExtra("EndDate"));
         EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
-        EtFallsBelow.setText(intent.getStringExtra("FallsBelow"));
+        String Fallsbelow = intent.getStringExtra("FallsBelow").replaceAll("\\D+", "");
+        EtFallsBelow.setText(Fallsbelow);
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,13 +140,26 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("enddate",endDate);
                             limitData.put("limit",spendLimit);
                             limitData.put("warning",fallsbelow);
-                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue").getId();//Getting Document ID
-                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
+//                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue");//Getting Document ID
+//                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
+                            String documentId = "wqeuqiueywue";
+                            DocumentReference documentRef = db.collection("users")
+                                    .document(sharedEmail)
+                                    .collection("setlimit")
+                                    .document(documentId);
+
+                            documentRef.set(limitData, SetOptions.merge())
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
+                                        startActivity(intent);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("Firestore", "Error setting document: " + e.getMessage());
+                                    });
 
 
-                            Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
-                            startActivity(intent);
+
                         }
                         else if (spendLimit <= 0) {
                             EtSpendLimit.setError("Spend Limit must be greater than 0");
@@ -165,26 +181,6 @@ public class EditSetLimit extends AppCompatActivity {
 
             }
         });
-    }
-
-    public String getTodaysDate(String dateType) {
-        Calendar calendar = Calendar.getInstance(); // Get current date
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth;
-
-        ArrayList<String> monthList = new ArrayList<>(Arrays.asList(
-                "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
-        if (dateType.equals("Start")) {
-            dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
-        } else if (dateType.equals("End")) {
-            dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        } else {
-            return "";
-        }
-
-        String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
-        return selectedDate;
     }
 
 }
