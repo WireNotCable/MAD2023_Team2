@@ -33,6 +33,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 import org.w3c.dom.Comment;
@@ -53,7 +57,7 @@ import sg.edu.np.mad.pennywise.Transfer;
 
 
 public class Mobile extends Fragment {
-
+    private FirebaseAuth auth;
     private static final int REQUEST_CONTACT_PERMISSION = 1;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     AutoCompleteTextView MobileNumber;
@@ -65,6 +69,7 @@ public class Mobile extends Fragment {
     Button Transfer;
     Vibrator vibrator;
     ArrayList<Contact> contactList = new ArrayList<>();
+    DatabaseReference transferDbRef;
 
 
     /*@Override
@@ -151,6 +156,7 @@ public class Mobile extends Fragment {
         AmountWarning = rootView.findViewById(R.id.Note);
         Comment = rootView.findViewById(R.id.Comments);
         Transfer = rootView.findViewById(R.id.button);
+        auth = FirebaseAuth.getInstance();
         vibrator = (Vibrator) requireContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         contactList.add(new Contact("test1","12345678"));
@@ -186,14 +192,21 @@ public class Mobile extends Fragment {
                 if (mobile != null && amount <= 20000){
                     String comment = String.valueOf(Comment.getText());
                     //write the firebase code to deduct the balance
+                    transferDbRef = FirebaseDatabase.getInstance().getReference().child("Transfers");
+                    insertTransfer();
                     Toast.makeText(getActivity(),"Transfer successful",Toast.LENGTH_SHORT).show();
                     getActivity().finish();
+
+
                 }
             }
         });
 
 
         return rootView;
+    }
+    private void insertTransfer(){
+
     }
 
     private void getPhoneContacts(){
