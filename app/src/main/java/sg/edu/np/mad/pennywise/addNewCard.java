@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,10 @@ public class addNewCard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        String date = expiryDate.getText().toString();
+        String month = date.substring(0,2);
+        String year = date.substring(2);
+        Date CurrentDate = new Date();
         addNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,9 +71,10 @@ public class addNewCard extends AppCompatActivity {
                 }
                 else if(expiryDate.length()!=4){
                     Toast.makeText(getApplicationContext(),"Expiry date must be 4 digits.",Toast.LENGTH_SHORT).show();
+                    String date = expiryDate.getText().toString();
                 }
-                else if(inputAddress.length()==0){
-                    Toast.makeText(getApplicationContext(),"Enter a Billing Address.",Toast.LENGTH_SHORT).show();
+                else if(inputAddress.length()==0) {
+                    Toast.makeText(getApplicationContext(), "Enter a Billing Address.", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Form Validate Successfully!", Toast.LENGTH_SHORT).show();
