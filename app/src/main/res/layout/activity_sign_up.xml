@@ -49,7 +49,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
                 android:hint="Contact Number"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="number"/>
             <EditText
                 android:id="@+id/signup_NRIC"
                 android:layout_width="match_parent"
