@@ -9,7 +9,7 @@
     tools:context=".Transfer">
 
     <ImageView
-        android:id="@+id/makecardBtn2"
+        android:id="@+id/homeButton"
         android:layout_width="38dp"
         android:layout_height="36dp"
         android:layout_marginStart="4dp"
@@ -23,7 +23,7 @@
         android:id="@+id/PageTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/makecardBtn2"
+        android:layout_below="@id/homeButton"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"

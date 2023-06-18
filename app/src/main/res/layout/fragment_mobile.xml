@@ -8,15 +8,19 @@
     tools:context=".fragments.Mobile">
 
 
-    <EditText
-        android:id="@+id/MobileNumber"
+    <AutoCompleteTextView
+        android:id="@+id/actv"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_margin="7dp"
-        android:layout_weight="1"
-        android:ems="10"
-        android:hint="Mobile no."
-        android:inputType="phone" />
+        android:completionHint="Select a contact"
+        android:completionThreshold="1"
+        android:hint="Phone Number" />
+
+    <Button
+        android:id="@+id/myContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Contacts" />
 
     <TextView
         android:id="@+id/Warning"
@@ -56,6 +60,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Transfer" />
+        android:text="Transfer"/>
 
 </LinearLayout>
