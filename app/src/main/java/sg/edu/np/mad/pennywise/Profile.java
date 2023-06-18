@@ -178,6 +178,30 @@ public class Profile extends AppCompatActivity {
         String name = username.split("@")[0];
         profilepic_name.setText(name);
 
+
+
+
+        //profile pic
+        ImageView profilepic = dialogView.findViewById(R.id.profilepic_profile);
+        String filename = username + ".jpg";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child("profilepic/" + filename);
+        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            // Handle the download URL, e.g., save it to a database or display the image
+            String imageUrl = uri.toString();
+
+            // Use Glide to load the image into the ImageView
+            Glide.with(dialogView)
+                    .load(imageUrl)
+                    .into(profilepic);
+
+            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+        }).addOnFailureListener(e -> {
+            // Handle any errors
+            Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
+
         // Pass the username to the dialog view
         TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
         profilepic_username.setText(username.toLowerCase(Locale.ROOT));
