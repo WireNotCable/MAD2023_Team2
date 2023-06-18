@@ -12,6 +12,9 @@
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp">
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +82,7 @@
                 android:text="Already an user? Login"
                 android:textSize="18sp" />
         </LinearLayout>
-
+        </ScrollView>
     </androidx.cardview.widget.CardView>
 
 

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +18,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private EditText signupEmail, signupPassword;
+    private EditText signupEmail, signupPassword, signupPhoneNum, signupNRIC;
     private Button signupButton;
     private TextView loginRedirectText;
+
+    //Shared preference //
+    public String GLOBAL_PREFS = "myPrefs";
+    public String MY_EMAIL = "MyEmail";
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -34,15 +44,18 @@ public class SignUp extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
+        signupPhoneNum = findViewById(R.id.signup_contact);
+        signupNRIC = findViewById(R.id.signup_NRIC);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
-        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
+                String phoneNum = signupPhoneNum.getText().toString();
+                String NRIC = signupNRIC.getText().toString();
                 if (user.isEmpty()){
                     signupEmail.setError("Email cannot be empty");
                 }
@@ -54,16 +67,24 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                User userdata = new User(user,password);
-                                dbHandler.addUser(userdata);
-                                Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUp.this, Login.class));
+
                             }
                             else{
                                 Toast.makeText(SignUp.this, "Sign Up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
+                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    Map<String, Object> userData = new HashMap<>();
+                    userData.put("email", user);
+                    userData.put("password", password);
+                    userData.put("phonenum", phoneNum);
+                    userData.put("nric", NRIC);
+                    db.collection("users").document(sharedEmail).collection("userdata").document("userdata").set(userData);
+
 
                     loginRedirectText.setOnClickListener(new View.OnClickListener() {
                         @Override
