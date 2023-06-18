@@ -36,7 +36,7 @@ public class SignUp extends AppCompatActivity {
         signupPassword = findViewById(R.id.signup_password);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
-        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
+
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +54,6 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                User userdata = new User(user,password);
-                                dbHandler.addUser(userdata);
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, Login.class));
                             }
