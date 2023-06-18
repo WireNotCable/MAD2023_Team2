@@ -40,8 +40,20 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.insert(ACCOUNTS, null, values);//input values
         db.close();//close connection
     }
+    public String getUID(String Email){
+        String query = "SELECT UID FROM " + ACCOUNTS + "WHERE" + COLUMN_USERNAME + "=\"" + Email +"\"";
+        SQLiteDatabase db = this.getWritableDatabase();// Open Connection
+        Cursor cursor = db.rawQuery(query,null); //Executing query
+        if (cursor.moveToFirst()){
+            cursor.close();
+            return cursor.getString(0);
+        }
+        else{
+            return null;
+        }
+    }
 
-    public User findUser(String Username)
+    /*public User findUser(String Username)
     {
         String query = "SELECT * FROM " + ACCOUNTS + "WHERE " + COLUMN_USERNAME + "=\"" + Username +"\"";
         SQLiteDatabase db = this.getWritableDatabase();// Open Connection
@@ -58,7 +70,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
             return result = null;
         }
 
-    }
+    }*/
 
 }
 

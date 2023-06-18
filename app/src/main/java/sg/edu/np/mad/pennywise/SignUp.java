@@ -49,6 +49,8 @@ public class SignUp extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
+        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
+
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,12 +64,25 @@ public class SignUp extends AppCompatActivity {
                 if (password.isEmpty()){
                     signupPassword.setError("Password cannot be empty");
                 }
+                if (phoneNum.isEmpty()){
+                    signupContactNumber.setError("Contact number cannot be empty");
+                }
+                if (NRIC.isEmpty()){
+                    signupNRIC.setError("NRIC cannot be empty");
+                }
+                if (NRIC.length() != 9 && NRIC.substring(1,7).chars().allMatch(Character :: isDigit)){
+                    signupNRIC.setError("Invalid NRIC input, please input a valid NRIC");
+                }
+
                 else{
                     auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-
+                                User userdata = new User(user,password);
+                                dbHandler.addUser(userdata);
+                                Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUp.this, Login.class));
                             }
                             else{
                                 Toast.makeText(SignUp.this, "Sign Up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
