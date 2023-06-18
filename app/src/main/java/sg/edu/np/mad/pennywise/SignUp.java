@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class SignUp extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class SignUp extends AppCompatActivity {
         signupNRIC = findViewById(R.id.signup_NRIC);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
+
 
         MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
 
@@ -65,12 +68,12 @@ public class SignUp extends AppCompatActivity {
                     signupPassword.setError("Password cannot be empty");
                 }
                 if (phoneNum.isEmpty()){
-                    signupContactNumber.setError("Contact number cannot be empty");
+                    signupPhoneNum.setError("Contact number cannot be empty");
                 }
                 if (NRIC.isEmpty()){
                     signupNRIC.setError("NRIC cannot be empty");
                 }
-                if (NRIC.length() != 9 && NRIC.substring(1,7).chars().allMatch(Character :: isDigit)){
+                if (NRIC.length() != 9 ){
                     signupNRIC.setError("Invalid NRIC input, please input a valid NRIC");
                 }
 
@@ -79,8 +82,18 @@ public class SignUp extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                User userdata = new User(user,password);
+                                User userdata = new User(user,password,NRIC,phoneNum);
                                 dbHandler.addUser(userdata);
+                                sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                                String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("email", user);
+                                userData.put("password", password);
+                                userData.put("phonenum", phoneNum);
+                                userData.put("nric", NRIC);
+                                db.collection("users").document(sharedEmail).collection("userdata").document("userdata").set(userData);
+
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, Login.class));
                             }
@@ -90,15 +103,7 @@ public class SignUp extends AppCompatActivity {
                         }
                     });
 
-                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    Map<String, Object> userData = new HashMap<>();
-                    userData.put("email", user);
-                    userData.put("password", password);
-                    userData.put("phonenum", phoneNum);
-                    userData.put("nric", NRIC);
-                    db.collection("users").document(sharedEmail).collection("userdata").document("userdata").set(userData);
+
 
 
                     loginRedirectText.setOnClickListener(new View.OnClickListener() {
