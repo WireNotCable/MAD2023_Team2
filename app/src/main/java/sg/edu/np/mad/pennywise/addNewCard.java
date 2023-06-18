@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,10 +54,7 @@ public class addNewCard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        String date = expiryDate.getText().toString();
-        String month = date.substring(0,2);
-        String year = date.substring(2);
-        Date CurrentDate = new Date();
+
         addNewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
