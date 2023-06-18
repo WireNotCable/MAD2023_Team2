@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -52,7 +53,6 @@ public class SignUp extends AppCompatActivity {
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
 
-        MyDBHandler dbHandler = new MyDBHandler(this,null,null,1);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +79,17 @@ public class SignUp extends AppCompatActivity {
 
                 else{
                     auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                FirebaseUser firebaseUser = auth.getCurrentUser();
                                 User userdata = new User(user,password,NRIC,phoneNum);
-                                dbHandler.addUser(userdata);
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 Map<String, Object> userData = new HashMap<>();
+                                userData.put("UID", firebaseUser.getUid());
                                 userData.put("email", user);
                                 userData.put("password", password);
                                 userData.put("phonenum", phoneNum);
