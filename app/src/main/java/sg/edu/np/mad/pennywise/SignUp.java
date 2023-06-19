@@ -90,12 +90,12 @@ public class SignUp extends AppCompatActivity {
                                 String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 Map<String, Object> userData = new HashMap<>();
-                                userData.put("UID", firebaseUser.getUid());
+                                userData.put("UID",auth.getUid());
                                 userData.put("email", user);
                                 userData.put("password", password); //just cos we wan add
                                 userData.put("phonenum", phoneNum);
                                 userData.put("nric", NRIC);
-                                db.collection("users").document(user).set(userData);
+                                db.collection("users").document(firebaseUser.getUid()).set(userData);
 
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
