@@ -84,6 +84,7 @@ public class SignUp extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 FirebaseUser firebaseUser = auth.getCurrentUser();
+                                //Log.v("TEST",firebaseUser.getEmail());
                                 User userdata = new User(user,password,NRIC,phoneNum);
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -91,10 +92,11 @@ public class SignUp extends AppCompatActivity {
                                 Map<String, Object> userData = new HashMap<>();
                                 userData.put("UID", firebaseUser.getUid());
                                 userData.put("email", user);
-                                userData.put("password", password);
+                                userData.put("password", password); //just cos we wan add
                                 userData.put("phonenum", phoneNum);
                                 userData.put("nric", NRIC);
-                                db.collection("users").document(sharedEmail).collection("userdata").document("userdata").set(userData);
+                                db.collection("users").document(user).set(userData);
+
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, Login.class));
