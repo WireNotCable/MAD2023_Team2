@@ -16,6 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,6 +43,7 @@ public class Profile extends AppCompatActivity {
     private static final String MY_PASSWORD = "MyPassword";
 
     private Uri selectedImageUri;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +161,7 @@ public class Profile extends AppCompatActivity {
                     .load(imageUrl)
                     .into(ProfilePic);
 
-            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
             // Handle any errors
             Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -173,10 +180,47 @@ public class Profile extends AppCompatActivity {
         String username = prefs.getString(MY_EMAIL, "");
         Log.v("Username", username);
 
-        // Pass the name to the dialog view
-        TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
-        String name = username.split("@")[0];
-        profilepic_name.setText(name);
+
+
+        //Pass Contact Number
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+        usersRef.whereEqualTo("email", username )
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String email = documentSnapshot.getString("email");
+                            String nric = documentSnapshot.getString("nric");
+                            String phoneNumber = documentSnapshot.getString("phonenum");
+
+                            // Pass the name to the dialog view
+                            TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
+                            String name = email.split("@")[0];
+                            profilepic_name.setText(name);
+
+                            // Pass the username to the dialog view
+                            TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
+                            profilepic_username.setText(email.toLowerCase());
+
+                            //Pass phonenumber to dialog view
+                            TextView profilepic_hp = dialogView.findViewById(R.id.profilepic_phoneno);
+                            profilepic_hp.setText(phoneNumber);
+                            Log.v("Phone Number",phoneNumber);
+
+                            // TODO: Use the retrieved data as needed
+                        } else {
+                            // No matching document found
+                            Log.d(TAG, "No document found for the specified email");
+                        }
+                    } else {
+                        // Error retrieving data
+                        Log.e(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
 
 
 
@@ -202,9 +246,7 @@ public class Profile extends AppCompatActivity {
             Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
 
-        // Pass the username to the dialog view
-        TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
-        profilepic_username.setText(username.toLowerCase(Locale.ROOT));
+
 
         AlertDialog dialog = builder.create();
         dialog.show();
