@@ -29,6 +29,7 @@ public class Login extends AppCompatActivity {
     // Shared preferences
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     public String MY_PASSWORD = "MyPassword";
     SharedPreferences sharedPreferences;
 
@@ -55,11 +56,13 @@ public class Login extends AppCompatActivity {
                         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
+
                                 // save email into shared preference
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(MY_EMAIL, email.toLowerCase());
                                 editor.putString(MY_PASSWORD, password);
+                                editor.putString(MY_UID,auth.getUid());
                                 editor.commit();
                                 //Redirect to login
                                 Toast.makeText(Login.this,"Login Successful",Toast.LENGTH_SHORT).show();

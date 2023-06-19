@@ -16,6 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,9 +40,10 @@ public class Profile extends AppCompatActivity {
     // Shared preferences
     private static final String GLOBAL_PREFS = "myPrefs";
     private static final String MY_EMAIL = "MyEmail";
-    private static final String MY_PASSWORD = "MyPassword";
+    public String MY_UID = "MyUID";
 
     private Uri selectedImageUri;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +55,8 @@ public class Profile extends AppCompatActivity {
         ProfilePic = findViewById(R.id.profile_profilepic);
         ShowProfile = findViewById(R.id.profile_viewprofile);
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        String filename = username + ".jpg";
+        String uid = prefs.getString(MY_UID, "");
+        String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
@@ -86,23 +93,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-//    private void DisplayProfilePic(){
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReference();
-//        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-//        String username = prefs.getString(MY_EMAIL, "");
-//        String filename = username + ".jpg";
-//        StorageReference imageRef = storageRef.child("profilepic/" + filename);
-//        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//            // Handle the download URL, e.g., save it to a database or display the image
-//            String imageUrl = uri.toString();
-//
-//            // Use Glide to load the image into the ImageView
-//            Glide.with(this)
-//                    .load(imageUrl)
-//                    .into(ProfilePic);
-//
-//    }
 
     private void launchImagePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -128,8 +118,8 @@ public class Profile extends AppCompatActivity {
 
         // Set a unique filename for the image
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        String filename = username + ".jpg";
+        String uid= prefs.getString(MY_UID, "");
+        String filename = uid + ".jpg";
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
 
         UploadTask uploadTask = imageRef.putFile(imageUri);
@@ -154,7 +144,7 @@ public class Profile extends AppCompatActivity {
                     .load(imageUrl)
                     .into(ProfilePic);
 
-            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
             // Handle any errors
             Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -168,22 +158,58 @@ public class Profile extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.profilepic, null);
         builder.setView(dialogView);
 
-        // Retrieve the username from the shared prefs
+        // Retrieve the uid from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        Log.v("Username", username);
+        String uid = prefs.getString(MY_UID, "");
 
-        // Pass the name to the dialog view
-        TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
-        String name = username.split("@")[0];
-        profilepic_name.setText(name);
+
+
+        //Pass Contact Number
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+        usersRef.whereEqualTo("UID", uid)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                            String email = documentSnapshot.getString("email");
+                            String phoneNumber = documentSnapshot.getString("phonenum");
+
+                            // Pass the name to the dialog view
+                            TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
+                            String name = email.split("@")[0];
+                            profilepic_name.setText(name);
+
+                            // Pass the username to the dialog view
+                            TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
+                            profilepic_username.setText(email.toLowerCase());
+
+                            //Pass phonenumber to dialog view
+                            TextView profilepic_hp = dialogView.findViewById(R.id.profilepic_phoneno);
+                            profilepic_hp.setText(phoneNumber);
+                            Log.v("Phone Number",phoneNumber);
+
+                            // TODO: Use the retrieved data as needed
+                        } else {
+                            // No matching document found
+                            Log.d(TAG, "No document found for the specified email");
+                        }
+                    } else {
+                        // Error retrieving data
+                        Log.e(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
 
 
 
 
         //profile pic
         ImageView profilepic = dialogView.findViewById(R.id.profilepic_profile);
-        String filename = username + ".jpg";
+        // Retrieve the uid from the shared prefs
+        String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
@@ -196,15 +222,13 @@ public class Profile extends AppCompatActivity {
                     .load(imageUrl)
                     .into(profilepic);
 
-            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
             // Handle any errors
             Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
 
-        // Pass the username to the dialog view
-        TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
-        profilepic_username.setText(username.toLowerCase(Locale.ROOT));
+
 
         AlertDialog dialog = builder.create();
         dialog.show();

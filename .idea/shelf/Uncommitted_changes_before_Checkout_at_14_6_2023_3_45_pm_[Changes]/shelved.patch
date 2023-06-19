@@ -1,0 +1,40 @@
+Index: app/src/main/java/sg/edu/np/mad/pennywise/Profile.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/Profile.java b/app/src/main/java/sg/edu/np/mad/pennywise/Profile.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/Profile.java	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/Profile.java	
+@@ -62,8 +62,8 @@
+ 
+         // Retrieve the username from the shared prefs
+         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+-        String username = prefs.getString("MY_EMAIL", "");
+-        Log.v("Usernmae",username);
++        String username = prefs.getString(MY_EMAIL, "");
++
+ 
+ 
+         // Pass the username to the dialogView
+Index: app/src/main/java/sg/edu/np/mad/pennywise/MyDBHandler.java
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/MyDBHandler.java b/app/src/main/java/sg/edu/np/mad/pennywise/MyDBHandler.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/MyDBHandler.java	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/MyDBHandler.java	
+@@ -22,9 +22,14 @@
+ 
+     @Override
+     public void onCreate(SQLiteDatabase db){
+-        String CREATE_ACCOUNTS_TABLE = "CREATE TABLE " + ACCOUNTS + "(" + COLUMN_USERNAME + "TEXT"+COLUMN_PASSWORD + "TEXT)";
++        String CREATE_ACCOUNTS_TABLE = "CREATE TABLE " + ACCOUNTS +
++                "(" +
++                COLUMN_USERNAME + " TEXT," +
++                COLUMN_PASSWORD + " TEXT" +
++                ")";
+         db.execSQL(CREATE_ACCOUNTS_TABLE);
+ 
++
+     }
+     public void onUpgrade(SQLiteDatabase db, int oldVersion , int newVersion){
+         db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS);

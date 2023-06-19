@@ -55,6 +55,7 @@ public class EditSetLimit extends AppCompatActivity {
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
 
@@ -132,6 +133,7 @@ public class EditSetLimit extends AppCompatActivity {
                         if (spendLimit > 0 && fallsbelow > 0) {
                             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                             String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
