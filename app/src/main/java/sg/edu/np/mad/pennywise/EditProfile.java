@@ -2,8 +2,11 @@ package sg.edu.np.mad.pennywise;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,8 +74,9 @@ public class EditProfile extends AppCompatActivity {
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             String Email = documentSnapshot.getString("email");
                             String phoneNumber = documentSnapshot.getString("phonenum");
-                            editEmail.setText(Email);
+                            editEmail.setText(email);
                             editHpNumber.setText(phoneNumber);
+                            Log.v("phonenumber",phoneNumber);
 
                             // TODO: Use the retrieved data as needed
                         } else {
@@ -103,41 +107,48 @@ public class EditProfile extends AppCompatActivity {
                             if (!oldPassword.isEmpty()) {
                                 if (oldPassword.equals(password)) {
                                     if (!newPassword.isEmpty()) {
-                                        usersRef.whereEqualTo("email", email)
-                                                .limit(1)
-                                                .get()
-                                                .addOnCompleteListener(task -> {
-                                                    if (task.isSuccessful()) {
-                                                        QuerySnapshot querySnapshot = task.getResult();
-                                                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                                        FirebaseUser currentUser = auth.getCurrentUser();
+                                        currentUser.updateEmail(newEmail);
+                                        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
+                                        currentUser.reauthenticate(credential);
+                                        currentUser.updatePassword(newPassword);
 
-                                                            // Update the fields
-                                                            DocumentReference documentRef = usersRef.document(documentSnapshot.getId());
-                                                            documentRef.update("email", newEmail);
-                                                            documentRef.update("password", newPassword);
-                                                            documentRef.update("phonenum", phonnum)
-                                                                    .addOnSuccessListener(aVoid -> {
-                                                                        // Fields updated successfully
-                                                                        //Update Shared Preferences
-                                                                        SharedPreferences.Editor editor = prefs.edit();
-                                                                        editor.putString(MY_EMAIL, newEmail);
-                                                                        editor.putString(MY_PASSWORD, newPassword);
-                                                                        editor.apply(); // Apply the changes to SharedPreferences
-                                                                        Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
-                                                                        startActivity(new Intent(EditProfile.this, Profile.class));
-                                                                        finish();
-                                                                    })
-                                                                    .addOnFailureListener(e -> {
-                                                                        // Failed to update fields
-                                                                        Toast.makeText(EditProfile.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-                                                                    });
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(EditProfile.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                    } else {
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        CollectionReference usersRef = db.collection("users");
+                                        usersRef.document(currentUser.getUid()).update("phonenum", phonnum);
+//                                        usersRef.document(currentUser.getUid()).update("phonenum", phonnum)
+//                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                    @Override
+//                                                    public void onSuccess(Void aVoid) {
+//                                                        // Fields updated successfully
+//                                                        // Update Shared Preferences
+//                                                        SharedPreferences.Editor editor = prefs.edit();
+//                                                        editor.putString(MY_EMAIL, newEmail);
+//                                                        editor.putString(MY_PASSWORD, newPassword);
+//                                                        editor.apply(); // Apply the changes to SharedPreferences
+//                                                        Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+//                                                        startActivity(new Intent(EditProfile.this, Profile.class));
+//                                                        finish();
+//                                                    }
+//                                                })
+//                                                .addOnFailureListener(new OnFailureListener() {
+//                                                    @Override
+//                                                    public void onFailure(@NonNull Exception e) {
+//                                                        // Failed to update fields
+//                                                        Toast.makeText(EditProfile.this, "Failed to update profile", Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                });
+                                                // Fields updated successfully
+                                                //Update Shared Preferences
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putString(MY_EMAIL, newEmail);
+                                                editor.putString(MY_PASSWORD, newPassword);
+                                                editor.apply(); // Apply the changes to SharedPreferences
+                                                Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+
+
+                                    }else {
                                         editNewPassword.setError("Please Enter New Password");
                                     }
                                 } else {
