@@ -240,7 +240,7 @@ public class Profile extends AppCompatActivity {
                     .load(imageUrl)
                     .into(profilepic);
 
-            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Image upload successful. URL: " + imageUrl, Toast.LENGTH_SHORT).show();
         }).addOnFailureListener(e -> {
             // Handle any errors
             Toast.makeText(this, "Failed to retrieve download URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
