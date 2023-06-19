@@ -37,6 +37,7 @@ public class EditProfile extends AppCompatActivity {
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
     public String MY_PASSWORD = "MyPassword";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
     private FirebaseAuth auth;
@@ -54,12 +55,13 @@ public class EditProfile extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String email = prefs.getString(MY_EMAIL, "");
         String password = prefs.getString(MY_PASSWORD, "");
+        String uid = prefs.getString(MY_UID,"");
 
 
         //Pass Contact Number
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
-        usersRef.whereEqualTo("email", email)
+        usersRef.whereEqualTo("UID", uid)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {

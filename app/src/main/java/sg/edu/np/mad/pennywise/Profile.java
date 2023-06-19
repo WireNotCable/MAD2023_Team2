@@ -40,7 +40,7 @@ public class Profile extends AppCompatActivity {
     // Shared preferences
     private static final String GLOBAL_PREFS = "myPrefs";
     private static final String MY_EMAIL = "MyEmail";
-    private static final String MY_PASSWORD = "MyPassword";
+    public String MY_UID = "MyUID";
 
     private Uri selectedImageUri;
     private FirebaseAuth auth;
@@ -55,8 +55,8 @@ public class Profile extends AppCompatActivity {
         ProfilePic = findViewById(R.id.profile_profilepic);
         ShowProfile = findViewById(R.id.profile_viewprofile);
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        String filename = username + ".jpg";
+        String uid = prefs.getString(MY_UID, "");
+        String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
@@ -93,23 +93,6 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
-//    private void DisplayProfilePic(){
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReference();
-//        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-//        String username = prefs.getString(MY_EMAIL, "");
-//        String filename = username + ".jpg";
-//        StorageReference imageRef = storageRef.child("profilepic/" + filename);
-//        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//            // Handle the download URL, e.g., save it to a database or display the image
-//            String imageUrl = uri.toString();
-//
-//            // Use Glide to load the image into the ImageView
-//            Glide.with(this)
-//                    .load(imageUrl)
-//                    .into(ProfilePic);
-//
-//    }
 
     private void launchImagePicker() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -135,8 +118,8 @@ public class Profile extends AppCompatActivity {
 
         // Set a unique filename for the image
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        String filename = username + ".jpg";
+        String uid= prefs.getString(MY_UID, "");
+        String filename = uid + ".jpg";
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
 
         UploadTask uploadTask = imageRef.putFile(imageUri);
@@ -175,17 +158,16 @@ public class Profile extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.profilepic, null);
         builder.setView(dialogView);
 
-        // Retrieve the username from the shared prefs
+        // Retrieve the uid from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String username = prefs.getString(MY_EMAIL, "");
-        Log.v("Username", username);
+        String uid = prefs.getString(MY_UID, "");
 
 
 
         //Pass Contact Number
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
-        usersRef.whereEqualTo("email", username )
+        usersRef.whereEqualTo("UID", uid)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -194,7 +176,6 @@ public class Profile extends AppCompatActivity {
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             String email = documentSnapshot.getString("email");
-                            String nric = documentSnapshot.getString("nric");
                             String phoneNumber = documentSnapshot.getString("phonenum");
 
                             // Pass the name to the dialog view
@@ -227,7 +208,8 @@ public class Profile extends AppCompatActivity {
 
         //profile pic
         ImageView profilepic = dialogView.findViewById(R.id.profilepic_profile);
-        String filename = username + ".jpg";
+        // Retrieve the uid from the shared prefs
+        String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("profilepic/" + filename);
