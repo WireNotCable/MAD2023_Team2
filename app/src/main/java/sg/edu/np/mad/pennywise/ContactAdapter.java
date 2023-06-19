@@ -86,7 +86,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         }
         @Override
         public CharSequence convertResultToString(Object resultValue){
-            return ((Contact) resultValue).getName()+","+((Contact) resultValue).getPhoneNumber();
+            return ((Contact) resultValue).getPhoneNumber()+"("+((Contact) resultValue).getName()+")";
         }
     };
 }
