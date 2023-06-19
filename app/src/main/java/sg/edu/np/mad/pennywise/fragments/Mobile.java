@@ -251,7 +251,7 @@ public class Mobile extends Fragment {
                                             transcationData.put("toUID",document.getString("UID"));
                                             transcationData.put("fromUID",auth.getUid());
                                             transcationData.put("type","Mobile");
-                                            transcationData.put("amount",amount);
+                                            transcationData.put("amount",-amount);
                                             transcationData.put("comments",comment);
                                             transcationData.put("transferDate",new Date());
 

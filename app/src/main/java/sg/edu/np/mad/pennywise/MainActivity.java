@@ -1,5 +1,7 @@
 package sg.edu.np.mad.pennywise;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,13 +23,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
@@ -51,8 +58,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
+    RecyclerView dashboardRecyclerView;
     Toolbar toolbar;
-
+    private ArrayList<Transfers> transfersArrayList = new ArrayList<>();
+    private TransfersRecyclerAdapter transfersRecyclerAdapter;
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
@@ -68,11 +77,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        updateTransfer();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
-
+        dashboardRecyclerView = findViewById(R.id.dashboardRecyclerView);
+        dashboardRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        transfersRecyclerAdapter = new TransfersRecyclerAdapter(transfersArrayList,MainActivity.this);
+        dashboardRecyclerView.setAdapter(transfersRecyclerAdapter);
         setSupportActionBar(toolbar);
 
         // Nav Drawer
@@ -91,6 +103,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getDashboardItems();
         addNewTrans();
         viewAllTrans();
+
+    }
+    @Override
+    protected void onResume( ) {
+        super.onResume();
+        updateTransfer();
     }
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
@@ -145,6 +163,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(dashboardAdaptor);
         });
+    }
+    public void updateTransfer(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        db.collection("transcation")
+                .whereEqualTo("fromUID",auth.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                transfersArrayList.add(new Transfers(
+                                        String.valueOf(document.get("amount")),
+                                        document.getString("comments"),
+                                        document.getString("fromUID"),
+                                        document.getString("toUID"),
+                                        document.getTimestamp("transferDate").toString(),
+                                        document.getString("type")
+                                ));
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
     }
 
     // Get balance for the card
