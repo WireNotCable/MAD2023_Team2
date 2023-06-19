@@ -1,0 +1,535 @@
+Index: app/src/main/res/drawable/box_background.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><shape xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <solid android:color=\"#F2F2F2\" />\r\n    <stroke\r\n        android:color=\"#CCCCCC\"\r\n        android:width=\"1dp\" />\r\n    <corners android:radius=\"4dp\" />\r\n    <padding\r\n        android:left=\"4dp\"\r\n        android:top=\"4dp\"\r\n        android:right=\"4dp\"\r\n        android:bottom=\"4dp\" />\r\n</shape>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/box_background.xml b/app/src/main/res/drawable/box_background.xml
+--- a/app/src/main/res/drawable/box_background.xml	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/res/drawable/box_background.xml	(date 1686831971456)
+@@ -5,8 +5,8 @@
+         android:width="1dp" />
+     <corners android:radius="4dp" />
+     <padding
+-        android:left="4dp"
++        android:left="20dp"
+         android:top="4dp"
+-        android:right="4dp"
++        android:right="20dp"
+         android:bottom="4dp" />
+ </shape>
+Index: app/src/main/java/sg/edu/np/mad/pennywise/SetLimit.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pennywise;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport java.lang.reflect.Array;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.Calendar;\r\nimport java.util.List;\r\n\r\n\r\nimport com.google.firebase.firestore.CollectionReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport java.util.Map;\r\n\r\npublic class SetLimit extends AppCompatActivity {\r\n    // Shared preference\r\n    public static final String GLOBAL_PREFS = \"myPrefs\";\r\n    public static final String MY_EMAIL = \"MyEmail\";\r\n    public String MY_EXPENSE= \"myExpense\";\r\n\r\n    public String MY_STARTDATE = \"myStartDate\";\r\n\r\n    public String MY_ENDDATE = \"myEndDate\";\r\n    SharedPreferences sharedPreferences;\r\n    private ImageView homeBtn;\r\n    private ImageView EditLimit;\r\n    private TextView StartDate;\r\n    private TextView EndDate;\r\n    private TextView SpendLimit;\r\n    private TextView FallsBelow;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_set_limit);\r\n\r\n        StartDate = findViewById(R.id.limit_startdate);\r\n        EndDate = findViewById(R.id.limit_enddate);\r\n        SpendLimit = findViewById(R.id.limit_spendlimit);\r\n        FallsBelow = findViewById(R.id.limit_spend);\r\n\r\n        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n        String sharedEmail = sharedPreferences.getString(MY_EMAIL, \"\");\r\n        String Expense = sharedPreferences.getString(MY_EXPENSE,\"\");\r\n        FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n        CollectionReference LimitRef = db.collection(\"users\").document(sharedEmail).collection(\"setlimit\");\r\n        LimitRef.get().addOnCompleteListener(task -> {\r\n            if (task.isSuccessful()) {\r\n                QuerySnapshot querySnapshot = task.getResult();\r\n                if (querySnapshot != null) {\r\n                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();\r\n                    LimitObject limit = new LimitObject(getTodaysDate(\"Start\"),getTodaysDate(\"End\"),1500,500);\r\n                    //int index = 0;\r\n                    //ArrayList<LimitObject> limit_list = new ArrayList<>();\r\n                    for (DocumentSnapshot document : documents) {\r\n                        Map<String, Object> data = document.getData();\r\n                        if (data != null) {\r\n                            //index+=1;\r\n                            // Extract data\r\n                            String Getstartdate = (String) data.get(\"startdate\");\r\n                            String Getenddate = (String) data.get(\"enddate\");\r\n                            double Getlimit = ((Number) data.get(\"limit\")).doubleValue();\r\n                            double Getwarning = ((Number) data.get(\"warning\")).doubleValue();\r\n                            limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);\r\n//                            limit_list.add(limit);\r\n//                            Log.v(\"START DATE\",limit.getStartdate());\r\n                        }\r\n                    }\r\n                    if (limit != null) {\r\n//                        limit = limit_list.get(index-1);\r\n                        Log.v(\"START DATE\",limit.getStartdate());\r\n                        StartDate.setText(limit.getStartdate());\r\n                        EndDate.setText(limit.getEnddate());\r\n                        SpendLimit.setText(Expense +\"/\"+ String.valueOf(limit.getSpendlimit()));\r\n                        FallsBelow.setText(String.valueOf(limit.getFallsbelow()));\r\n                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n                        SharedPreferences.Editor editor = prefs.edit();\r\n                        editor.putString(MY_STARTDATE,limit.getStartdate());\r\n                        editor.putString(MY_ENDDATE,limit.getEnddate());\r\n                        editor.apply(); // Apply the changes to SharedPreferences\r\n                    }\r\n\r\n                }\r\n            }\r\n        });\r\n\r\n        homeBtn = findViewById(R.id.limit_home);\r\n        homeBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(SetLimit.this, MainActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        EditLimit = findViewById(R.id.setlimit_icon);\r\n        EditLimit.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);\r\n                intent.putExtra(\"StartDate\", StartDate.getText().toString());\r\n                intent.putExtra(\"EndDate\",EndDate.getText().toString());\r\n                intent.putExtra(\"SpendLimit\",SpendLimit.getText().toString().split(\"/\")[1]);\r\n                intent.putExtra(\"FallsBelow\",FallsBelow.getText().toString());\r\n                startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n    public String getTodaysDate(String dateType) {\r\n        Calendar calendar = Calendar.getInstance(); // Get current date\r\n        int year = calendar.get(Calendar.YEAR);\r\n        int month = calendar.get(Calendar.MONTH);\r\n        int dayOfMonth;\r\n\r\n        ArrayList<String> monthList = new ArrayList<>(Arrays.asList(\r\n                \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"));\r\n        if (dateType.equals(\"Start\")) {\r\n            dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);\r\n        } else if (dateType.equals(\"End\")) {\r\n            dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);\r\n        } else {\r\n            return \"\";\r\n        }\r\n\r\n        String selectedDate = dayOfMonth + \"-\" + monthList.get(month) + \"-\" + year;\r\n        return selectedDate;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/SetLimit.java b/app/src/main/java/sg/edu/np/mad/pennywise/SetLimit.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/SetLimit.java	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/SetLimit.java	(date 1686831324059)
+@@ -10,7 +10,6 @@
+ import android.widget.ImageView;
+ import android.widget.TextView;
+ 
+-import java.lang.reflect.Array;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Calendar;
+@@ -41,16 +40,48 @@
+     private TextView SpendLimit;
+     private TextView FallsBelow;
+ 
++    private  TextView AvailableBalnce;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_set_limit);
+ 
+         StartDate = findViewById(R.id.limit_startdate);
+-        EndDate = findViewById(R.id.limit_enddate);
+-        SpendLimit = findViewById(R.id.limit_spendlimit);
++        EndDate = findViewById(R.id.textview20);
++        SpendLimit = findViewById(R.id.limit_amount);
+         FallsBelow = findViewById(R.id.limit_spend);
++        AvailableBalnce = findViewById(R.id.setlimit_balance);
++
+ 
++
++        homeBtn = findViewById(R.id.limit_home);
++        homeBtn.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Intent intent = new Intent(SetLimit.this, MainActivity.class);
++                startActivity(intent);
++            }
++        });
++
++        EditLimit = findViewById(R.id.limit_icon);
++        EditLimit.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
++                intent.putExtra("StartDate", StartDate.getText().toString());
++                intent.putExtra("EndDate",EndDate.getText().toString());
++                intent.putExtra("SpendLimit",SpendLimit.getText().toString().split("/")[1]);
++                intent.putExtra("FallsBelow",FallsBelow.getText().toString());
++                startActivity(intent);
++                finish();
++            }
++        });
++    }
++
++
++    protected void onStart() {
++        super.onStart();
+         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+         String Expense = sharedPreferences.getString(MY_EXPENSE,"");
+@@ -85,6 +116,8 @@
+                         EndDate.setText(limit.getEnddate());
+                         SpendLimit.setText(Expense +"/"+ String.valueOf(limit.getSpendlimit()));
+                         FallsBelow.setText(String.valueOf(limit.getFallsbelow()));
++                        double balance = limit.getSpendlimit()-Double.valueOf(Expense);
++                        AvailableBalnce.setText(String.valueOf(balance));
+                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                         SharedPreferences.Editor editor = prefs.edit();
+                         editor.putString(MY_STARTDATE,limit.getStartdate());
+@@ -95,28 +128,6 @@
+                 }
+             }
+         });
+-
+-        homeBtn = findViewById(R.id.limit_home);
+-        homeBtn.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent intent = new Intent(SetLimit.this, MainActivity.class);
+-                startActivity(intent);
+-            }
+-        });
+-
+-        EditLimit = findViewById(R.id.setlimit_icon);
+-        EditLimit.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
+-                intent.putExtra("StartDate", StartDate.getText().toString());
+-                intent.putExtra("EndDate",EndDate.getText().toString());
+-                intent.putExtra("SpendLimit",SpendLimit.getText().toString().split("/")[1]);
+-                intent.putExtra("FallsBelow",FallsBelow.getText().toString());
+-                startActivity(intent);
+-            }
+-        });
+     }
+     public String getTodaysDate(String dateType) {
+         Calendar calendar = Calendar.getInstance(); // Get current date
+@@ -137,4 +148,7 @@
+         String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
+         return selectedDate;
+     }
++
++
++
+ }
+Index: app/src/main/res/layout/activity_set_limit.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".SetLimit\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView10\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"68dp\"\r\n        android:layout_marginTop=\"36dp\"\r\n        android:textSize=\"16sp\"\r\n        android:text=\"@string/limit_spendlimit\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView9\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/limit_home\"\r\n        android:layout_width=\"43dp\"\r\n        android:layout_height=\"52dp\"\r\n        android:layout_marginStart=\"16dp\"\r\n        android:layout_marginTop=\"16dp\"\r\n        android:layout_marginEnd=\"121dp\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/textView17\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:srcCompat=\"@drawable/home_icon\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/setlimit_icon\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"165dp\"\r\n        android:layout_marginTop=\"36dp\"\r\n        android:layout_marginEnd=\"165dp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView17\"\r\n        app:srcCompat=\"@drawable/bell\" />\r\n\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView7\"\r\n        android:layout_width=\"94dp\"\r\n        android:layout_height=\"35dp\"\r\n        android:layout_marginStart=\"68dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:layout_marginBottom=\"48dp\"\r\n        android:text=\"Start Date\"\r\n        android:textSize=\"20sp\"\r\n        app:layout_constraintBottom_toTopOf=\"@+id/textView9\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/setlimit_icon\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/limit_startdate\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"93dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:layout_marginEnd=\"80dp\"\r\n        android:textSize=\"20sp\"\r\n        android:text=\"@string/limit_startdate\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/textView7\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/setlimit_icon\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView9\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"68dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:text=\"End Date\"\r\n        android:textSize=\"20sp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView7\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/limit_enddate\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"93dp\"\r\n        android:layout_marginTop=\"30dp\"\r\n        android:layout_marginEnd=\"80dp\"\r\n        android:text=\"@string/limit_enddate\"\r\n        android:textSize=\"20sp\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/textView9\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/limit_startdate\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/limit_spendlimit\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"48dp\"\r\n        android:layout_marginEnd=\"191dp\"\r\n        android:text=\"TextView\"\r\n        android:textSize=\"20sp\"\r\n        android:background=\"@drawable/box_background\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView10\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView12\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"68dp\"\r\n        android:layout_marginTop=\"24dp\"\r\n        android:text=\"@string/limit_spend\"\r\n        android:textSize=\"16sp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/limit_spendlimit\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/limit_spend\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"50dp\"\r\n        android:layout_marginEnd=\"191dp\"\r\n        android:text=\"TextView\"\r\n        android:textSize=\"20sp\"\r\n        android:background=\"@drawable/box_background\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/textView12\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView17\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"24dp\"\r\n        android:layout_marginEnd=\"176dp\"\r\n        android:text=\"Set Limit\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_set_limit.xml b/app/src/main/res/layout/activity_set_limit.xml
+--- a/app/src/main/res/layout/activity_set_limit.xml	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/res/layout/activity_set_limit.xml	(date 1686831577559)
+@@ -6,17 +6,6 @@
+     android:layout_height="match_parent"
+     tools:context=".SetLimit">
+ 
+-    <TextView
+-        android:id="@+id/textView10"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="68dp"
+-        android:layout_marginTop="36dp"
+-        android:textSize="16sp"
+-        android:text="@string/limit_spendlimit"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+-
+     <ImageView
+         android:id="@+id/limit_home"
+         android:layout_width="43dp"
+@@ -24,118 +13,149 @@
+         android:layout_marginStart="16dp"
+         android:layout_marginTop="16dp"
+         android:layout_marginEnd="121dp"
+-        app:layout_constraintEnd_toStartOf="@+id/textView17"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+         app:srcCompat="@drawable/home_icon" />
+ 
+-    <ImageView
+-        android:id="@+id/setlimit_icon"
++    <TextView
++        android:id="@+id/textView17"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginStart="165dp"
+-        android:layout_marginTop="36dp"
+-        android:layout_marginEnd="165dp"
++        android:layout_marginTop="24dp"
++        android:layout_marginEnd="176dp"
++        android:text="Set Limit"
+         app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.0"
++        app:layout_constraintTop_toTopOf="parent" />
++    <androidx.cardview.widget.CardView
++        android:id="@+id/cardView"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_marginHorizontal="30dp"
++        android:layout_marginTop="80dp"
++        app:cardCornerRadius="15dp"
++        app:cardElevation="20dp"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView17"
+-        app:srcCompat="@drawable/bell" />
++        app:layout_constraintTop_toTopOf="parent">
+ 
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:gravity="center_vertical"
++            android:orientation="vertical">
++
++            <TextView
++                android:id="@+id/sbtextView"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center_horizontal"
++                android:layout_marginTop="20dp"
++                android:text="Available Balance" />
+ 
+-    <TextView
+-        android:id="@+id/textView7"
+-        android:layout_width="94dp"
+-        android:layout_height="35dp"
+-        android:layout_marginStart="68dp"
+-        android:layout_marginTop="30dp"
+-        android:layout_marginBottom="48dp"
+-        android:text="Start Date"
+-        android:textSize="20sp"
+-        app:layout_constraintBottom_toTopOf="@+id/textView9"
++            <TextView
++                android:id="@+id/setlimit_balance"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_gravity="center_horizontal"
++                android:layout_marginTop="12dp"
++                android:layout_marginBottom="20dp"
++                android:textSize="32sp"
++                android:textStyle="bold" />
++        </LinearLayout>
++    </androidx.cardview.widget.CardView>
++
++    <LinearLayout
++        android:layout_width="357dp"
++        android:layout_height="455dp"
++        android:layout_marginStart="1dp"
++        android:layout_marginTop="10dp"
++        android:layout_marginEnd="1dp"
++        android:layout_marginBottom="1dp"
++        android:background="@drawable/profilepic_background"
++        android:orientation="vertical"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/setlimit_icon" />
++        app:layout_constraintTop_toBottomOf="@+id/cardView">
++
++        <TextView
++            android:id="@+id/textView8"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="Start Date"
++            android:textSize="18sp"
++            android:textStyle="bold" />
+ 
+-    <TextView
+-        android:id="@+id/limit_startdate"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="93dp"
+-        android:layout_marginTop="30dp"
+-        android:layout_marginEnd="80dp"
+-        android:textSize="20sp"
+-        android:text="@string/limit_startdate"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toEndOf="@+id/textView7"
+-        app:layout_constraintTop_toBottomOf="@+id/setlimit_icon" />
++        <TextView
++            android:id="@+id/limit_startdate"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="@string/limit_startdate"
++            android:textSize="16sp" />
+ 
+-    <TextView
+-        android:id="@+id/textView9"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="68dp"
+-        android:layout_marginTop="30dp"
+-        android:text="End Date"
+-        android:textSize="20sp"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
++        <TextView
++            android:id="@+id/textview20"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="End Date"
++            android:textSize="18sp"
++            android:textStyle="bold" />
+ 
+-    <TextView
+-        android:id="@+id/limit_enddate"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="93dp"
+-        android:layout_marginTop="30dp"
+-        android:layout_marginEnd="80dp"
+-        android:text="@string/limit_enddate"
+-        android:textSize="20sp"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toEndOf="@+id/textView9"
+-        app:layout_constraintTop_toBottomOf="@+id/limit_startdate" />
++        <TextView
++            android:id="@+id/limit_enddate"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="TextView"
++            android:textSize="16sp" />
++
++        <TextView
++            android:id="@+id/textView14"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="Spend"
++            android:textSize="18sp"
++            android:textStyle="bold" />
+ 
+-    <TextView
+-        android:id="@+id/limit_spendlimit"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="48dp"
+-        android:layout_marginEnd="191dp"
+-        android:text="TextView"
+-        android:textSize="20sp"
+-        android:background="@drawable/box_background"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
++        <TextView
++            android:id="@+id/limit_amount"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="TextView"
++            android:background="@drawable/box_background"
++            android:textSize="16sp" />
+ 
+-    <TextView
+-        android:id="@+id/textView12"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginStart="68dp"
+-        android:layout_marginTop="24dp"
+-        android:text="@string/limit_spend"
+-        android:textSize="16sp"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/limit_spendlimit" />
++        <TextView
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="Falls Below"
++            android:textSize="18sp"
++            android:textStyle="bold" />
+ 
+-    <TextView
+-        android:id="@+id/limit_spend"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="50dp"
+-        android:layout_marginEnd="191dp"
+-        android:text="TextView"
+-        android:textSize="20sp"
+-        android:background="@drawable/box_background"
++        <TextView
++            android:id="@+id/limit_spend"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:padding="8dp"
++            android:text="TextView"
++            android:background="@drawable/box_background"
++            android:textSize="16sp" />
++    </LinearLayout>
++
++    <ImageView
++        android:id="@+id/limit_icon"
++        android:layout_width="52dp"
++        android:layout_height="49dp"
++        android:layout_marginTop="16dp"
++        android:layout_marginEnd="28dp"
+         app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
++        app:layout_constraintTop_toTopOf="parent"
++        app:srcCompat="@drawable/bell" />
+ 
+-    <TextView
+-        android:id="@+id/textView17"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="24dp"
+-        android:layout_marginEnd="176dp"
+-        android:text="Set Limit"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+Index: app/src/main/java/sg/edu/np/mad/pennywise/viewCardAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pennywise;\r\n\r\nimport android.graphics.Color;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class viewCardAdapter extends RecyclerView.Adapter<CardViewImgHolder>{\r\n    ArrayList<Card>listOfCards;\r\n    public viewCardAdapter(ArrayList<Card>listOfCards){\r\n        this.listOfCards = listOfCards;\r\n    }\r\n\r\n    public CardViewImgHolder onCreateViewHolder(ViewGroup parent, int viewType) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_view_card, parent, false);\r\n        CardViewImgHolder holder = new CardViewImgHolder(view);\r\n        return holder;\r\n    }\r\n\r\n    public void onBindViewHolder(CardViewImgHolder holder, int position){\r\n        Card list_Cards = listOfCards.get(position);\r\n        holder.txt1.setText(list_Cards.getNumCard());\r\n        holder.txt2.setText(list_Cards.getXpDate());\r\n        holder.txt3.setText(list_Cards.getThreeDigitNum());\r\n        holder.txt4.setText(list_Cards.getCardNaming());\r\n        holder.txt5.setText(list_Cards.getHouseAddr());\r\n\r\n    }\r\n\r\n    public int getItemCount(){\r\n        return listOfCards.size();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/viewCardAdapter.java b/app/src/main/java/sg/edu/np/mad/pennywise/viewCardAdapter.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/viewCardAdapter.java	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/viewCardAdapter.java	(date 1686832800025)
+@@ -24,7 +24,6 @@
+     public void onBindViewHolder(CardViewImgHolder holder, int position){
+         Card list_Cards = listOfCards.get(position);
+         holder.txt1.setText(list_Cards.getNumCard());
+-        holder.txt2.setText(list_Cards.getXpDate());
+         holder.txt3.setText(list_Cards.getThreeDigitNum());
+         holder.txt4.setText(list_Cards.getCardNaming());
+         holder.txt5.setText(list_Cards.getHouseAddr());
+Index: app/src/main/java/sg/edu/np/mad/pennywise/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pennywise;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.ActionBarDrawerToggle;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.view.GravityCompat;\r\nimport androidx.drawerlayout.widget.DrawerLayout;\r\n\r\nimport android.content.ClipData;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.Gravity;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.TextView;\r\n//import android.widget.Toolbar;\r\nimport androidx.appcompat.widget.Toolbar;\r\nimport androidx.recyclerview.widget.DefaultItemAnimator;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\nimport com.google.android.material.navigation.NavigationView;\r\nimport com.google.firebase.firestore.CollectionReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\n\r\nimport org.w3c.dom.Text;\r\n\r\nimport java.text.DateFormat;\r\nimport java.text.DecimalFormat;\r\nimport java.text.ParseException;\r\nimport java.text.SimpleDateFormat;\r\nimport java.text.SimpleDateFormat;\r\nimport java.time.LocalDate;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.Collections;\r\nimport java.util.Comparator;\r\nimport java.util.Date;\r\nimport java.util.Date;\r\nimport java.util.List;\r\nimport java.util.Locale;\r\nimport java.util.Map;\r\n\r\npublic class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {\r\n\r\n    DrawerLayout drawerLayout;\r\n    NavigationView navigationView;\r\n    Toolbar toolbar;\r\n\r\n    //Shared preference\r\n    public String GLOBAL_PREFS = \"myPrefs\";\r\n    public String MY_EMAIL = \"MyEmail\";\r\n\r\n    public String MY_EXPENSE= \"myExpense\";\r\n\r\n    public String MY_STARTDATE = \"myStartDate\";\r\n\r\n    public String MY_ENDDATE = \"myEndDate\";\r\n    SharedPreferences sharedPreferences;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n\r\n        drawerLayout = findViewById(R.id.drawer_layout);\r\n        navigationView = findViewById(R.id.nav_view);\r\n        toolbar = findViewById(R.id.toolbar);\r\n\r\n        setSupportActionBar(toolbar);\r\n\r\n        // Nav Drawer\r\n        navigationView.bringToFront();\r\n        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);\r\n        drawerLayout.addDrawerListener(toggle);\r\n        toggle.syncState();\r\n\r\n        TextView monthText = findViewById(R.id.sbtextView);\r\n        String currentMonth = getCurrentMonthMMM();\r\n        monthText.setText(\"Your Balance : \"+\"(\"+currentMonth+\")\");\r\n\r\n        navigationView.setNavigationItemSelectedListener(this);\r\n        navigationView.setCheckedItem(R.id.nav_home);\r\n        getBalance();\r\n        getDashboardItems();\r\n        addNewTrans();\r\n        viewAllTrans();\r\n    }\r\n\r\n    //Get dashboard items for recycler view\r\n    public void getDashboardItems(){\r\n        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n        String sharedEmail = sharedPreferences.getString(MY_EMAIL, \"\");\r\n        FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n        CollectionReference transactionRef = db.collection(\"users\").document(sharedEmail).collection(\"alltransaction\");\r\n        transactionRef.get().addOnCompleteListener(task -> {\r\n            QuerySnapshot querySnapshot = task.getResult();\r\n            List<DocumentSnapshot> documents = querySnapshot.getDocuments();\r\n            ArrayList<Transaction> transactionList = new ArrayList<>();\r\n            for (DocumentSnapshot document : documents){\r\n                Map<String, Object> data = document.getData();\r\n\r\n                //Extract data\r\n                String title = (String) data.get(\"title\");\r\n                String date = (String) data.get(\"date\");\r\n                double amount = (double) data.get(\"amount\");\r\n                String type = (String) data.get(\"type\");\r\n                String currentMonth = getCurrentMonthMMM();\r\n                String extractMonth = extractMonthFromDate(date);\r\n                String currentYear = getCurrentYear();\r\n                String extractYear = extractYearFromDate(date);\r\n                Transaction transaction = new Transaction(title, date, amount, type);\r\n                if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){\r\n                    transactionList.add(transaction);\r\n                    Log.v(\"extract\",extractMonth);\r\n                }\r\n            }\r\n            // Sort transactionList based on date\r\n            Collections.sort(transactionList, new Comparator<Transaction>() {\r\n                SimpleDateFormat dateFormat = new SimpleDateFormat(\"dd-MMM-yyyy\");\r\n\r\n                @Override\r\n                public int compare(Transaction t1, Transaction t2) {\r\n                    try {\r\n                        Date date1 = dateFormat.parse(t1.getTransDate());\r\n                        Date date2 = dateFormat.parse(t2.getTransDate());\r\n                        return date2.compareTo(date1);\r\n                    } catch (ParseException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                    return 0;\r\n                }\r\n            });\r\n            RecyclerView recyclerView = findViewById(R.id.dashboardRecyclerView);\r\n            DashboardAdaptor dashboardAdaptor = new DashboardAdaptor(transactionList);\r\n            LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);\r\n            recyclerView.setLayoutManager(myLayoutManager);\r\n            recyclerView.setItemAnimator(new DefaultItemAnimator());\r\n            recyclerView.setAdapter(dashboardAdaptor);\r\n        });\r\n    }\r\n\r\n    // Get balance for the card\r\n    public void getBalance(){\r\n        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n        String sharedEmail = sharedPreferences.getString(MY_EMAIL, \"\");\r\n        String TotalExpense = sharedPreferences.getString(MY_EXPENSE, \"\");\r\n        String StartDate = sharedPreferences.getString(MY_STARTDATE,\"\");\r\n        String EndDate = sharedPreferences.getString(MY_ENDDATE,\"\");\r\n        FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n        Log.v(\"email\",sharedEmail);\r\n        CollectionReference transactionRef = db.collection(\"users\").document(sharedEmail).collection(\"alltransaction\");\r\n        transactionRef.get().addOnCompleteListener(task -> {\r\n            QuerySnapshot querySnapshot = task.getResult();\r\n            List<DocumentSnapshot> documents = querySnapshot.getDocuments();\r\n            double totalBalance = 0;\r\n            double TotalSpend = 0;\r\n            for (DocumentSnapshot document : documents){\r\n                Map<String, Object> data = document.getData();\r\n                double amount = (double) data.get(\"amount\");\r\n                String type = (String) data.get(\"type\");\r\n                String date = (String) data.get(\"date\");\r\n                String currentMonth = getCurrentMonthMMM();\r\n                String extractMonth = extractMonthFromDate(date);\r\n                String currentYear = getCurrentYear();\r\n                String extractYear = extractYearFromDate(date);\r\n                if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){\r\n                    if (type.equals(\"income\")){\r\n                        totalBalance += amount;\r\n                    }\r\n                    else{\r\n                        totalBalance -= amount;\r\n                    }\r\n                }\r\n                if (type.equals(\"income\")){\r\n                    totalBalance += amount;\r\n\r\n                }\r\n                else{\r\n                    totalBalance -= amount;\r\n                    if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)\r\n                    {\r\n\r\n                        TotalSpend+=amount;\r\n                    }\r\n\r\n                }\r\n            }\r\n            DecimalFormat decimalFormat = new DecimalFormat(\"#.##\");\r\n            String roundedBalance = decimalFormat.format(totalBalance);\r\n            SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n            SharedPreferences.Editor editor = prefs.edit();\r\n            editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));\r\n            editor.apply(); // Apply the changes to SharedPreferences\r\n            TextView balanceTxt = findViewById(R.id.balanceText);\r\n            balanceTxt.setText(\"$\" + roundedBalance);\r\n        });\r\n    }\r\n\r\n    private String getCurrentMonthMMM() {\r\n        Calendar calendar = Calendar.getInstance();\r\n        SimpleDateFormat sdf = new SimpleDateFormat(\"MMM\", Locale.getDefault());\r\n        return sdf.format(calendar.getTime());\r\n    }\r\n    private String getCurrentYear() {\r\n        Calendar calendar = Calendar.getInstance();\r\n        SimpleDateFormat sdf = new SimpleDateFormat(\"yyyy\", Locale.getDefault());\r\n        return sdf.format(calendar.getTime());\r\n    }\r\n    private String extractMonthFromDate(String dateString) {\r\n        DateFormat inputDateFormat = new SimpleDateFormat(\"dd-MMM-yyyy\", Locale.ENGLISH);\r\n        DateFormat outputDateFormat = new SimpleDateFormat(\"MMM\", Locale.getDefault());\r\n        try {\r\n            Date date = inputDateFormat.parse(dateString);\r\n            return outputDateFormat.format(date);\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n    private String extractYearFromDate(String dateString) {\r\n        DateFormat inputDateFormat = new SimpleDateFormat(\"dd-MMM-yyyy\", Locale.ENGLISH);\r\n        DateFormat outputDateFormat = new SimpleDateFormat(\"yyyy\", Locale.getDefault());\r\n        try {\r\n            Date date = inputDateFormat.parse(dateString);\r\n            return outputDateFormat.format(date);\r\n        } catch (Exception e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n\r\n    // Redirect to AddTransaction Page\r\n    public void addNewTrans(){\r\n        FloatingActionButton fab = findViewById(R.id.addTransBtn);\r\n        fab.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(MainActivity.this, AddTransaction.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n\r\n    // Redirect to View All Transaction Page\r\n    public void viewAllTrans(){\r\n        TextView tv = findViewById(R.id.viewAllTrans);\r\n        tv.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(MainActivity.this, ViewAllTransactions.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n    }\r\n\r\n    @Override\r\n    public void onBackPressed(){\r\n        if(drawerLayout.isDrawerOpen(GravityCompat.START)){\r\n            drawerLayout.closeDrawer(GravityCompat.START);\r\n        }\r\n        else{\r\n            super.onBackPressed();\r\n        }\r\n    }\r\n\r\n\r\n    // NAVBAR\r\n    @Override\r\n    public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n        if (item.getItemId() == R.id.nav_add_transactions){\r\n            Intent intent = new Intent(MainActivity.this, AddTransaction.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_view_transactions){\r\n            Intent intent = new Intent(MainActivity.this, ViewAllTransactions.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_card){\r\n            Intent intent = new Intent(MainActivity.this, ViewCard.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_profile){\r\n            Intent intent = new Intent(MainActivity.this, Profile.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_about){\r\n            Intent intent = new Intent(MainActivity.this, AboutUs.class);\r\n            startActivity(intent);\r\n        }\r\n\r\n       else if (item.getItemId() == R.id.nav_currency) {\r\n\r\n        else if (item.getItemId() == R.id.nav_currency) {\r\n\r\n            Intent intent = new Intent(MainActivity.this, Currency.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_login){\r\n            Intent intent = new Intent(MainActivity.this, Login.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_signup){\r\n            Intent intent = new Intent(MainActivity.this, SignUp.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_set_limit){\r\n            Intent intent = new Intent(MainActivity.this, SetLimit.class);\r\n            startActivity(intent);\r\n        }\r\n        else if (item.getItemId() == R.id.nav_transfer){\r\n            Intent intent = new Intent(MainActivity.this,Transfer.class);\r\n            startActivity(intent);\r\n        }\r\n\r\n\r\n\r\n        drawerLayout.closeDrawer(GravityCompat.START);\r\n        return true;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/MainActivity.java b/app/src/main/java/sg/edu/np/mad/pennywise/MainActivity.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/MainActivity.java	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/MainActivity.java	(date 1686827433059)
+@@ -6,12 +6,10 @@
+ import androidx.core.view.GravityCompat;
+ import androidx.drawerlayout.widget.DrawerLayout;
+ 
+-import android.content.ClipData;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.os.Bundle;
+ import android.util.Log;
+-import android.view.Gravity;
+ import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.TextView;
+@@ -28,21 +26,15 @@
+ import com.google.firebase.firestore.FirebaseFirestore;
+ import com.google.firebase.firestore.QuerySnapshot;
+ 
+-import org.w3c.dom.Text;
+-
+ import java.text.DateFormat;
+ import java.text.DecimalFormat;
+ import java.text.ParseException;
+ import java.text.SimpleDateFormat;
+-import java.text.SimpleDateFormat;
+-import java.time.LocalDate;
+-import java.time.format.DateTimeFormatter;
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.Collections;
+ import java.util.Comparator;
+ import java.util.Date;
+-import java.util.Date;
+ import java.util.List;
+ import java.util.Locale;
+ import java.util.Map;
+@@ -198,7 +190,7 @@
+             SharedPreferences.Editor editor = prefs.edit();
+             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
+             editor.apply(); // Apply the changes to SharedPreferences
+-            TextView balanceTxt = findViewById(R.id.balanceText);
++            TextView balanceTxt = findViewById(R.id.setlimit_balance);
+             balanceTxt.setText("$" + roundedBalance);
+         });
+     }
+@@ -295,7 +287,6 @@
+             startActivity(intent);
+         }
+ 
+-       else if (item.getItemId() == R.id.nav_currency) {
+ 
+         else if (item.getItemId() == R.id.nav_currency) {
+ 
+@@ -319,8 +310,6 @@
+             startActivity(intent);
+         }
+ 
+-
+-
+         drawerLayout.closeDrawer(GravityCompat.START);
+         return true;
+     }
+Index: app/src/main/res/layout/dashboard.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:id=\"@+id/cardView\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginHorizontal=\"30dp\"\r\n        android:layout_marginTop=\"50dp\"\r\n        app:cardCornerRadius=\"15dp\"\r\n        app:cardElevation=\"20dp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center_vertical\"\r\n            android:orientation=\"vertical\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/sbtextView\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center_horizontal\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:text=\"Your Balance\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/balanceText\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center_horizontal\"\r\n                android:layout_marginTop=\"12dp\"\r\n                android:layout_marginBottom=\"20dp\"\r\n                android:textSize=\"32sp\"\r\n                android:textStyle=\"bold\" />\r\n        </LinearLayout>\r\n    </androidx.cardview.widget.CardView>\r\n\r\n    <LinearLayout\r\n        android:id=\"@+id/linearLayout\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:padding=\"30dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/cardView\"\r\n        tools:layout_editor_absoluteX=\"16dp\">\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:text=\"Transactions\"\r\n            android:textSize=\"30sp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/viewAllTrans\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:textSize=\"25sp\"\r\n            android:gravity=\"end\"\r\n            android:text=\"See All\" />\r\n    </LinearLayout>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/dashboardRecyclerView\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"380dp\"\r\n        android:layout_marginHorizontal=\"30dp\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/linearLayout\" />\r\n\r\n\r\n    <com.google.android.material.floatingactionbutton.FloatingActionButton\r\n        android:id=\"@+id/addTransBtn\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"176dp\"\r\n        android:layout_marginTop=\"7dp\"\r\n        android:contentDescription=\"Add Transaction\"\r\n        android:src=\"@drawable/add\"\r\n        app:layout_anchor=\"@id/dashboardRecyclerView\"\r\n        app:layout_anchorGravity=\"top|end\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.935\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/dashboard.xml b/app/src/main/res/layout/dashboard.xml
+--- a/app/src/main/res/layout/dashboard.xml	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/res/layout/dashboard.xml	(date 1686827433066)
+@@ -31,7 +31,7 @@
+                 android:text="Your Balance" />
+ 
+             <TextView
+-                android:id="@+id/balanceText"
++                android:id="@+id/setlimit_balance"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_horizontal"
+Index: app/src/main/java/sg/edu/np/mad/pennywise/EditSetLimit.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pennywise;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\n\r\n\r\nimport android.app.DatePickerDialog;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.media.Image;\r\nimport android.os.Bundle;\r\nimport android.os.ProxyFileDescriptorCallback;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.material.datepicker.MaterialDatePicker;\r\nimport com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport java.util.Map;\r\nimport java.util.HashMap;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.SetOptions;\r\n\r\n\r\n\r\nimport java.text.DateFormat;\r\nimport java.text.MessageFormat;\r\nimport java.text.SimpleDateFormat;\r\nimport java.time.Month;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.Calendar;\r\nimport java.util.Date;\r\nimport java.util.HashMap;\r\nimport java.util.Locale;\r\n\r\npublic class EditSetLimit extends AppCompatActivity {\r\n\r\n    private TextView selectedStartDate;\r\n    private TextView selectedEndDate;\r\n\r\n    private EditText EtSpendLimit;\r\n\r\n    private EditText EtFallsBelow;\r\n\r\n    //Shared preference\r\n    public String GLOBAL_PREFS = \"myPrefs\";\r\n    public String MY_EMAIL = \"MyEmail\";\r\n    SharedPreferences sharedPreferences;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_edit_set_limit);\r\n\r\n        Button setButton= findViewById(R.id.editsetlimit_setbutton);\r\n        ImageView closeButton = findViewById(R.id.editsetlimit_close);\r\n        selectedStartDate = findViewById(R.id.editsetlimit_startdate);\r\n        selectedEndDate = findViewById(R.id.editsetlimit_enddate);\r\n        EtSpendLimit= findViewById(R.id.editsetlimit_spendlimit);\r\n        EtFallsBelow = findViewById(R.id.editsetlimit_warning);\r\n\r\n        Intent intent = getIntent();\r\n        selectedStartDate.setText(intent.getStringExtra(\"StartDate\"));\r\n        selectedEndDate.setText(intent.getStringExtra(\"EndDate\"));\r\n        EtSpendLimit.setText(intent.getStringExtra(\"SpendLimit\"));\r\n        EtFallsBelow.setText(intent.getStringExtra(\"FallsBelow\"));\r\n\r\n        selectedStartDate.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()\r\n                        .setTitleText(\"Select Date\")\r\n                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())\r\n                        .build();\r\n                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {\r\n                    @Override\r\n                    public void onPositiveButtonClick(Long selection) {\r\n                        String date = new SimpleDateFormat(\"dd-MMM-yyy\", Locale.getDefault()).format(new Date(selection));\r\n                        selectedStartDate.setText(date);\r\n                    }\r\n                });\r\n                materialDatePicker.show(getSupportFragmentManager(), \"tag\");\r\n            }\r\n        });\r\n        selectedEndDate.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()\r\n                        .setTitleText(\"Select Date\")\r\n                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())\r\n                        .build();\r\n                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {\r\n                    @Override\r\n                    public void onPositiveButtonClick(Long selection) {\r\n                        String date = new SimpleDateFormat(\"dd-MMM-yyy\", Locale.getDefault()).format(new Date(selection));\r\n                        selectedEndDate.setText(date);\r\n\r\n                    }\r\n                });\r\n                materialDatePicker.show(getSupportFragmentManager(), \"tag\");\r\n            }\r\n        });\r\n        closeButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(EditSetLimit.this,SetLimit.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n        setButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String startDate = selectedStartDate.getText().toString();\r\n                String endDate = selectedEndDate.getText().toString();\r\n                int compareDate = startDate.compareTo(endDate);\r\n                double spendLimit = Double.parseDouble(EtSpendLimit.getText().toString());\r\n                double fallsbelow = Double.parseDouble(EtFallsBelow.getText().toString());\r\n                if(compareDate <= 0){\r\n                    if(!TextUtils.isEmpty(EtSpendLimit.getText()) && !TextUtils.isEmpty(EtFallsBelow.getText())) {\r\n                        if (spendLimit > 0 && fallsbelow > 0) {\r\n                            sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);\r\n                            String sharedEmail = sharedPreferences.getString(MY_EMAIL, \"\");\r\n\r\n                            FirebaseFirestore db = FirebaseFirestore.getInstance();\r\n\r\n                            Map<String, Object> limitData = new HashMap<>();\r\n                            limitData.put(\"startdate\",startDate);\r\n                            limitData.put(\"enddate\",endDate);\r\n                            limitData.put(\"limit\",spendLimit);\r\n                            limitData.put(\"warning\",fallsbelow);\r\n                            String id = db.collection(\"users\").document(sharedEmail).collection(\"setlimit\").document(\"wqeuqiueywue\").getId();//Getting Document ID\r\n                            db.collection(\"users\").document(sharedEmail).collection(\"setlimit\").document(id).set(limitData);//Set Data to Document\r\n                            Toast.makeText(EditSetLimit.this, \"Update Successful\", Toast.LENGTH_SHORT).show();\r\n                            Intent intent = new Intent(EditSetLimit.this, SetLimit.class);\r\n                            startActivity(intent);\r\n                        }\r\n                        else if (spendLimit <= 0) {\r\n                            EtSpendLimit.setError(\"Spend Limit must be greater than 0\");\r\n\r\n                        } else if (fallsbelow <= 0) {\r\n                            EtFallsBelow.setError(\"Warning  must be greater than 0\");\r\n                        }\r\n                    }\r\n                    else if(TextUtils.isEmpty(EtSpendLimit.getText())){\r\n                        EtSpendLimit.setError(\"Spend Limit must not be empty\");\r\n                    }\r\n                    else if(TextUtils.isEmpty(EtFallsBelow.getText())){\r\n                        EtFallsBelow.setError(\"Warning must no be empty\");\r\n                    }\r\n                }\r\n                else if(compareDate > 0){\r\n                    selectedEndDate.setError(\"End Date must be greater than start date\");\r\n                }\r\n\r\n            }\r\n        });\r\n    }\r\n\r\n    public String getTodaysDate(String dateType) {\r\n        Calendar calendar = Calendar.getInstance(); // Get current date\r\n        int year = calendar.get(Calendar.YEAR);\r\n        int month = calendar.get(Calendar.MONTH);\r\n        int dayOfMonth;\r\n\r\n        ArrayList<String> monthList = new ArrayList<>(Arrays.asList(\r\n                \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"));\r\n        if (dateType.equals(\"Start\")) {\r\n            dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);\r\n        } else if (dateType.equals(\"End\")) {\r\n            dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);\r\n        } else {\r\n            return \"\";\r\n        }\r\n\r\n        String selectedDate = dayOfMonth + \"-\" + monthList.get(month) + \"-\" + year;\r\n        return selectedDate;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/EditSetLimit.java b/app/src/main/java/sg/edu/np/mad/pennywise/EditSetLimit.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/EditSetLimit.java	(revision 28123dbce61bdeb8001982f54c3d52e8e66994f3)
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/EditSetLimit.java	(date 1686826280644)
+@@ -139,6 +139,8 @@
+                             limitData.put("warning",fallsbelow);
+                             String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue").getId();//Getting Document ID
+                             db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
++
++
+                             Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                             Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
+                             startActivity(intent);
