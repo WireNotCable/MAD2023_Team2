@@ -36,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
-            android:backgroundTint="#F4EB9C"
             android:orientation="vertical">
 
             <TextView
