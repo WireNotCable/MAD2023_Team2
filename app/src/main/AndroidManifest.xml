@@ -21,7 +21,10 @@
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
-            android:name=".MyContacts"
+            android:name=".ViewTransaction"
+            android:exported="false"/>
+        <activity
+            android:name=".Contact"
             android:exported="false" />
         <activity
             android:name=".ViewAllTransactions"

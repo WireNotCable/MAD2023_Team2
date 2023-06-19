@@ -17,6 +17,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +37,8 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Currency extends AppCompatActivity {
@@ -41,7 +50,18 @@ public class Currency extends AppCompatActivity {
     Dialog toDialog;
     Button convertButton;
     String convertFromValue, convertToValue, conversionValue;
-    String[] country = {"AFN","EUR"};
+    String[] country = {
+            "AFN", "EUR", "ALL", "DZD", "USD", "AOA", "XCD", "ARS", "AMD", "AWG", "AUD", "AZN", "BSD", "BHD", "BDT", "BBD", "BYN", "BZD", "XOF",
+            "BMD", "BTN", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "XOF", "BIF", "CVE", "KHR", "XAF", "CAD", "KYD", "XAF", "CLP", "CNY", "COP",
+            "KMF", "CDF", "NZD", "CRC", "HRK", "CUP", "ANG", "CZK", "DKK", "DJF", "XCD", "DOP", "EGP", "XCD", "ERN", "EEK", "ETB", "EUR", "FKP",
+            "FJD", "EUR", "XPF", "GMD", "GEL", "EUR", "GHS", "GIP", "XCD", "GTQ", "GGP", "GNF", "XOF", "GYD", "HTG", "HNL", "HKD", "HUF", "ISK",
+            "INR", "IDR", "XDR", "IRR", "IQD", "IMP", "ILS", "EUR", "JMD", "JPY", "JEP", "JOD", "KZT", "KES", "AUD", "KPW", "KRW", "KWD", "KGS",
+            "LAK", "LVL", "LBP", "LSL", "LRD", "LYD", "CHF", "LTL", "EUR", "MOP", "MKD", "MGA", "MWK", "MYR", "MVR", "XOF", "EUR", "MRO", "MUR",
+            "MXN", "MDL", "MNT", "EUR", "XCD", "MAD", "MZN", "MMK", "NAD", "AUD", "NPR", "EUR", "XPF", "NZD", "NIO", "XOF", "NGN", "NZD", "NOK",
+            "OMR", "PKR", "PAB", "PGK", "PYG", "PEN", "PHP", "NZD", "PLN", "EUR", "QAR", "RON", "RUB", "RWF", "XCD", "EUR", "SHP", "XCD", "XCD",
+            "WST", "EUR", "STD", "SAR", "XOF", "RSD", "SCR", "SLL", "SGD", "EUR", "SBD", "SOS", "ZAR", "GBP", "EUR"
+    };
+
     private static final String API_KEY = "0675ebc65257b3241fe03de7d9759945";
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
 
@@ -167,35 +187,35 @@ public class Currency extends AppCompatActivity {
             }
         });
     }
-    public String getConversionRate(String convertFrom, String convertTo, Double amountToConvert){
-
-
+    public String getConversionRate(String convertFrom, String convertTo, Double amountToConvert) {
+        String url = "https://v6.exchangerate-api.com/v6/" + "f28e6c11bf096c06cd4ee33b" + "/pair/" + convertFrom + "/" + convertTo + "/" + amountToConvert;
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://free.currconv.com/api/v7/convert?q="+convertFrom+"_"+convertTo+"&compact=ultra&apiKey=22e91ab924eb2aa6f9a4";
+
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                JSONObject jsonObject = null;
                 try {
-                    jsonObject = new JSONObject(response);
-                    Double conversionRateValue = round(((Double) jsonObject.get(convertFrom + "_" + convertTo)), 2);
-                    conversionValue = "" + round((conversionRateValue * amountToConvert), 2);
+                    JSONObject jsonObject = new JSONObject(response);
+                    Double conversionRateValue = jsonObject.getDouble("conversion_rate");
+                    Double convertedAmount = round((amountToConvert * conversionRateValue), 2);
+                    conversionValue = String.valueOf(convertedAmount);
                     conversionRateText.setText(conversionValue);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.v("Error","Error");
-
+                Log.v("Error", "Error");
             }
         });
+
         queue.add(stringRequest);
         return null;
     }
+
+
 
     public static double round(double value, int places){
         if(places<0) throw new IllegalArgumentException();
