@@ -56,6 +56,7 @@ public class Profile extends AppCompatActivity {
         ShowProfile = findViewById(R.id.profile_viewprofile);
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
+        String email = prefs.getString(MY_EMAIL,"");
         String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -164,7 +165,8 @@ public class Profile extends AppCompatActivity {
 
 
 
-        //Pass Contact Number
+
+        //Pass Details
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
         usersRef.whereEqualTo("UID", uid)
@@ -175,9 +177,9 @@ public class Profile extends AppCompatActivity {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                            String email = documentSnapshot.getString("email");
+                            //String email = documentSnapshot.getString("email");
                             String phoneNumber = documentSnapshot.getString("phonenum");
-
+                            String email = prefs.getString(MY_EMAIL, "");
                             // Pass the name to the dialog view
                             TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
                             String name = email.split("@")[0];
