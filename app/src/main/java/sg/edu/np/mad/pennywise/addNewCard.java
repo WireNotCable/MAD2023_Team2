@@ -74,7 +74,9 @@ public class addNewCard extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             int currentYear = calendar.get(Calendar.YEAR);
             int currentMonth = calendar.get(Calendar.MONTH) + 1;
-
+            if (Number.isEmpty()){
+                return;
+            }
             if(Number.length() == 16){
                 if(CSV.length() == 3){
                     if(date.length() ==4){

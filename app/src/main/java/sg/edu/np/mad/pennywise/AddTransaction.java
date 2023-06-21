@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -17,12 +18,6 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.Timestamp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.MessageFormat;
@@ -103,7 +98,17 @@ public class AddTransaction extends AppCompatActivity {
                 String title = titleEt.getText().toString();
                 EditText amtEt = findViewById(R.id.addTransAmount);
                 String amountstr = amtEt.getText().toString();
-                double amount = Double.parseDouble(amountstr);
+                if (amountstr.isEmpty()) {
+                    return;
+                }
+                double amount = 0.0;
+                if (TextUtils.isDigitsOnly(amountstr)) {
+                    try {
+                        amount = Double.parseDouble(amountstr);
+                    } catch (NumberFormatException e) {
+                        return;
+                    }
+                }
                 String type = "";
                 RadioGroup radioGroup = findViewById(R.id.typeRadio);
                 int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
