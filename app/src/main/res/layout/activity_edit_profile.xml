@@ -51,15 +51,6 @@
                 android:padding="8dp" />
 
             <EditText
-                android:id="@+id/editprofile_phoneno"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="40dp"
-                android:hint="Phone Number"
-                android:maxLength="8"
-                android:padding="8dp" />
-
-            <EditText
                 android:id="@+id/editprofile_password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

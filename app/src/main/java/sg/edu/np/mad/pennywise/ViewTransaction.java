@@ -95,6 +95,7 @@ public class ViewTransaction extends AppCompatActivity {
         }
     }
 
+    // Delete transaction
     public void delete(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -108,6 +109,7 @@ public class ViewTransaction extends AppCompatActivity {
         });
     }
 
+    // Edit transaction
     public void edit(){
         Intent receivingEnd = getIntent();
         String id = receivingEnd.getStringExtra("Id");
@@ -116,6 +118,7 @@ public class ViewTransaction extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Go back to Main page or View All Transaction page
     public void Redirect(String from){
         if (from.equals("Main")){
             Intent intent = new Intent(ViewTransaction.this, MainActivity.class);

@@ -84,10 +84,7 @@ public class SignUp extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 FirebaseUser firebaseUser = auth.getCurrentUser();
-                                //Log.v("TEST",firebaseUser.getEmail());
-                                User userdata = new User(user,password,NRIC,phoneNum);
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                                String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 Map<String, Object> userData = new HashMap<>();
                                 userData.put("UID",auth.getUid());
