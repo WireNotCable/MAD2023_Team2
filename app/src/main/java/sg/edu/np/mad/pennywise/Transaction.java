@@ -4,7 +4,7 @@ import android.widget.DatePicker;
 
 import com.google.type.Date;
 import com.google.type.DateTime;
-
+// Model for Transaction object //
 public class Transaction {
     private String transId;
     private String transTitle;

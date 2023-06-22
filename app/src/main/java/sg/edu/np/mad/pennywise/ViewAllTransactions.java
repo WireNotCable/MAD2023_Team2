@@ -171,6 +171,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         }
     }
 
+    // Click to view individual transaction //
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(ViewAllTransactions.this, ViewTransaction.class);

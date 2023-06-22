@@ -88,6 +88,8 @@ public class AddTransaction extends AppCompatActivity {
         });
 
         Button saveTrans = findViewById(R.id.saveTransBtn);
+
+        // Send data to firestore //
         saveTrans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +100,8 @@ public class AddTransaction extends AppCompatActivity {
                 String title = titleEt.getText().toString();
                 EditText amtEt = findViewById(R.id.addTransAmount);
                 String amountstr = amtEt.getText().toString();
+
+                // data validation
                 if (amountstr.isEmpty()) {
                     return;
                 }
@@ -117,6 +121,8 @@ public class AddTransaction extends AppCompatActivity {
                 } else if (selectedRadioButtonId == R.id.expenseSelected) {
                     type = "expense";
                 }
+
+                // Send data to firestore
                 if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
                     Transaction transaction = new Transaction("", title, date, amount, type);
                     sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);

@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
-    //Get dashboard items for recycler view
+    // Get dashboard items for recycler view //
     public void getDashboardItems(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    // Get balance for the card
+    // Get balance
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
@@ -236,22 +236,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
-            editor.apply(); // Apply the changes to SharedPreferences
+            editor.commit(); // Apply the changes to SharedPreferences
             TextView balanceTxt = findViewById(R.id.balanceText);
             balanceTxt.setText("$" + roundedBalance);
         });
     }
 
+    // Get month in MMM format (e.g. Jun)
     private String getCurrentMonthMMM() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM", Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
+
+    // Get year in yyyy format (e.g 2023)
     private String getCurrentYear() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
+
+    // Extract month in MMM format from the transaction date
     private String extractMonthFromDate(String dateString) {
         DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         DateFormat outputDateFormat = new SimpleDateFormat("MMM", Locale.getDefault());
@@ -263,6 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return null;
     }
+
+    // Extract year in yyyy format from the transaction date
     private String extractYearFromDate(String dateString) {
         DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         DateFormat outputDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
@@ -350,17 +357,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
-            editor.apply();
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(MainActivity.this,Login.class);
             startActivity(intent);
         }
-
-
-
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    // Click to view individual transaction
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, ViewTransaction.class);
@@ -370,7 +375,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra("Amount",transactionList.get(position).getTransAmt());
         intent.putExtra("Date",transactionList.get(position).getTransDate());
         intent.putExtra("Type",transactionList.get(position).getTransType());
-        Log.v("hmm","Item clicked, Intent send from MainActivity");
         startActivity(intent);
     }
 }
