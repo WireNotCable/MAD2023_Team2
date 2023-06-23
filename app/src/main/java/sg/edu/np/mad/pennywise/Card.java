@@ -6,6 +6,7 @@ public class Card {
     private String threeDigitNum;
     private String cardNaming;
     private String houseAddr;
+    private double balance;
 
     public String getNumCard() {
         return numCard;
@@ -47,12 +48,21 @@ public class Card {
         this.houseAddr = houseAddr;
     }
 
-    public Card(String cardNaming, String threeDigitNum, String xpDate, String houseAddr, String numCard) {
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public Card(String cardNaming, String threeDigitNum, String xpDate, String houseAddr, String numCard, double balance) {
 
         this.threeDigitNum = threeDigitNum;
         this.cardNaming = cardNaming;
         this.numCard= numCard;
         this.xpDate = xpDate;
         this.houseAddr = houseAddr;
+        this.balance = balance;
     }
 }

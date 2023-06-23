@@ -28,6 +28,7 @@ public class viewCardAdapter extends RecyclerView.Adapter<CardViewImgHolder>{
         holder.txt3.setText(list_Cards.getXpDate());
         holder.txt4.setText(list_Cards.getCardNaming());
         holder.txt5.setText(list_Cards.getHouseAddr());
+        holder.txt6.setText("Balance: "+String.valueOf(list_Cards.getBalance()));
 
     }
 

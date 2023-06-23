@@ -84,6 +84,7 @@ public class addNewCard extends AppCompatActivity {
                 cardData.put("exp",ExpiryDate.getText().toString());
                 cardData.put("csv",CSVNumber.getText().toString());
                 cardData.put("name",NameCard.getText().toString());
+                cardData.put("balance",0);
                 String id = db.collection("users").document(auth.getUid()).collection("addCard").document().getId();
                 db.collection("users").document(auth.getUid()).collection("addCard").document(id).set(cardData);
                 Intent intent = new Intent(addNewCard.this,ViewCard.class);

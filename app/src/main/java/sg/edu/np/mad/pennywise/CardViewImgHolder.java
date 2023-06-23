@@ -12,6 +12,7 @@ public class CardViewImgHolder extends RecyclerView.ViewHolder {
     TextView txt3;
     TextView txt4;
     TextView txt5;
+    TextView txt6;
     ImageView image;
 
     public CardViewImgHolder(View itemView){
@@ -21,6 +22,7 @@ public class CardViewImgHolder extends RecyclerView.ViewHolder {
         txt3 = itemView.findViewById(R.id.adapCSV);
         txt4 = itemView.findViewById(R.id.adapCardName);
         txt5 = itemView.findViewById(R.id.adapAddress);
+        txt6 = itemView.findViewById(R.id.balance);
         image = itemView.findViewById(R.id.cardimg);
 
     }

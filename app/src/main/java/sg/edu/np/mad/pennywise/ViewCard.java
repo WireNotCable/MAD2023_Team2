@@ -81,7 +81,8 @@ public class ViewCard extends AppCompatActivity {
                 String CSV = (String) data.get("csv");
                 String name = (String) data.get("name");
                 String address = (String) data.get("address");
-                Card card = new Card(Number, Exp, CSV, name, address);
+                double balance = document.getDouble("balance");
+                Card card = new Card(Number, Exp, CSV, name, address,balance);
                 cardList.add(card);
             }
             RecyclerView recyclerView = findViewById(R.id.CardViewing);
