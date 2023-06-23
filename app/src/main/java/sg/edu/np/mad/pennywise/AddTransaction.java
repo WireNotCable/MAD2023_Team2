@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.MessageFormat;
@@ -128,13 +129,14 @@ public class AddTransaction extends AppCompatActivity {
                     sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                     String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
                     Map<String, Object> transactionData = new HashMap<>();
                     transactionData.put("title", transaction.getTransTitle());
                     transactionData.put("date", transaction.getTransDate());
                     transactionData.put("amount", transaction.getTransAmt());
                     transactionData.put("type", transaction.getTransType());
                     //HERE
-                    String id = db.collection("users").document(sharedEmail).collection("alltransactions").document().getId();
+                    String id = db.collection("transcation").document(sharedEmail).collection("alltransactions").document().getId();
                     db.collection("users").document(sharedEmail).collection("alltransaction").document(id).set(transactionData);
                     Intent intent = new Intent(AddTransaction.this, MainActivity.class);
                     startActivity(intent);

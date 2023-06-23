@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     RecyclerView dashboardRecyclerView;
     Toolbar toolbar;
-    private ArrayList<Transfers> transfersArrayList = new ArrayList<>();
-    private TransfersRecyclerAdapter transfersRecyclerAdapter;
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
@@ -77,14 +75,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        updateTransfer();
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
         dashboardRecyclerView = findViewById(R.id.dashboardRecyclerView);
         dashboardRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        transfersRecyclerAdapter = new TransfersRecyclerAdapter(transfersArrayList,MainActivity.this);
-        dashboardRecyclerView.setAdapter(transfersRecyclerAdapter);
         setSupportActionBar(toolbar);
 
         // Nav Drawer
@@ -105,11 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewAllTrans();
 
     }
-    @Override
-    protected void onResume( ) {
-        super.onResume();
-        updateTransfer();
-    }
+
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
     // Get dashboard items for recycler view //
@@ -164,34 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recyclerView.setAdapter(dashboardAdaptor);
         });
     }
-    public void updateTransfer(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("transcation")
-                .whereEqualTo("fromUID",auth.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                transfersArrayList.add(new Transfers(
-                                        String.valueOf(document.get("amount")),
-                                        document.getString("comments"),
-                                        document.getString("fromUID"),
-                                        document.getString("toUID"),
-                                        document.getTimestamp("transferDate").toString(),
-                                        document.getString("type")
-                                ));
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
 
-
-    }
 
     // Get balance
     public void getBalance(){

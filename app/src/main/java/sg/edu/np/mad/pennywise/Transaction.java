@@ -9,8 +9,11 @@ public class Transaction {
     private String transId;
     private String transTitle;
     private String transDate;
+    private String toUID;
+    private String fromUID;
     private double transAmt;
     private String transType;
+
 
     public String getTransId() {
         return transId;
@@ -52,13 +55,14 @@ public class Transaction {
     public void setTransType(String transType) {
         this.transType = transType;
     }
-    public Transaction(String transId, String transTitle, String transDate, double transAmt, String transType) {
+
+
+
+    public Transaction(String transId, String transTitle, String transDate,  double transAmt, String transType) {
         this.transId = transId;
         this.transTitle = transTitle;
         this.transDate = transDate;
         this.transAmt = transAmt;
         this.transType = transType;
     }
-
-
 }

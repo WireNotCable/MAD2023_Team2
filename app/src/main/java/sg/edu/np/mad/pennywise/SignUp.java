@@ -93,7 +93,7 @@ public class SignUp extends AppCompatActivity {
                                 userData.put("phonenum", phoneNum);
                                 userData.put("nric", NRIC);
                                 db.collection("users").document(firebaseUser.getUid()).set(userData);
-
+                                //db.collection("users").document(firebaseUser.getUid()).collection("friendslist");
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, Login.class));
