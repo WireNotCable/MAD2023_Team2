@@ -87,6 +87,9 @@ public class EditProfile extends AppCompatActivity {
 
                                         FirebaseAuth auth = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser = auth.getCurrentUser();
+                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                        db.collection("users").document(auth.getUid()).update("email",newEmail);
+                                        db.collection("users").document(auth.getUid()).update("password",newPassword);
                                         currentUser.updateEmail(newEmail);
                                         AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
                                         currentUser.reauthenticate(credential);
