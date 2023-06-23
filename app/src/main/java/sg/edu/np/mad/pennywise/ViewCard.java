@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,7 +66,8 @@ public class ViewCard extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("addCard");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("addCard");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();

@@ -13,19 +13,28 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.units.qual.C;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
 
 public class addNewCard extends AppCompatActivity {
-    EditText NameCard,bankCardNumber,expiryDate,CSVNumber,inputAddress;
+    Random random = new Random();
+    EditText NameCard;
+
+    TextView bankCardNumber,ExpiryDate,CSVNumber;
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_EMAIL = "MyEmail";
+
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +44,13 @@ public class addNewCard extends AppCompatActivity {
         Button addNewCard = findViewById(R.id.add1);
         NameCard = findViewById(R.id.inputNameCard);
         bankCardNumber = findViewById(R.id.bankCardNum);
-        expiryDate = findViewById(R.id.expiryDate1);
+        ExpiryDate = findViewById(R.id.expiryDate1);
         CSVNumber = findViewById(R.id.CSVNum);
-        inputAddress = findViewById(R.id.inputAddr);
-
+        String cardnum = String.valueOf((long) (random.nextDouble() * 9_000_000_000_000_000L) + 1_000_000_000_000_000L);
+        bankCardNumber.setText(cardnum);//random.nextInt(100));//max - min + 1) + min
+        String csvnum = String.valueOf(random.nextInt(900) + 100);
+        CSVNumber.setText(csvnum);//random.nextInt(100));//999-100 + 1)+100
+        ExpiryDate.setText(LocalDate.now().plusYears(5).format(DateTimeFormatter.ofPattern("MM/yy")));
         /*myValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
         myValidation.addValidation(this,R.id.bankCardNum, "^(\\d{4}[- ]){3}\\d{4}|\\d{16}$",R.string.invalid_banknumber);
@@ -61,67 +73,28 @@ public class addNewCard extends AppCompatActivity {
 
             public void onClick(View v) {
 
-
-
-
-            String Number = bankCardNumber.getText().toString();
-            String CSV = CSVNumber.getText().toString();
             String CardName = NameCard.getText().toString();
-            String date = expiryDate.getText().toString();
-            String Address = inputAddress.getText().toString();
-            String month = date.substring(0, 2);
-            String year = date.substring(2);
-            Calendar calendar = Calendar.getInstance();
-            int currentYear = calendar.get(Calendar.YEAR);
-            int currentMonth = calendar.get(Calendar.MONTH) + 1;
-            if (Number.isEmpty()){
-                return;
-            }
-            if(Number.length() == 16){
-                if(CSV.length() == 3){
-                    if(date.length() ==4){
-                        if((Integer.valueOf(year) < currentYear || (Integer.valueOf(year) == currentYear && Integer.valueOf(month) < currentMonth))){
-                            if(!CardName.isEmpty()){
-                                if(!Address.isEmpty()){
-                                    Card card = new Card(Number, date, CSV, CardName, Address);
-                                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                    Map<String, Object> cardData = new HashMap<>();
-                                    cardData.put("number", card.getNumCard());
-                                    cardData.put("exp", card.getXpDate());
-                                    cardData.put("csv", card.getThreeDigitNum());
-                                    cardData.put("name", card.getCardNaming());
-                                    cardData.put("address", card.getHouseAddr());
-                                    String id = db.collection("users").document(sharedEmail).collection("addCard").document().getId();
-                                    db.collection("users").document(sharedEmail).collection("addCard").document(id).set(cardData);
-                                    Intent intent = new Intent(addNewCard.this, ViewCard.class);
-                                    startActivity(intent);
+           if (!CardName.isEmpty()){
+                sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
+                String sharedEmail = sharedPreferences.getString(MY_EMAIL,"");
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                Map<String,Object> cardData = new HashMap<>();
+                cardData.put("number",bankCardNumber.getText().toString());
+                cardData.put("exp",ExpiryDate.getText().toString());
+                cardData.put("csv",CSVNumber.getText().toString());
+                cardData.put("name",NameCard.getText().toString());
+                String id = db.collection("users").document(auth.getUid()).collection("addCard").document().getId();
+                db.collection("users").document(auth.getUid()).collection("addCard").document(id).set(cardData);
+                Intent intent = new Intent(addNewCard.this,ViewCard.class);
+                startActivity(intent);
 
-                                }
-                                else{
-                                    inputAddress.setError("Address cannot be empty");
-                                }
-                            }
-                            else{
-                                NameCard.setError("Name on card cannot be empty");
-                            }
-                        }
-                        else{
-                            expiryDate.setError("Your Card has expired");
-                        }
-                    }
-                    else{
-                        expiryDate.setError("Date must have both date and month");
-                    }
-                }
-                else{
-                    CSVNumber.setError("CSV must be 3 digit");
-                }
-            }
-            else{
-                bankCardNumber.setError("Bank Card Number must be 16 digit");
-            }
+
+           }
+           else{
+                NameCard.setError("Please input a name for your new card!");
+           }
+
 
 //                if(NameCard.length()==0){
 //                    Toast.makeText(getApplicationContext(),"Enter A Name.",Toast.LENGTH_SHORT).show();

@@ -63,7 +63,7 @@
                     android:text="@string/cardNumber"
                     android:textSize="20dp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/bankCardNum"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -72,7 +72,6 @@
                     android:ems="10"
                     android:gravity="start|center_vertical"
                     android:hint="Bank Card Number"
-                    android:inputType="numberPassword"
                     android:maxLength="16"
                     android:padding="16dp" />
 
@@ -84,7 +83,7 @@
                     android:text="@string/CSV"
                     android:textSize="20dp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/CSVNum"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -92,7 +91,6 @@
                     android:background="@drawable/border"
                     android:ems="10"
                     android:gravity="start|center_vertical"
-                    android:inputType="numberPassword"
                     android:maxLength="3"
                     android:padding="16dp" />
 
@@ -104,7 +102,7 @@
                     android:text="@string/expiryDate"
                     android:textSize="20dp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/expiryDate1"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
@@ -114,7 +112,7 @@
                     android:layout_marginBottom="32dp"
                     android:ems="10"
                     android:maxLength="4"
-                    android:inputType="numberPassword" />
+                     />
 
                 <TextView
                     android:id="@+id/NameCardTitle"
@@ -135,23 +133,7 @@
                     android:inputType="text"
                     android:padding="16dp" />
 
-                <TextView
-                    android:id="@+id/billingAddrTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="30dp"
-                    android:text="@string/billingAddr"
-                    android:textSize="20dp" />
 
-                <EditText
-                    android:id="@+id/inputAddr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="46dp"
-                    android:layout_marginBottom="150dp"
-                    android:ems="10"
-                    android:inputType="textPostalAddress" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -24,10 +24,8 @@ public class viewCardAdapter extends RecyclerView.Adapter<CardViewImgHolder>{
     public void onBindViewHolder(CardViewImgHolder holder, int position){
         Card list_Cards = listOfCards.get(position);
         holder.txt1.setText(list_Cards.getNumCard());
-        String Date = list_Cards.getXpDate();
-        String[] DateString = Date.split("");
-        holder.txt2.setText(DateString[0]+DateString[1]+" / "+ DateString[2]+DateString[3]);
-        holder.txt3.setText(list_Cards.getThreeDigitNum());
+        holder.txt2.setText(list_Cards.getThreeDigitNum());
+        holder.txt3.setText(list_Cards.getXpDate());
         holder.txt4.setText(list_Cards.getCardNaming());
         holder.txt5.setText(list_Cards.getHouseAddr());
 
