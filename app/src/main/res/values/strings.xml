@@ -21,9 +21,9 @@
     <string name="invalid_expiryDate">Enter Valid Expiry Date</string>
     <string name="invalid_Address">Enter valid Billing Address</string>
     <string name="invalid_Name">Enter Valid Name</string>
-    <string name="card_info">Card Info</string>
-    <string name="exp_Title">Exp Date:</string>
-    <string name="csv_Title">CSV:</string>
+    <string name="card_info">Card Info: </string>
+    <string name="exp_Title">Exp Date: </string>
+    <string name="csv_Title">CSV: </string>
     <string name="num_Title">Card NO. :</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

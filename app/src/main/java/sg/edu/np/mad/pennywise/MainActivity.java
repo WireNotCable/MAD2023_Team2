@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Log.v("id",sharedUID);
         CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();

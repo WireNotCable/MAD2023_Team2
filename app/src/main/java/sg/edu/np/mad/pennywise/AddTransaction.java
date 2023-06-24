@@ -34,9 +34,6 @@ import java.util.Map;
 
 public class AddTransaction extends AppCompatActivity {
 
-    private DatePickerDialog datePickerDialog;
-    private Button dateButton;
-
     //Shared preference //
     public String GLOBAL_PREFS = "myPrefs";
     public String MY_UID = "MyUID";
