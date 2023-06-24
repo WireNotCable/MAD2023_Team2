@@ -108,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
@@ -165,8 +166,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         Log.v("email",sharedEmail);
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();

@@ -39,8 +39,8 @@ public class Transfer extends AppCompatActivity {
     EditText amount,comment;
     Button transfer;
     ImageView homeButton,userIcon;
-    Double userbalance;
-    Double userlimit;
+    public Double userbalance = Double.valueOf(0);
+    public Double userlimit;
 
     ArrayList<String> friendList = new ArrayList<>();
     SharedPreferences sharedPreferences;
@@ -67,14 +67,7 @@ public class Transfer extends AppCompatActivity {
         getLimit();
         getBalance();
 
-        if (userlimit == null){
-            limit.setText("Limit : No limit");
-            userlimit = Double.MAX_VALUE;
-        }
-        else{
-            limit.setText("Limit : $"+userlimit);
-        }
-        balance.setText("Balance : $"+userbalance);
+
 
 
         userIcon.setOnClickListener(new View.OnClickListener() {
@@ -104,12 +97,23 @@ public class Transfer extends AppCompatActivity {
                         String formattedDate = dateFormat.format(currentDate);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         FirebaseAuth auth = FirebaseAuth.getInstance();
+
                         HashMap<String,Object> transcationData = new HashMap<>();
                         transcationData.put("amount",roundedValue);
                         transcationData.put("date",formattedDate);
                         transcationData.put("title",comment.getText().toString());
                         transcationData.put("type","expense");
+                        String Fromid = db.collection("users").document(auth.getUid()).collection("alltransaction").document().getId();
+                        db.collection("users").document(auth.getUid()).collection("alltransaction").document(Fromid).set(transcationData);
 
+                        HashMap<String,Object> transcationData2 = new HashMap<>();
+                        transcationData2.put("amount",roundedValue);
+                        transcationData2.put("date",formattedDate);
+                        transcationData2.put("title",comment.getText().toString());
+                        transcationData2.put("type","income");
+                        String ToUID = chooseuser.getText().toString().trim().split(",")[1];
+                        String Toid = db.collection("users").document(ToUID).collection("alltransaction").document().getId();
+                        db.collection("users").document(ToUID).collection("alltransaction").document(Toid).set(transcationData2);
                         Toast.makeText(Transfer.this,"Transfer successful",Toast.LENGTH_SHORT).show();
                         finish();
 
@@ -130,7 +134,7 @@ public class Transfer extends AppCompatActivity {
     private void getFriendList() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("friendslist")
+        db.collection("users").document(auth.getUid()).collection("friendlist")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -141,7 +145,6 @@ public class Transfer extends AppCompatActivity {
                                 friendList.add(document.getString("name")+","+document.getString("UID"));
                             }
                         }else{
-
                             chooseuser.setError("Unable to fetch users, please add some friends");
                         }
 
@@ -165,6 +168,13 @@ public class Transfer extends AppCompatActivity {
                                 userlimit = document.getDouble("limit");
                                 return;
                             }
+                            if (userlimit == null){
+                                limit.setText("Limit : No limit");
+                                userlimit = Double.MAX_VALUE;
+                            }
+                            else{
+                                limit.setText("Limit : $"+userlimit);
+                            }
                         }
                         else{
                         }
@@ -175,20 +185,32 @@ public class Transfer extends AppCompatActivity {
     private void getBalance(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("alltranscation")
+        db.collection("users").document(auth.getUid()).collection("alltransaction")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            double total = 0.0;
                             for(QueryDocumentSnapshot document : task.getResult()){
-                                if (document.getString("type") == "expense"){
-                                    userbalance -= document.getDouble("amount");
+
+                                if ("expense".equals(document.getString("type"))){
+                                    total -= document.getDouble("amount");
+
+
                                 }
-                                else if (document.getString("type") == "income"){
-                                    userbalance += document.getDouble("amount");
+                                else if ("income".equals(document.getString("type"))){
+                                    Double number = document.getDouble("amount");
+                                    total += number;
+
                                 }
                             }
+                            balance = findViewById(R.id.DisplayBalance);
+                            balance.setText("Balance : $"+total);
+                            userbalance = total;
+
+
+
                         }
                     }
                 });

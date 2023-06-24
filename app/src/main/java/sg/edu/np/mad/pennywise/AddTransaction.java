@@ -136,8 +136,8 @@ public class AddTransaction extends AppCompatActivity {
                     transactionData.put("amount", transaction.getTransAmt());
                     transactionData.put("type", transaction.getTransType());
                     //HERE
-                    String id = db.collection("transcation").document(sharedEmail).collection("alltransactions").document().getId();
-                    db.collection("users").document(sharedEmail).collection("alltransaction").document(id).set(transactionData);
+                    String id = db.collection("users").document(auth.getUid()).collection("alltransactions").document().getId();
+                    db.collection("users").document(auth.getUid()).collection("alltransaction").document(id).set(transactionData);
                     Intent intent = new Intent(AddTransaction.this, MainActivity.class);
                     startActivity(intent);
                 }
