@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,18 +31,17 @@ public class Users extends AppCompatActivity {
     private UsersRecyclerAdapter recyclerViewAdapter;
     private EditText searchFriend;
     ImageView addFriend,backArrow;
-    ArrayList<FriendClass> friendList;
+    ArrayList<FriendClass> friendList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
-        friendList = new ArrayList<>();
         recyclerView = findViewById(R.id.FriendRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(Users.this));
         addFriend = findViewById(R.id.AddFriend);
         searchFriend = findViewById(R.id.SearchFriends);
         backArrow = findViewById(R.id.BackArrowFriends);
-
+        friendList.clear();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -63,6 +63,7 @@ public class Users extends AppCompatActivity {
                 });
 
 
+
         recyclerViewAdapter = new UsersRecyclerAdapter(friendList,Users.this);
         recyclerView.setAdapter(recyclerViewAdapter);
 
@@ -79,7 +80,10 @@ public class Users extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());
+                if (s.toString() != "") {
+                    filter(s.toString());
+                    Log.v("!@#$%^&", s.toString());
+                }
 
             }
             private void filter(String text){
@@ -106,6 +110,37 @@ public class Users extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        friendList.clear();
+        recyclerView = findViewById(R.id.FriendRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Users.this));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        db.collection("users").document(auth.getUid()).collection("friendlist")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                friendList.add(new FriendClass(document.getString("UID"),document.getString("name"),document.getString("email"),document.getString("contact")));
+                            }
+                        }
+                        else{
+                            Toast.makeText(Users.this,"Unable to fetch user data, please contact support",Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+
+
+        recyclerViewAdapter = new UsersRecyclerAdapter(friendList,Users.this);
+        recyclerView.setAdapter(recyclerViewAdapter);
+
     }
 
 

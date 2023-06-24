@@ -38,7 +38,10 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
     public int getItemCount() {
         return friendList.size();
     }
-
+    public void filterList(ArrayList<FriendClass> list){
+        friendList = list;
+        notifyDataSetChanged();
+    }
     public class FriendViewHolder extends RecyclerView.ViewHolder {
         private TextView name,email,contact;
         public FriendViewHolder(@NonNull View itemView) {
@@ -50,8 +53,5 @@ public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdap
 
         }
     }
-    public void filterList(ArrayList<FriendClass> filteredList){
-        friendList = filteredList;
-        notifyDataSetChanged();
-    }
+
 }

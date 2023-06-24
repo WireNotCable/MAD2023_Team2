@@ -132,6 +132,7 @@ public class Transfer extends AppCompatActivity {
 
 
     private void getFriendList() {
+        friendList.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         db.collection("users").document(auth.getUid()).collection("friendlist")
@@ -212,6 +213,31 @@ public class Transfer extends AppCompatActivity {
 
 
                         }
+                    }
+                });
+    }
+    @Override
+    protected void onResume(){
+        friendList.clear();
+        super.onResume();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        db.collection("users").document(auth.getUid()).collection("friendlist")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                friendList.add(document.getString("name")+","+document.getString("UID"));
+                            }
+                        }else{
+                            chooseuser.setError("Unable to fetch users, please add some friends");
+                        }
+
+                        ArrayAdapter adapter = new ArrayAdapter(Transfer.this, android.R.layout.simple_list_item_1,friendList);
+                        chooseuser.setAdapter(adapter);
                     }
                 });
     }
