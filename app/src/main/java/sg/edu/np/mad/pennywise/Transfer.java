@@ -63,7 +63,6 @@ public class Transfer extends AppCompatActivity {
         userbalance = Double.valueOf(0);
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
 
-        getFriendList();
         getLimit();
         getBalance();
 

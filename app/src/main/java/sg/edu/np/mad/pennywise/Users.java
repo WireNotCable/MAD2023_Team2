@@ -43,7 +43,7 @@ public class Users extends AppCompatActivity {
         backArrow = findViewById(R.id.BackArrowFriends);
         friendList.clear();
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         db.collection("users").document(auth.getUid()).collection("friendlist")
                 .get()
@@ -63,9 +63,12 @@ public class Users extends AppCompatActivity {
                 });
 
 
-
         recyclerViewAdapter = new UsersRecyclerAdapter(friendList,Users.this);
+        recyclerViewAdapter.notifyDataSetChanged();
+
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.notifyDataSetChanged();*/
+
 
         searchFriend.addTextChangedListener(new TextWatcher() {
             @Override
@@ -82,7 +85,6 @@ public class Users extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (s.toString() != "") {
                     filter(s.toString());
-                    Log.v("!@#$%^&", s.toString());
                 }
 
             }
@@ -140,6 +142,7 @@ public class Users extends AppCompatActivity {
 
         recyclerViewAdapter = new UsersRecyclerAdapter(friendList,Users.this);
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.notifyDataSetChanged();
 
     }
 
