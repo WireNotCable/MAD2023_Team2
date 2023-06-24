@@ -32,7 +32,7 @@ import java.util.Map;
 public class ViewAllTransactions extends AppCompatActivity implements ViewTransRVInterface{
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
     AppCompatRadioButton radioAllBtn, radioExpenseBtn, radioIncomeBtn;
@@ -70,7 +70,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
     // Get transaction data //
     public void getTransData(String typeSelected){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String sharedEmail = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {

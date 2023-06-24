@@ -27,7 +27,7 @@ public class EditTransaction extends AppCompatActivity {
 
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class EditTransaction extends AppCompatActivity {
         String id = receivingEnd.getStringExtra("Id");
 
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String sharedEmail = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction").document(id);
 
@@ -108,7 +108,7 @@ public class EditTransaction extends AppCompatActivity {
                 if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
                     Transaction transaction = new Transaction("", title, date, amount, type);
                     sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                    String sharedEmail = sharedPreferences.getString(MY_UID, "");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> transactionData = new HashMap<>();
                     transactionData.put("title", transaction.getTransTitle());

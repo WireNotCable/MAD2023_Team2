@@ -24,7 +24,7 @@ public class ViewTransaction extends AppCompatActivity {
 
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
     @Override
@@ -98,7 +98,7 @@ public class ViewTransaction extends AppCompatActivity {
     // Delete transaction
     public void delete(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String sharedEmail = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Intent receivingEnd = getIntent();
