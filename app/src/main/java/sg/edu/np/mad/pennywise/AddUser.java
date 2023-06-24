@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,20 +56,22 @@ public class AddUser extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         for (QueryDocumentSnapshot document : task.getResult()){
                                             String UID = document.getString("UID");
+                                            Log.v("!@#$%^&",UID);
                                             String contact = document.getString("phonenum");
                                             String email = document.getString("email");
                                             String inputname = name.getText().toString().trim();
                                             if (email.equals(detailinput) || contact.equals(detailinput)){
                                                 db.collection("users").document(auth.getUid()).collection("friendlist")
-                                                        .whereEqualTo("UID",UID)
                                                         .get()
                                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                                 if (task.isSuccessful()){
-                                                                    Toast.makeText(AddUser.this,"User already exists in your friends",Toast.LENGTH_SHORT).show();
-
-                                                                }else{
+                                                                    for (QueryDocumentSnapshot document : task.getResult()){
+                                                                        if (document.getString("UID").equals(UID)){
+                                                                            Toast.makeText(AddUser.this,"User already exists in your friends",Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
                                                                     String id = db.collection("users").document(auth.getUid()).collection("friendlist").document().getId();
                                                                     HashMap<String, Object> friendData = new HashMap<>();
                                                                     friendData.put("UID",UID);
@@ -78,6 +81,11 @@ public class AddUser extends AppCompatActivity {
                                                                     db.collection("users").document(auth.getUid()).collection("friendlist").document(id).set(friendData);
                                                                     Toast.makeText(AddUser.this,"New friend added!",Toast.LENGTH_SHORT).show();
                                                                     finish();
+
+                                                                }
+                                                                else{
+                                                                    Toast.makeText(AddUser.this,"Error fetching details",Toast.LENGTH_SHORT).show();
+
                                                                 }
                                                             }
                                                         });
