@@ -39,7 +39,7 @@ public class AddTransaction extends AppCompatActivity {
 
     //Shared preference //
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
 
@@ -127,17 +127,16 @@ public class AddTransaction extends AppCompatActivity {
                 if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
                     Transaction transaction = new Transaction("", title, date, amount, type);
                     sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                    String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                    String sharedUID = sharedPreferences.getString(MY_UID, "");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
                     Map<String, Object> transactionData = new HashMap<>();
                     transactionData.put("title", transaction.getTransTitle());
                     transactionData.put("date", transaction.getTransDate());
                     transactionData.put("amount", transaction.getTransAmt());
                     transactionData.put("type", transaction.getTransType());
                     //HERE
-                    String id = db.collection("users").document(auth.getUid()).collection("alltransactions").document().getId();
-                    db.collection("users").document(auth.getUid()).collection("alltransaction").document(id).set(transactionData);
+                    String id = db.collection("transaction").document(sharedUID).collection("alltransactions").document().getId();
+                    db.collection("users").document(sharedUID).collection("alltransaction").document(id).set(transactionData);
                     Intent intent = new Intent(AddTransaction.this, MainActivity.class);
                     startActivity(intent);
                 }

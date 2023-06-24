@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
+    public String MY_UID = "MyUID";
 
     public String MY_EXPENSE= "myExpense";
 
@@ -106,10 +106,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Get dashboard items for recycler view //
     public void getDashboardItems(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String sharedUID = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
@@ -129,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Transaction transaction = new Transaction(id, title, date, amount, type);
                 if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
                     transactionList.add(transaction);
-                    Log.v("extract",extractMonth);
                 }
             }
             // Sort transactionList based on date
@@ -161,14 +159,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Get balance
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String sharedUID = sharedPreferences.getString(MY_UID, "");
         String TotalExpense = sharedPreferences.getString(MY_EXPENSE, "");
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Log.v("email",sharedEmail);
-        CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("alltransaction");
+        Log.v("id",sharedUID);
+        CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
@@ -199,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             String roundedBalance = decimalFormat.format(totalBalance);
+
             SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
