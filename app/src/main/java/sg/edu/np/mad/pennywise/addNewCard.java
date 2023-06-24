@@ -33,7 +33,6 @@ public class addNewCard extends AppCompatActivity {
 
     TextView bankCardNumber,ExpiryDate,CSVNumber;
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
 
     SharedPreferences sharedPreferences;
     @Override
@@ -76,7 +75,6 @@ public class addNewCard extends AppCompatActivity {
             String CardName = NameCard.getText().toString();
            if (!CardName.isEmpty()){
                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
-                String sharedEmail = sharedPreferences.getString(MY_EMAIL,"");
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 FirebaseAuth auth = FirebaseAuth.getInstance();
                 Map<String,Object> cardData = new HashMap<>();

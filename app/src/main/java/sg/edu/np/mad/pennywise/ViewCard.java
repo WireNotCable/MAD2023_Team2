@@ -27,20 +27,12 @@ import java.util.Map;
 public class ViewCard extends AppCompatActivity {
     String title = "View Card";
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
     SharedPreferences sharedPreferences;
-    ArrayList<cardObject> myList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_card);
         getCardDetails();
-        /*for(int i = 0; i<10; i++){
-            cardObject obj = new cardObject();
-            obj.setMyImageID(R.drawable.card_icon);
-            obj.setMyText(String.valueOf(i));
-            myList.add(obj);
-        }*/
 
         ImageView homeBtn = findViewById(R.id.ViewCardBtn);
         homeBtn.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +56,6 @@ public class ViewCard extends AppCompatActivity {
     }
     public void getCardDetails(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         CollectionReference transactionRef = db.collection("users").document(auth.getUid()).collection("addCard");

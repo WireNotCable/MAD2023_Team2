@@ -129,7 +129,4 @@ public class ViewTransaction extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-
-
 }

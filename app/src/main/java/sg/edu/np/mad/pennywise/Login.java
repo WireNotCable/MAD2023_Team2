@@ -44,8 +44,7 @@ public class Login extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
         signupRedirectText = findViewById(R.id.signupRedirectText);
 
-
-
+        // When login button is clicked
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +89,8 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
+        // Redirect to sign up
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
