@@ -1,6 +1,5 @@
 package sg.edu.np.mad.pennywise;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import sg.edu.np.mad.pennywise.models.Card;
 
 public class viewCardAdapter extends RecyclerView.Adapter<CardViewImgHolder>{
     ArrayList<Card>listOfCards;

@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise.models;
 
 public class Contact {
     private String name;

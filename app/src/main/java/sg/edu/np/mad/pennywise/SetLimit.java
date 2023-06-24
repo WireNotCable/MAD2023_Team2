@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
+import sg.edu.np.mad.pennywise.models.LimitObject;
+
 public class SetLimit extends AppCompatActivity {
     // Shared preference
     public static final String GLOBAL_PREFS = "myPrefs";

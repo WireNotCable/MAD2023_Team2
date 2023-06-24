@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import sg.edu.np.mad.pennywise.models.Transaction;
+
 public class ViewAllTransactions extends AppCompatActivity implements ViewTransRVInterface{
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
@@ -70,9 +72,9 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
     // Get transaction data //
     public void getTransData(String typeSelected){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_UID, "");
+        String sharedUID = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();

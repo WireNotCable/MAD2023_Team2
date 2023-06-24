@@ -2,14 +2,12 @@ package sg.edu.np.mad.pennywise;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -18,19 +16,15 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.MessageFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import sg.edu.np.mad.pennywise.models.Transaction;
 
 public class AddTransaction extends AppCompatActivity {
 
@@ -100,7 +94,12 @@ public class AddTransaction extends AppCompatActivity {
                 String amountstr = amtEt.getText().toString();
 
                 // data validation
+                if (title.isEmpty()) {
+                    titleEt.setError("Description cannot be empty!");
+                    return;
+                }
                 if (amountstr.isEmpty()) {
+                    amtEt.setError("Description cannot be empty!");
                     return;
                 }
                 double amount = 0.0;
@@ -118,6 +117,9 @@ public class AddTransaction extends AppCompatActivity {
                     type = "income";
                 } else if (selectedRadioButtonId == R.id.expenseSelected) {
                     type = "expense";
+                }
+                else{
+                    return;
                 }
 
                 // Send data to firestore

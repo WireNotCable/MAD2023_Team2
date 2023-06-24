@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import sg.edu.np.mad.pennywise.models.FriendClass;
+
 public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdapter.FriendViewHolder>{
     private ArrayList<FriendClass> friendList;
     private Context context;

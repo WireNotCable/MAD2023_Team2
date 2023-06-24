@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise.models;
 
 public class User {
     private String username;

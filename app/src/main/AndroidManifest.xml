@@ -33,7 +33,7 @@
             android:name=".ViewTransaction"
             android:exported="false" />
         <activity
-            android:name=".Contact"
+            android:name=".models.Contact"
             android:exported="false" />
         <activity
             android:name=".ViewAllTransactions"

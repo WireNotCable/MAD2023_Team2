@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,9 +21,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
+
+import sg.edu.np.mad.pennywise.models.FriendClass;
 
 public class Users extends AppCompatActivity {
     private RecyclerView recyclerView ;
@@ -42,33 +41,6 @@ public class Users extends AppCompatActivity {
         searchFriend = findViewById(R.id.SearchFriends);
         backArrow = findViewById(R.id.BackArrowFriends);
         friendList.clear();
-
-        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("friendlist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                friendList.add(new FriendClass(document.getString("UID"),document.getString("name"),document.getString("email"),document.getString("contact")));
-                            }
-                        }
-                        else{
-                            Toast.makeText(Users.this,"Unable to fetch user data, please contact support",Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
-
-
-        recyclerViewAdapter = new UsersRecyclerAdapter(friendList,Users.this);
-        recyclerViewAdapter.notifyDataSetChanged();
-
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.notifyDataSetChanged();*/
-
 
         searchFriend.addTextChangedListener(new TextWatcher() {
             @Override

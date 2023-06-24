@@ -27,7 +27,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="10dp"
-            android:background="#83DD86"
+            android:background="@drawable/border"
+            android:backgroundTint="@color/black"
             app:srcCompat="@android:drawable/ic_input_add" />
     </LinearLayout>
 

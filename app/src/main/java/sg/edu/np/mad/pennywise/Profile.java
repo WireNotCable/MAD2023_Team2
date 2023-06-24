@@ -56,7 +56,6 @@ public class Profile extends AppCompatActivity {
         ShowProfile = findViewById(R.id.profile_viewprofile);
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
-        String email = prefs.getString(MY_EMAIL,"");
         String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();

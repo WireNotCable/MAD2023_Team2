@@ -45,7 +45,6 @@ public class Transfer extends AppCompatActivity {
     ArrayList<String> friendList = new ArrayList<>();
     SharedPreferences sharedPreferences;
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +90,7 @@ public class Transfer extends AppCompatActivity {
                         df.setRoundingMode(RoundingMode.HALF_UP);
                         Double roundedValue = Double.parseDouble(df.format(Double.parseDouble(amount.getText().toString())));
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                         Date currentDate = new Date();
                         String formattedDate = dateFormat.format(currentDate);
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,6 +100,9 @@ public class Transfer extends AppCompatActivity {
                         transcationData.put("amount",roundedValue);
                         transcationData.put("date",formattedDate);
                         transcationData.put("title",comment.getText().toString());
+                        if(comment.getText().toString().isEmpty()){
+                            transcationData.put("title","Transfer");
+                        }
                         transcationData.put("type","expense");
                         String Fromid = db.collection("users").document(auth.getUid()).collection("alltransaction").document().getId();
                         db.collection("users").document(auth.getUid()).collection("alltransaction").document(Fromid).set(transcationData);
@@ -109,12 +111,16 @@ public class Transfer extends AppCompatActivity {
                         transcationData2.put("amount",roundedValue);
                         transcationData2.put("date",formattedDate);
                         transcationData2.put("title",comment.getText().toString());
+                        if(comment.getText().toString().isEmpty()){
+                            transcationData2.put("title","Transfer");
+                        }
                         transcationData2.put("type","income");
                         String ToUID = chooseuser.getText().toString().trim().split(",")[1];
                         String Toid = db.collection("users").document(ToUID).collection("alltransaction").document().getId();
                         db.collection("users").document(ToUID).collection("alltransaction").document(Toid).set(transcationData2);
                         Toast.makeText(Transfer.this,"Transfer successful",Toast.LENGTH_SHORT).show();
-                        finish();
+                        Intent intent = new Intent(Transfer.this, MainActivity.class);
+                        startActivity(intent);
 
                     }
                     else{
@@ -208,9 +214,6 @@ public class Transfer extends AppCompatActivity {
                             balance = findViewById(R.id.DisplayBalance);
                             balance.setText("Balance : $"+total);
                             userbalance = total;
-
-
-
                         }
                     }
                 });
