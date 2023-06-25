@@ -16,6 +16,12 @@ Set a spending limit to make sure u dont overspend a single penny. Keep tabs on 
 
 <a href='https://play.google.com/store/apps/details?id=sg.edu.np.mad.pennywise'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="80"/></a>
 
+
+## User Guide
+https://connectnpedu-my.sharepoint.com/:w:/g/personal/s10243745_connect_np_edu_sg/EaQTYA4JkXZNrKyeomT42DoBu2up3ewmd1KwH13siWHPaA?e=vhALp6(https://connectnpedu-my.sharepoint.com/:w:/g/personal/s10243745_connect_np_edu_sg/EaQTYA4JkXZNrKyeomT42DoBu2up3ewmd1KwH13siWHPaA?e=vhALp6
+)
+
+
 ## Stage 1
   
 Tasks/features of each student:
@@ -60,8 +66,8 @@ Tasks/features of each student:
 ## Stage 2
 * Ong Xin Yin - S10243745
 * Kenan Chia - S10242837
+    *View Income/Expense Statistics
 * Koh Wen Bin - S10242132
-  * View Income/Expense Statistics
 * Koay Yeow Teik - S10242544
 
 
