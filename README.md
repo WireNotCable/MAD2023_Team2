@@ -58,6 +58,7 @@ Tasks/features of each student:
     * Firebase
         * Firebase Firestore
         * Data cleaning
+        * Firebase Authentication
     * SignUp
     * Transfer
     * Friend list
