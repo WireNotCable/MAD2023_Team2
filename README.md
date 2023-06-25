@@ -68,16 +68,17 @@ Tasks/features of each student:
 * Ong Xin Yin - S10243745
     * Export transactions as csv
     * Dark/Light mode
+    * Improve search
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
 * Koh Wen Bin - S10242132
-  * View Income/Expense Statistics
+    * View Income/Expense Statistics
 * Koay Yeow Teik - S10242544
-  *Improve the account sign up interface/make sure user email is legit by sending an actual email
-  *Smart notifications?
-  *financial goal tracking with milestones to track ( may require a savings feature )
-  *Multiple cards feature (still undecided)
-  *Rewards programme
+    * Improve the account sign up interface/make sure user email is legit by sending an actual email
+    * Smart notifications?
+    * financial goal tracking with milestones to track ( may require a savings feature )
+    * Multiple cards feature (still undecided)
+    * Rewards programme
 
 
 ## Acknowledgments
