@@ -59,6 +59,8 @@ Tasks/features of each student:
 
 ## Stage 2
 * Ong Xin Yin - S10243745
+    * Export transactions as csv
+    * Dark/Light mode
 * Kenan Chia - S10242837
 * Koh Wen Bin - S10242132
   * View Income/Expense Statistics
