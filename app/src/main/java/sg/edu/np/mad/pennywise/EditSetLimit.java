@@ -78,7 +78,7 @@ public class EditSetLimit extends AppCompatActivity {
         String Fallsbelow = intent.getStringExtra("FallsBelow").replaceAll("\\D+", "");
         EtFallsBelow.setText(Fallsbelow);
 
-        selectedStartDate.setOnClickListener(new View.OnClickListener() {
+        selectedStartDate.setOnClickListener(new View.OnClickListener() {//Date Picker
             @Override
             public void onClick(View v) {
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
@@ -95,7 +95,7 @@ public class EditSetLimit extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
-        selectedEndDate.setOnClickListener(new View.OnClickListener() {
+        selectedEndDate.setOnClickListener(new View.OnClickListener() {// Date Picker
             @Override
             public void onClick(View v) {
                 MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
@@ -133,8 +133,6 @@ public class EditSetLimit extends AppCompatActivity {
                         if (spendLimit > 0 && fallsbelow > 0) {
                             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                             String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-
-
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                             Map<String, Object> limitData = new HashMap<>();
@@ -142,17 +140,15 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("enddate",endDate);
                             limitData.put("limit",spendLimit);
                             limitData.put("warning",fallsbelow);
-//                            String id = db.collection("users").document(sharedEmail).collection("setlimit").document("wqeuqiueywue");//Getting Document ID
-//                            db.collection("users").document(sharedEmail).collection("setlimit").document(id).set(limitData);//Set Data to Document
-                            String documentId = "wqeuqiueywue";
+                            String documentId = "wqeuqiueywue";// Setting a default document Id
                             DocumentReference documentRef = db.collection("users")
                                     .document(sharedEmail)
                                     .collection("setlimit")
-                                    .document(documentId);
+                                    .document(documentId);// Override Id if exist
 
                             documentRef.set(limitData, SetOptions.merge())
                                     .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();// Show Message
                                         Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                                         startActivity(intent);
                                     })

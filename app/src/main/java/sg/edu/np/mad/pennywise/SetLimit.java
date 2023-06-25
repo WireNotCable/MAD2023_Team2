@@ -60,10 +60,10 @@ public class SetLimit extends AppCompatActivity {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null) {
                     List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);
+                    LimitObject limit = new LimitObject(getTodaysDate("Start"),getTodaysDate("End"),1500,500);//Deafault Limit Object
                     for (DocumentSnapshot document : documents) {
                         Map<String, Object> data = document.getData();
-                        if (data != null) {
+                        if (data != null) {// Getting Set Limit
                             String Getstartdate = (String) data.get("startdate");
                             String Getenddate = (String) data.get("enddate");
                             double Getlimit = ((Number) data.get("limit")).doubleValue();
@@ -143,7 +143,7 @@ public class SetLimit extends AppCompatActivity {
             return "";
         }
 
-        String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
+        String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;// Date format
         return selectedDate;
     }
 
@@ -166,7 +166,7 @@ public class SetLimit extends AppCompatActivity {
                     String date = (String) data.get("date");
 
                     if (type.equals("expense")) {
-                        if (date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <= 0) {
+                        if (date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <= 0) { // If Transaction is between Start and End Date
                             totalSpend += amount;
                         }
                     }
@@ -177,7 +177,7 @@ public class SetLimit extends AppCompatActivity {
             }
             SpendLimit.setText("$"+totalSpend +" / "+ spendlimit);
             double balance = spendlimit-totalSpend;
-            if(balance < fallsbelow){
+            if(balance < fallsbelow || totalSpend > spendlimit){// Setting Error
                 AvailableBalance.setTextColor(Color.RED);
                 AvailableBalance.setError("You have reached your spending limit");
             }

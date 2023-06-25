@@ -56,6 +56,7 @@ public class Profile extends AppCompatActivity {
         ShowProfile = findViewById(R.id.profile_viewprofile);
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
+        //Setting profile pic
         String filename = uid + ".jpg";
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -86,7 +87,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        ProfilePic.setOnClickListener(new View.OnClickListener() {
+        ProfilePic.setOnClickListener(new View.OnClickListener() {// Launch Image Picker
             @Override
             public void onClick(View v) {
                 launchImagePicker();
@@ -94,7 +95,7 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    private void launchImagePicker() {
+    private void launchImagePicker() {// Open gallery
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_IMAGE_GET);
@@ -102,7 +103,7 @@ public class Profile extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {// Getting Image Selected
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
             if (data != null) {
@@ -112,7 +113,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-    private void uploadImage(Uri imageUri) {
+    private void uploadImage(Uri imageUri) {//Uploading Image
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 

@@ -88,8 +88,8 @@ public class EditProfile extends AppCompatActivity {
                                         FirebaseAuth auth = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser = auth.getCurrentUser();
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        db.collection("users").document(auth.getUid()).update("email",newEmail);
-                                        db.collection("users").document(auth.getUid()).update("password",newPassword);
+                                        db.collection("users").document(auth.getUid()).update("email",newEmail);//Updates Email
+                                        db.collection("users").document(auth.getUid()).update("password",newPassword);//Updates Password
                                         currentUser.updateEmail(newEmail);
                                         AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
                                         currentUser.reauthenticate(credential);
@@ -135,7 +135,7 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
-    public boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {//Validate Email
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"; // Regular expression
         Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
         return EMAIL_PATTERN.matcher(email).matches(); // validating
