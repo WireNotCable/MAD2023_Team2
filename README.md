@@ -60,8 +60,8 @@ Tasks/features of each student:
 ## Stage 2
 * Ong Xin Yin - S10243745
 * Kenan Chia - S10242837
-    *View Income/Expense Statistics
 * Koh Wen Bin - S10242132
+  * View Income/Expense Statistics
 * Koay Yeow Teik - S10242544
 
 
