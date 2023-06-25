@@ -62,6 +62,7 @@ Tasks/features of each student:
     * Export transactions as csv
     * Dark/Light mode
 * Kenan Chia - S10242837
+    *Crypto Currency Tracker
 * Koh Wen Bin - S10242132
   * View Income/Expense Statistics
 * Koay Yeow Teik - S10242544
