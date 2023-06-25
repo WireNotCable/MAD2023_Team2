@@ -68,7 +68,7 @@ Tasks/features of each student:
 * Ong Xin Yin - S10243745
     * Export transactions as csv
     * Dark/Light mode
-    * Improve search
+    * Recurring transaction record
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
 * Koh Wen Bin - S10242132
