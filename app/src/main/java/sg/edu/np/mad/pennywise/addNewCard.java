@@ -35,6 +35,7 @@ public class addNewCard extends AppCompatActivity {
     public String GLOBAL_PREFS = "myPrefs";
 
     SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +120,7 @@ public class addNewCard extends AppCompatActivity {
 
             }
         });
+        //find id from XML and place pre inputs, and home button
 //        addNewCard.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -134,6 +136,7 @@ public class addNewCard extends AppCompatActivity {
 //                EditText BillingAddress = findViewById(R.id.inputAddr);
 //                String Address = BillingAddress.getText().toString();
 //                String type = "";
+    //Save Data into the firebase, map helps to keep track of info
 //                if (Number!=null&&!Number.isEmpty() && !CSV.isEmpty() && !ExpDate.isEmpty() && !CardName.isEmpty() && !Address.isEmpty()){
 //                    Card card = new Card(Number, ExpDate, CSV, CardName, Address);
 //                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
