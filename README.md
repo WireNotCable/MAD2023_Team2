@@ -34,13 +34,13 @@ Tasks/features of each student:
   * Add card
   * View card
   * Currency converter with API
-  * About us
   * Firebase
       * Firebase firestore
 
   
 * Koh Wen Bin - S10242132
     * Set spending limit
+    * About us
     * Nav bar code & design
     * Edit Profile
     * Firebase
