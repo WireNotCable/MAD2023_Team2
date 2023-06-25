@@ -21,9 +21,9 @@ import java.io.InputStreamReader;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.google.gson.JsonParser;
+/*import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonObject;*/
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -64,7 +64,7 @@ public class Currency extends AppCompatActivity {
 
     private static final String API_KEY = "0675ebc65257b3241fe03de7d9759945";
     private static final String BASE_URL = "https://api.exchangeratesapi.io/latest";
-
+//finding the id's from XML, adding the countries to an array list, home button
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,7 @@ public class Currency extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        //Allow dropdown list selection with search filter
         convertFromDropdownTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +132,7 @@ public class Currency extends AppCompatActivity {
                 });
             }
         });
-
+        //Same but for the Convert To
         convertToDropdownTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,7 +175,7 @@ public class Currency extends AppCompatActivity {
                 });
             }
         });
-
+// Calls the get conversion rate method to convert currency
         convertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +188,7 @@ public class Currency extends AppCompatActivity {
             }
         });
     }
+    //The API used for currency exchange and converting String to JSON and returning conversion amount
     public String getConversionRate(String convertFrom, String convertTo, Double amountToConvert) {
         String url = "https://v6.exchangerate-api.com/v6/" + "f28e6c11bf096c06cd4ee33b" + "/pair/" + convertFrom + "/" + convertTo + "/" + amountToConvert;
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -216,7 +218,7 @@ public class Currency extends AppCompatActivity {
     }
 
 
-
+// Rounding off to 2 DP using Big Decimal
     public static double round(double value, int places){
         if(places<0) throw new IllegalArgumentException();
         BigDecimal bd = BigDecimal.valueOf(value);bd = bd.setScale(places, RoundingMode.HALF_UP);

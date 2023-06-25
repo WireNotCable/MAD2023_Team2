@@ -28,6 +28,7 @@ public class ViewCard extends AppCompatActivity {
     String title = "View Card";
     public String GLOBAL_PREFS = "myPrefs";
     SharedPreferences sharedPreferences;
+    //calls get card details method, home button and add new card button
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,7 @@ public class ViewCard extends AppCompatActivity {
 
 
     }
+    //get the card details by accessing the firebase data
     public void getCardDetails(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -76,6 +78,7 @@ public class ViewCard extends AppCompatActivity {
                 Card card = new Card(Number, Exp, CSV, name, address,balance);
                 cardList.add(card);
             }
+            //configuring recycler view
             RecyclerView recyclerView = findViewById(R.id.CardViewing);
             viewCardAdapter ViewCardAdapter = new viewCardAdapter(cardList);
             LinearLayoutManager myLayoutManager = new LinearLayoutManager(this);
