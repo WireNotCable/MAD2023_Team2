@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,7 +54,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         // Search //
         SearchView searchView = findViewById(R.id.search);
         searchView.setFocusable(true);
-        searchView.setIconified(false);
+        searchView.setIconifiedByDefault(false);
         searchView.requestFocus();
         search();
 
@@ -206,7 +207,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
             @Override
             public boolean onQueryTextSubmit(String query) {
                 filter(query);
-                return true;
+                return false;
             }
 
             @Override
@@ -215,6 +216,9 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
                 return true;
             }
         });
+
         return null;
     }
+
+
 }
