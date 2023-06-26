@@ -1,4 +1,4 @@
-﻿# PennyWise
+# PennyWise
 
 For the Assignment, our team decided to create a finance app, named PennyWise. 
 
@@ -40,13 +40,13 @@ Tasks/features of each student:
   * Add card
   * View card
   * Currency converter with API
-  * About us
   * Firebase
       * Firebase firestore
 
   
 * Koh Wen Bin - S10242132
     * Set spending limit
+    * About us
     * Nav bar code & design
     * Edit Profile
     * Firebase
@@ -58,6 +58,7 @@ Tasks/features of each student:
     * Firebase
         * Firebase Firestore
         * Data cleaning
+        * Firebase Authentication
     * SignUp
     * Transfer
     * Friend list
@@ -65,10 +66,19 @@ Tasks/features of each student:
 
 ## Stage 2
 * Ong Xin Yin - S10243745
+    * Export transactions as csv
+    * Dark/Light mode
+    * Recurring transaction record
 * Kenan Chia - S10242837
-    *View Income/Expense Statistics
+    * Crypto Currency Tracker
 * Koh Wen Bin - S10242132
+    * View Income/Expense Statistics
 * Koay Yeow Teik - S10242544
+    * Improve the account sign up interface/make sure user email is legit by sending an actual email
+    * Smart notifications?
+    * financial goal tracking with milestones to track ( may require a savings feature )
+    * Multiple cards feature (still undecided)
+    * Rewards programme
 
 
 ## Acknowledgments
