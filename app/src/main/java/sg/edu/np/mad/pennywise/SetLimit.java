@@ -34,6 +34,8 @@ public class SetLimit extends AppCompatActivity {
 
     public String MY_STARTDATE = "myStartDate";
 
+    public String MY_UID = "MyUID";
+
     public String MY_ENDDATE = "myEndDate";
     SharedPreferences sharedPreferences;
     private ImageView homeBtn;
@@ -52,6 +54,7 @@ public class SetLimit extends AppCompatActivity {
         setContentView(R.layout.activity_set_limit);
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String uid = sharedPreferences.getString(MY_UID,"");
         String Expense = sharedPreferences.getString(MY_EXPENSE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
@@ -77,7 +80,7 @@ public class SetLimit extends AppCompatActivity {
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
                         FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
-                        GetTotalExpense(sharedEmail,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
+                        GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(MY_STARTDATE,limit.getStartdate());
