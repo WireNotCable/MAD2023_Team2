@@ -33,11 +33,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import sg.edu.np.mad.pennywise.models.Goal_Progress;
+
 public class Transfer extends AppCompatActivity {
     TextView balance,limit;
     AutoCompleteTextView chooseuser;
     EditText amount,comment;
-    Button transfer;
+    Button transfer,test;
     ImageView homeButton,userIcon;
     public Double userbalance = Double.valueOf(0);
     public Double userlimit;
@@ -58,6 +60,7 @@ public class Transfer extends AppCompatActivity {
         transfer = findViewById(R.id.TransferButton);
         homeButton = findViewById(R.id.ButtonHome);
         userIcon = findViewById(R.id.UserIcon);
+        test = findViewById(R.id.test);
 
         userbalance = Double.valueOf(0);
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
@@ -66,7 +69,14 @@ public class Transfer extends AppCompatActivity {
         getBalance();
 
 
-
+        //delete after test is completed
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Transfer.this, Goal_Progress.class);
+                startActivity(intent);
+            }
+        });
 
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
