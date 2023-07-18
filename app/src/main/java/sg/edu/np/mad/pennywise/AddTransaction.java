@@ -98,15 +98,16 @@ public class AddTransaction extends AppCompatActivity {
                     titleEt.setError("Description cannot be empty!");
                     return;
                 }
+                double amount = 0.0;
                 if (amountstr.isEmpty()) {
                     amtEt.setError("Description cannot be empty!");
                     return;
                 }
-                double amount = 0.0;
-                if (TextUtils.isDigitsOnly(amountstr)) {
+                else{
                     try {
                         amount = Double.parseDouble(amountstr);
                     } catch (NumberFormatException e) {
+                        amtEt.setError("Invalid amount!");
                         return;
                     }
                 }
