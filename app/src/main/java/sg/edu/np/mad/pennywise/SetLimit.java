@@ -78,7 +78,6 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
 
-        String Expense = sharedPreferences.getString(MY_EXPENSE, "");
 
         String uid = sharedPreferences.getString(MY_UID,"");
         String Expense = sharedPreferences.getString(MY_EXPENSE,"");

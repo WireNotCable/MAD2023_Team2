@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public String MY_STARTDATE = "myStartDate";
 
     public String MY_ENDDATE = "myEndDate";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
     @Override
