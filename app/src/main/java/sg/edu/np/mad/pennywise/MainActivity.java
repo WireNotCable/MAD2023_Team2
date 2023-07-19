@@ -11,9 +11,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.Gravity;
+
+
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
@@ -21,9 +25,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -77,23 +84,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(toolbar);
 
+        // Remove title in homepage
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         // Nav Drawer
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        TextView monthText = findViewById(R.id.sbtextView);
-        String currentMonth = getCurrentMonthMMM();
-        monthText.setText("Your Balance : "+"("+currentMonth+")");
+        //TextView monthText = findViewById(R.id.sbtextView);
+        //String currentMonth = getCurrentMonthMMM();
+        //monthText.setText("Your Balance : "+"("+currentMonth+")");
+
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String sharedUID = sharedPreferences.getString(MY_UID, "");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference nameRef = db.collection("users").document(sharedUID);
+        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                TextView name = findViewById(R.id.home_name);
+                Object nameText = document.get("name");
+                name.setText(nameText.toString());
+            }
+        });
+
+
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
+
+
+
+        threeMiddleButtons();
+
         getBalance();
         getDashboardItems();
-        addNewTrans();
         viewAllTrans();
     }
+
+
+    public void threeMiddleButtons(){
+        ImageButton addtrans = findViewById(R.id.home_addtran);
+        addtrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+                startActivity(intent);
+            }
+        });
+        ImageButton setlimit = findViewById(R.id.home_setlimit);
+        setlimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SetLimit.class);
+                startActivity(intent);
+            }
+        });
+        ImageButton transfer = findViewById(R.id.home_transfer);
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Transfer.class);
+                startActivity(intent);
+            }
+        });
+    }
+
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
     //Get dashboard items for recycler view
@@ -181,7 +242,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         totalBalance -= amount;
                         if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
                         {
-
                             TotalSpend+=amount;
                         }
                     }
@@ -194,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
             editor.apply(); // Apply the changes to SharedPreferences
             TextView balanceTxt = findViewById(R.id.balanceText);
-            balanceTxt.setText("$" + roundedBalance);
+            balanceTxt.setText("$ " + roundedBalance);
         });
     }
 
@@ -229,18 +289,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
         return null;
-    }
-
-    // Redirect to AddTransaction Page
-    public void addNewTrans(){
-        FloatingActionButton fab = findViewById(R.id.addTransBtn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
-                startActivity(intent);
-            }
-        });
     }
 
     // Redirect to View All Transaction Page

@@ -39,6 +39,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
     public static final String MY_EMAIL = "MyEmail";
     public String MY_EXPENSE = "myExpense";
     public String MY_STARTDATE = "myStartDate";
+
+
+    public String MY_UID = "MyUID";
+
+
     public String MY_ENDDATE = "myEndDate";
     SharedPreferences sharedPreferences;
 
@@ -72,7 +77,12 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+
         String Expense = sharedPreferences.getString(MY_EXPENSE, "");
+
+        String uid = sharedPreferences.getString(MY_UID,"");
+        String Expense = sharedPreferences.getString(MY_EXPENSE,"");
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
         LimitRef.get().addOnCompleteListener(task -> {
@@ -95,7 +105,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
                         FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+
                         GetTotalExpense(sharedEmail, limit.getStartdate(), limit.getEnddate(), limit.getSpendlimit(), limit.getFallsbelow());
+
+                        GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
+
                         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.putString(MY_STARTDATE, limit.getStartdate());

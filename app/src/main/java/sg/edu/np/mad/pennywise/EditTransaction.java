@@ -13,11 +13,17 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import sg.edu.np.mad.pennywise.models.Transaction;
@@ -79,6 +85,28 @@ public class EditTransaction extends AppCompatActivity {
             else{
                 RadioButton expenseSel = findViewById(R.id.expenseSelectedEdit);
                 expenseSel.setChecked(true);
+            }
+        });
+
+        // Date Picker //
+        MaterialButton button = findViewById(R.id.datePickerEdit);
+        TextView textView = findViewById(R.id.selectDate);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Select Date")
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .build();
+                materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        String date = new SimpleDateFormat("dd-MMM-yyy", Locale.getDefault()).format(new Date(selection));
+                        textView.setText(date);
+
+                    }
+                });
+                materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
 
