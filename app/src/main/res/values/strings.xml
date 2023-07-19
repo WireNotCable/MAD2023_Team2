@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">PennyWise</string>
+    <string name="apps_name"></string>
+    <string name="splash_name">PennyWise</string>
+    <string name="splash_desc">Your Futuristic Finance App</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="viewCard1">View Card</string>

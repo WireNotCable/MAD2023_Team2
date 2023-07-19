@@ -6,11 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+
+import android.view.Gravity;
+
+
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 //import android.widget.Toolbar;
 import androidx.appcompat.widget.Toolbar;
@@ -18,22 +25,30 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -45,29 +60,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    RecyclerView dashboardRecyclerView;
     Toolbar toolbar;
+
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_UID = "MyUID";
+    public String MY_EMAIL = "MyEmail";
 
     public String MY_EXPENSE= "myExpense";
 
     public String MY_STARTDATE = "myStartDate";
 
     public String MY_ENDDATE = "myEndDate";
+    public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
-        dashboardRecyclerView = findViewById(R.id.dashboardRecyclerView);
-        dashboardRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
         setSupportActionBar(toolbar);
+
+        // Remove title in homepage
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         // Nav Drawer
         navigationView.bringToFront();
@@ -75,27 +96,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        TextView monthText = findViewById(R.id.sbtextView);
-        String currentMonth = getCurrentMonthMMM();
-        monthText.setText("Your Balance : "+"("+currentMonth+")");
+        //TextView monthText = findViewById(R.id.sbtextView);
+        //String currentMonth = getCurrentMonthMMM();
+        //monthText.setText("Your Balance : "+"("+currentMonth+")");
+
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String sharedUID = sharedPreferences.getString(MY_UID, "");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference nameRef = db.collection("users").document(sharedUID);
+//        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                DocumentSnapshot document = task.getResult();
+//                TextView name = findViewById(R.id.home_name);
+//                Object nameText = document.get("name");
+//                name.setText(nameText.toString());
+//            }
+//        });
+
+
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
+
+
+        threeMiddleButtons();
+
         getBalance();
         getDashboardItems();
-        addNewTrans();
         viewAllTrans();
     }
 
 
+    public void threeMiddleButtons(){
+        ImageButton addtrans = findViewById(R.id.home_addtran);
+        addtrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
+                startActivity(intent);
+            }
+        });
+        ImageButton setlimit = findViewById(R.id.home_setlimit);
+        setlimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SetLimit.class);
+                startActivity(intent);
+            }
+        });
+        ImageButton transfer = findViewById(R.id.home_transfer);
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Transfer.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
     ArrayList<Transaction> transactionList = new ArrayList<>();
-    // Get dashboard items for recycler view //
+    //Get dashboard items for recycler view
     public void getDashboardItems(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedUID = sharedPreferences.getString(MY_UID, "");
+        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
@@ -115,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Transaction transaction = new Transaction(id, title, date, amount, type);
                 if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
                     transactionList.add(transaction);
+                    Log.v("extract",extractMonth);
                 }
             }
             // Sort transactionList based on date
@@ -142,15 +211,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
-    // Get balance
+    // Get balance for the card
     public void getBalance(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedUID = sharedPreferences.getString(MY_UID, "");
+        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+        String TotalExpense = sharedPreferences.getString(MY_EXPENSE, "");
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedUID).collection("alltransaction");
+        Log.v("email",sharedEmail);
+        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
             List<DocumentSnapshot> documents = querySnapshot.getDocuments();
@@ -173,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         totalBalance -= amount;
                         if(date.compareTo(StartDate) >= 0 && date.compareTo(EndDate) <=0)
                         {
-
                             TotalSpend+=amount;
                         }
                     }
@@ -181,31 +250,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             String roundedBalance = decimalFormat.format(totalBalance);
-
             SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(MY_EXPENSE,String.valueOf(TotalSpend));
-            editor.commit(); // Apply the changes to SharedPreferences
+            editor.apply(); // Apply the changes to SharedPreferences
             TextView balanceTxt = findViewById(R.id.balanceText);
-            balanceTxt.setText("$" + roundedBalance);
+            balanceTxt.setText("$ " + roundedBalance);
         });
     }
 
-    // Get month in MMM format (e.g. Jun)
     private String getCurrentMonthMMM() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM", Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
-
-    // Get year in yyyy format (e.g 2023)
     private String getCurrentYear() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
-
-    // Extract month in MMM format from the transaction date
     private String extractMonthFromDate(String dateString) {
         DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         DateFormat outputDateFormat = new SimpleDateFormat("MMM", Locale.getDefault());
@@ -217,8 +280,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return null;
     }
-
-    // Extract year in yyyy format from the transaction date
     private String extractYearFromDate(String dateString) {
         DateFormat inputDateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
         DateFormat outputDateFormat = new SimpleDateFormat("yyyy", Locale.getDefault());
@@ -229,18 +290,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
         return null;
-    }
-
-    // Redirect to AddTransaction Page
-    public void addNewTrans(){
-        FloatingActionButton fab = findViewById(R.id.addTransBtn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddTransaction.class);
-                startActivity(intent);
-            }
-        });
     }
 
     // Redirect to View All Transaction Page
@@ -302,23 +351,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, Transfer.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-            Intent intent = new Intent(MainActivity.this, Users.class);
-            startActivity(intent);
-        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
-            FirebaseAuth.getInstance().signOut();
+            editor.apply();
             Intent intent = new Intent(MainActivity.this,Login.class);
             startActivity(intent);
         }
+
+
+
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    // Click to view individual transaction
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(MainActivity.this, ViewTransaction.class);
@@ -328,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra("Amount",transactionList.get(position).getTransAmt());
         intent.putExtra("Date",transactionList.get(position).getTransDate());
         intent.putExtra("Type",transactionList.get(position).getTransType());
+        Log.v("hmm","Item clicked, Intent send from MainActivity");
         startActivity(intent);
     }
 }
