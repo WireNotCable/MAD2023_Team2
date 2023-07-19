@@ -104,15 +104,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String sharedUID = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference nameRef = db.collection("users").document(sharedUID);
-        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot document = task.getResult();
-                TextView name = findViewById(R.id.home_name);
-                Object nameText = document.get("name");
-                name.setText(nameText.toString());
-            }
-        });
+//        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                DocumentSnapshot document = task.getResult();
+//                TextView name = findViewById(R.id.home_name);
+//                Object nameText = document.get("name");
+//                name.setText(nameText.toString());
+//            }
+//        });
 
 
 
