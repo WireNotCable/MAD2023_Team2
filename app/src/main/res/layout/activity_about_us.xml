@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/home_icon" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/CurrentProgressLeft"
         android:layout_width="117dp"
         android:layout_height="23dp"
         android:layout_marginTop="33dp"
@@ -38,7 +38,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/CurrentProgressLeft"
         app:layout_constraintVertical_bias="0.2" />
 
 

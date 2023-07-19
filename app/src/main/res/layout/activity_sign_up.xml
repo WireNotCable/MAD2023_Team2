@@ -13,6 +13,15 @@
         android:layout_margin="30dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:textAlignment="center"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,14 +32,6 @@
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="24dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:textAlignment="center"
-                android:textSize="36sp"
-                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/signup_email"
@@ -55,13 +56,6 @@
                 android:hint="Contact Number"
                 android:padding="8dp"
                 android:inputType="number"/>
-            <EditText
-                android:id="@+id/signup_NRIC"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="40dp"
-                android:hint="NRIC"
-                android:padding="8dp" />
 
 
             <Button

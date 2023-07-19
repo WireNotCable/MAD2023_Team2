@@ -57,20 +57,17 @@ public class ProgressBarFragment extends Fragment {
         // Animate ProgressBar and TextView with fadeIn and translate animations
         AnimationSet animationSet = new AnimationSet(true);
         Animation fadeInAnimation = new AlphaAnimation(0, 1);
-        Animation translateAnimation = new TranslateAnimation(-progressBar.getWidth()/4, 0, 0, 0);
 
-        fadeInAnimation.setDuration(500);
-        translateAnimation.setDuration(500);
+        fadeInAnimation.setDuration(400);
 
         animationSet.addAnimation(fadeInAnimation);
-        animationSet.addAnimation(translateAnimation);
 
         progressBar.startAnimation(animationSet);
         progressValue.startAnimation(animationSet);
 
         // Animate ProgressBar from 0% to desired progress in 1 second
         ValueAnimator progressAnimator = ValueAnimator.ofInt(0, desiredProgress);
-        progressAnimator.setDuration(1000);
+        progressAnimator.setDuration(700);
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {

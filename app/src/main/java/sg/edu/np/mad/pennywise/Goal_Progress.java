@@ -47,10 +47,8 @@ public class Goal_Progress extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         pagerDots = findViewById(R.id.pager_dots);
 
-        // Set up the ViewPager2 adapter
         viewPager.setAdapter(new ProgressPagerAdapter(this));
 
-        // Create the carousel buttons (page indicators)
         createCarouselButtons();
 
         // Set a listener to handle page changes and update carousel buttons accordingly
@@ -82,13 +80,11 @@ public class Goal_Progress extends AppCompatActivity {
             });
             pagerDots.addView(dot);
 
-            //dot.setOnClickListener(new CarouselButtonClickListener(i));
 
 
         }
 
 
-        // Set the first carousel button as selected by default
         updateCarouselButtons(0);
     }
 
@@ -99,6 +95,8 @@ public class Goal_Progress extends AppCompatActivity {
                     i == selectedPosition ? R.drawable.page_indicator_selected : R.drawable.page_indicator_unselected));
         }
     }
+
+
 
 
 }

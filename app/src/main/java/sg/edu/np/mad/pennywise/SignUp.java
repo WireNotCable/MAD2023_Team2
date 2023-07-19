@@ -48,7 +48,6 @@ public class SignUp extends AppCompatActivity {
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
         signupPhoneNum = findViewById(R.id.signup_contact);
-        signupNRIC = findViewById(R.id.signup_NRIC);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
@@ -60,7 +59,6 @@ public class SignUp extends AppCompatActivity {
                 String user = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
                 String phoneNum = signupPhoneNum.getText().toString();
-                String NRIC = signupNRIC.getText().toString();
 
                 // data validation
                 if (user.isEmpty()){
@@ -72,12 +70,7 @@ public class SignUp extends AppCompatActivity {
                 if (phoneNum.isEmpty()){
                     signupPhoneNum.setError("Contact number cannot be empty");
                 }
-                if (NRIC.isEmpty()){
-                    signupNRIC.setError("NRIC cannot be empty");
-                }
-                if (NRIC.length() != 9 ){
-                    signupNRIC.setError("Invalid NRIC input, please input a valid NRIC");
-                }
+
                 else{
                     auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
@@ -92,7 +85,6 @@ public class SignUp extends AppCompatActivity {
                                 userData.put("email", user);
                                 userData.put("password", password); //just cos we wan add
                                 userData.put("phonenum", phoneNum);
-                                userData.put("nric", NRIC);
                                 db.collection("users").document(firebaseUser.getUid()).set(userData);
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
