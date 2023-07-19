@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise.models;
+package sg.edu.np.mad.pennywise;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,12 +7,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class MyPagerAdapter extends FragmentStateAdapter {
+import sg.edu.np.mad.pennywise.fragments.CardViewFragment;
+import sg.edu.np.mad.pennywise.fragments.LineChartFragment;
+import sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;
+
+public class ProgressPagerAdapter extends FragmentStateAdapter {
 
     private static final int NUM_PAGES = 3;
 
-    public MyPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
-        super(fragmentManager, lifecycle);
+    public ProgressPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+        super(fragmentActivity);
     }
 
     @NonNull

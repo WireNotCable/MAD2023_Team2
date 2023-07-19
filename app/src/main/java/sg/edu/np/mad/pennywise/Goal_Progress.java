@@ -1,22 +1,19 @@
-package sg.edu.np.mad.pennywise.models;
+package sg.edu.np.mad.pennywise;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import sg.edu.np.mad.pennywise.R;
+import sg.edu.np.mad.pennywise.fragments.CardViewFragment;
+import sg.edu.np.mad.pennywise.fragments.LineChartFragment;
+import sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;
 
 
 public class Goal_Progress extends AppCompatActivity {
@@ -51,7 +48,7 @@ public class Goal_Progress extends AppCompatActivity {
         pagerDots = findViewById(R.id.pager_dots);
 
         // Set up the ViewPager2 adapter
-        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), getLifecycle()));
+        viewPager.setAdapter(new ProgressPagerAdapter(this));
 
         // Create the carousel buttons (page indicators)
         createCarouselButtons();
@@ -74,9 +71,19 @@ public class Goal_Progress extends AppCompatActivity {
             params.setMargins(margin, 0, margin, 0);
             dot.setLayoutParams(params);
             dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.page_indicator_unselected));
+            dot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = pagerDots.indexOfChild(v);
+                    if (position >= 0) {
+                        viewPager.setCurrentItem(position, true);
+                    }
+                }
+            });
             pagerDots.addView(dot);
 
-            dot.setOnClickListener(new CarouselButtonClickListener(i));
+            //dot.setOnClickListener(new CarouselButtonClickListener(i));
+
 
         }
 
@@ -92,40 +99,6 @@ public class Goal_Progress extends AppCompatActivity {
                     i == selectedPosition ? R.drawable.page_indicator_selected : R.drawable.page_indicator_unselected));
         }
     }
-    private void loadFragment(int position) {
-        Fragment fragment;
-        switch (position) {
-            case 0:
-                fragment = new ProgressBarFragment();
-                break;
-            case 1:
-                fragment = new LineChartFragment();
-                break;
-            case 2:
-                fragment = new CardViewFragment();
-                break;
-            default:
-                fragment = null;
-                break;
-        }
 
-        if (fragment != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.view_pager, fragment)
-                    .commit();
-        }
-    }
-    private class CarouselButtonClickListener implements View.OnClickListener {
-        private int position;
 
-        public CarouselButtonClickListener(int position) {
-            this.position = position;
-        }
-
-        @Override
-        public void onClick(View v) {
-            viewPager.setCurrentItem(position, true);
-            loadFragment(position); // Load the corresponding fragment when button clicked
-        }
-    }
 }
