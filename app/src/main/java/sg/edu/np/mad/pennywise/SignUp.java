@@ -61,7 +61,7 @@ public class SignUp extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(5000);
 
         ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(rootView, "translationY", rootView.getHeight(), 0f);
-        translationAnimator.setDuration(1000);
+        translationAnimator.setDuration(1500);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(translationAnimator, ObjectAnimator.ofFloat(rootView, "alpha", 0f, 1f));
