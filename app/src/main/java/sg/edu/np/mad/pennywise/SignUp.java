@@ -4,18 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,9 +36,11 @@ import java.util.Map;
 public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private EditText signupEmail, signupPassword, signupPhoneNum, signupNRIC;
+    private EditText  signupPassword, signupPhoneNum, signupNRIC;
+    private TextInputEditText signupEmail;
     private Button signupButton;
     private TextView loginRedirectText;
+
 
     //Shared preference //
     public String GLOBAL_PREFS = "myPrefs";
@@ -43,6 +53,22 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        View rootView = findViewById(R.id.signupLayOut);
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in_from_bottom);
+        AnimationDrawable animationDrawable = (AnimationDrawable) rootView.getBackground();
+        animationDrawable.setEnterFadeDuration(2500);
+        animationDrawable.setExitFadeDuration(5000);
+
+        ObjectAnimator translationAnimator = ObjectAnimator.ofFloat(rootView, "translationY", rootView.getHeight(), 0f);
+        translationAnimator.setDuration(1000);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(translationAnimator, ObjectAnimator.ofFloat(rootView, "alpha", 0f, 1f));
+
+        animatorSet.start();
+        rootView.startAnimation(fadeInAnimation);
+        animationDrawable.start();
 
         auth = FirebaseAuth.getInstance();
         signupEmail = findViewById(R.id.signup_email);
@@ -111,5 +137,20 @@ public class SignUp extends AppCompatActivity {
                 startActivity(new Intent(SignUp.this, Login.class));
             }
         });
+
+
+    }
+    private AnimatorSet createBackgroundAnimation(View view) {
+        // Implement the background animation here, e.g., using ObjectAnimator
+        // You can apply alpha, translation, etc. to the view
+        // Return an AnimatorSet that includes all the animations for the background
+        // For example:
+        AnimatorSet animatorSet = new AnimatorSet();
+        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
+        alphaAnimator.setDuration(1000);
+        animatorSet.play(alphaAnimator);
+        // Add other animations as needed for the background
+
+        return animatorSet;
     }
 }
