@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -106,15 +107,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String sharedUID = sharedPreferences.getString(MY_UID, "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference nameRef = db.collection("users").document(sharedUID);
-//        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                DocumentSnapshot document = task.getResult();
-//                TextView name = findViewById(R.id.home_name);
-//                Object nameText = document.get("name");
-//                name.setText(nameText.toString());
-//            }
-//        });
+        nameRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                TextView name = findViewById(R.id.home_name);
+                Object nameText = document.get("name");
+                name.setText(nameText.toString());
+            }
+        });
 
 
 
@@ -255,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Transaction transaction = new Transaction(id, title, date, amount, type);
                 if (currentMonth.equals(extractMonth) && currentYear.equals(extractYear)){
                     transactionList.add(transaction);
+                    Log.v("extract",extractMonth);
                 }
             }
             // Sort transactionList based on date
@@ -290,6 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String StartDate = sharedPreferences.getString(MY_STARTDATE,"");
         String EndDate = sharedPreferences.getString(MY_ENDDATE,"");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.v("email",sharedEmail);
         CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             QuerySnapshot querySnapshot = task.getResult();
@@ -445,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.putExtra("Amount",transactionList.get(position).getTransAmt());
         intent.putExtra("Date",transactionList.get(position).getTransDate());
         intent.putExtra("Type",transactionList.get(position).getTransType());
+        Log.v("hmm","Item clicked, Intent send from MainActivity");
         startActivity(intent);
     }
 }

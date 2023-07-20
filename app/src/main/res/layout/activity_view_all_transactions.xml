@@ -85,7 +85,7 @@
                     android:gravity="center"
                     android:onClick="onRadioButtonClicked"
                     android:text="INCOME"
-                    android:textColor="@color/red" />
+                    android:textColor="#4465DA" />
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioExpenseBtn"
                     android:layout_width="0dp"
@@ -97,7 +97,7 @@
                     android:gravity="center"
                     android:onClick="onRadioButtonClicked"
                     android:text="EXPENSE"
-                    android:textColor="@color/red" />
+                    android:textColor="#4465DA" />
             </RadioGroup>
 
             <androidx.appcompat.widget.SearchView

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -51,9 +52,10 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
     private ImageView EditLimit;
     private TextView StartDate;
     private TextView EndDate;
-    private TextView SpendLimit;
-    private TextView FallsBelow;
+    private ProgressBar progressBar;
     private TextView AvailableBalance;
+
+
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -95,17 +97,16 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                         if (data != null) {
                             String Getstartdate = (String) data.get("startdate");
                             String Getenddate = (String) data.get("enddate");
-                            double Getlimit = ((Number) data.get("limit")).doubleValue();
-                            double Getwarning = ((Number) data.get("warning")).doubleValue();
-                            limit = new LimitObject(Getstartdate, Getenddate, Getlimit, Getwarning);
+                             double getLimit = ((Number) data.get("limit")).doubleValue();
+                             double getFallsBelow = ((Number) data.get("warning")).doubleValue();
+                            limit = new LimitObject(Getstartdate, Getenddate, getLimit, getFallsBelow);
                         }
                     }
                     if (limit != null) {
                         StartDate.setText(limit.getStartdate());
                         EndDate.setText(limit.getEnddate());
-                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+//                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
 
-                        GetTotalExpense(sharedEmail, limit.getStartdate(), limit.getEnddate(), limit.getSpendlimit(), limit.getFallsbelow());
 
                         GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
 
@@ -132,9 +133,10 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         super.onStart();
         StartDate = findViewById(R.id.limit_startdate);
         EndDate = findViewById(R.id.limit_enddate);
-        SpendLimit = findViewById(R.id.limit_amount);
-        FallsBelow = findViewById(R.id.limit_spend);
         AvailableBalance = findViewById(R.id.balanceText);
+        progressBar = findViewById(R.id.setlimit_progressBar);
+        progressBar.setIndeterminate(false);
+
 
 
 
@@ -145,8 +147,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                 Intent intent = new Intent(SetLimit.this, EditSetLimit.class);
                 intent.putExtra("StartDate", StartDate.getText().toString());
                 intent.putExtra("EndDate", EndDate.getText().toString());
-                intent.putExtra("SpendLimit", SpendLimit.getText().toString().split("/")[1]);
-                intent.putExtra("FallsBelow", FallsBelow.getText().toString());
+
+//                intent.putExtra("SpendLimit", SpendLimit);
+//                intent.putExtra("FallsBelow", FallsBelow);
                 startActivity(intent);
                 finish();
             }
@@ -194,7 +197,8 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
             }
-            SpendLimit.setText("$" + totalSpend + " / " + spendlimit);
+
+            progressBar.setProgress((int)(Math.ceil(totalSpend/spendlimit)));
             double balance = spendlimit - totalSpend;
             if (balance < fallsbelow || totalSpend > spendlimit) {
                 AvailableBalance.setTextColor(Color.RED);

@@ -75,7 +75,7 @@ public class EditSetLimit extends AppCompatActivity {
         selectedStartDate.setText(intent.getStringExtra("StartDate"));
         selectedEndDate.setText(intent.getStringExtra("EndDate"));
         EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
-        String Fallsbelow = intent.getStringExtra("FallsBelow").replaceAll("\\D+", "");
+        String Fallsbelow = intent.getStringExtra("FallsBelow");
         EtFallsBelow.setText(Fallsbelow);
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {//Date Picker
