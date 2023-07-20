@@ -43,7 +43,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
     TextView balance,limit;
     AutoCompleteTextView chooseuser;
     EditText amount,comment;
-    Button transfer;
+    Button transfer,test;
     ImageView homeButton,userIcon;
     public Double userbalance = Double.valueOf(0);
     public Double userlimit;
@@ -68,6 +68,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         amount = findViewById(R.id.InputAmount);
         comment = findViewById(R.id.InputComments);
         transfer = findViewById(R.id.TransferButton);
+        test = findViewById(R.id.GoalTracking);
 
         userIcon = findViewById(R.id.UserIcon);
 
@@ -92,6 +93,13 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setCheckedItem(R.id.nav_home);
 
 
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Transfer.this,Goal_Progress.class);
+                startActivity(intent);
+            }
+        });
 
 
 
