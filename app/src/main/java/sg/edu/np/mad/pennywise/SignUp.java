@@ -36,7 +36,7 @@ import java.util.Map;
 public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private EditText  signupPassword, signupPhoneNum, signupNRIC;
+    private EditText  signupPassword, signupPhoneNum, signupName;
     private TextInputEditText signupEmail;
     private Button signupButton;
     private TextView loginRedirectText;
@@ -74,6 +74,7 @@ public class SignUp extends AppCompatActivity {
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
         signupPhoneNum = findViewById(R.id.signup_contact);
+        signupName = findViewById(R.id.signup_name);
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
@@ -85,6 +86,7 @@ public class SignUp extends AppCompatActivity {
                 String user = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
                 String phoneNum = signupPhoneNum.getText().toString();
+                String name = signupName.getText().toString();
 
                 // data validation
                 if (user.isEmpty()){
@@ -96,27 +98,28 @@ public class SignUp extends AppCompatActivity {
                 if (phoneNum.isEmpty()){
                     signupPhoneNum.setError("Contact number cannot be empty");
                 }
-
-                else{
+                if (name.isEmpty()) {
+                    signupName.setError("Name cannot be empty");
+                } else {
                     auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 FirebaseUser firebaseUser = auth.getCurrentUser();
                                 sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 Map<String, Object> userData = new HashMap<>();
-                                userData.put("UID",auth.getUid());
+                                userData.put("UID", auth.getUid());
                                 userData.put("email", user);
+                                userData.put("name", name);
                                 userData.put("password", password); //just cos we wan add
                                 userData.put("phonenum", phoneNum);
                                 db.collection("users").document(firebaseUser.getUid()).set(userData);
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SignUp.this, Login.class));
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(SignUp.this, "Sign Up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }

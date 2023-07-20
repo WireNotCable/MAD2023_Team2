@@ -43,7 +43,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     private static final int REQUEST_IMAGE_GET = 1;
 
     private ImageView homeBtn;
-    private ImageView EditButton;
+    private TextView EditButton;
     private ImageView ProfilePic;
     private Button ShowProfile;
 
@@ -183,9 +183,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         // Retrieve the uid from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
-
-
-
 
         //Pass Details
         FirebaseFirestore db = FirebaseFirestore.getInstance();

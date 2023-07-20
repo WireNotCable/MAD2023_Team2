@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     app:cardCornerRadius="20dp"
     android:layout_marginTop="40dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="636dp"
+        android:layout_height="match_parent"
 
         tools:context=".EditSetLimit">
 
@@ -24,6 +24,9 @@
             android:focusable="false"
             android:inputType="date"
             android:onClick="showStartDatePicker"
+            android:textAlignment="center"
+            android:background="@drawable/border"
+            android:padding="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -47,7 +50,10 @@
             android:ems="10"
             android:focusable="false"
             android:inputType="date"
+            android:padding="12sp"
+            android:textAlignment="center"
             android:onClick="showEndDatePicker"
+            android:background="@drawable/border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/editsetlimit_startdate"
@@ -93,6 +99,9 @@
             android:layout_marginTop="7dp"
             android:layout_marginEnd="172dp"
             android:text="Set Limit"
+            android:textColor="#4465DA"
+            android:textStyle="bold"
+            android:fontFamily="@font/antic"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,15 +123,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="109dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="103dp"
-            android:layout_marginBottom="96dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/border"
             android:ems="10"
             android:inputType="number"
+            android:padding="12sp"
             android:text="1500"
+            android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/editsetlimit_warning"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textView16"
@@ -140,23 +155,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="109dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="103dp"
-            android:layout_marginBottom="116dp"
+            android:background="@drawable/border"
             android:ems="10"
             android:inputType="number"
+            android:padding="12sp"
             android:text="500"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/editsetlimit_setbutton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.909"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
         <Button
             android:id="@+id/editsetlimit_setbutton"
             android:layout_width="225dp"
             android:layout_height="48dp"
-            android:layout_marginStart="84dp"
-            android:layout_marginEnd="102dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginStart="95dp"
+            android:layout_marginEnd="95dp"
+            android:layout_marginBottom="40dp"
             android:backgroundTint="@color/black"
             android:text="Set"
             app:layout_constraintBottom_toBottomOf="parent"

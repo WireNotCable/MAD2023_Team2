@@ -131,7 +131,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
     protected void onStart() {
         super.onStart();
         StartDate = findViewById(R.id.limit_startdate);
-        EndDate = findViewById(R.id.textview20);
+        EndDate = findViewById(R.id.limit_enddate);
         SpendLimit = findViewById(R.id.limit_amount);
         FallsBelow = findViewById(R.id.limit_spend);
         AvailableBalance = findViewById(R.id.balanceText);
