@@ -162,8 +162,8 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         if (v.getId() == R.id.radioAllBtn) {
             if(isSelected){
                 radioAllBtn.setTextColor(Color.WHITE);
-                radioExpenseBtn.setTextColor(Color.RED);
-                radioIncomeBtn.setTextColor(Color.RED);
+                radioExpenseBtn.setTextColor(Color.parseColor("#4465DA"));
+                radioIncomeBtn.setTextColor(Color.parseColor("#4465DA"));
                 getTransData("all");
                 SearchView sv = findViewById(R.id.search);
                 sv.setQuery("", false);
@@ -171,8 +171,8 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         }
         else if (v.getId() == R.id.radioIncomeBtn){
             if(isSelected){
-                radioExpenseBtn.setTextColor(Color.RED);
-                radioAllBtn.setTextColor(Color.RED);
+                radioExpenseBtn.setTextColor(Color.parseColor("#4465DA"));
+                radioAllBtn.setTextColor(Color.parseColor("#4465DA"));
                 radioIncomeBtn.setTextColor(Color.WHITE);
                 getTransData("income");
                 SearchView sv = findViewById(R.id.search);
@@ -183,8 +183,8 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
             if(isSelected){
 
                 radioExpenseBtn.setTextColor(Color.WHITE);
-                radioAllBtn.setTextColor(Color.RED);
-                radioIncomeBtn.setTextColor(Color.RED);
+                radioAllBtn.setTextColor(Color.parseColor("#4465DA"));
+                radioIncomeBtn.setTextColor(Color.parseColor("#4465DA"));
                 getTransData("expense");
                 SearchView sv = findViewById(R.id.search);
                 sv.setQuery("", false);
