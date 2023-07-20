@@ -15,14 +15,21 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label=""
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
-            android:name=".AddUser"
-            android:exported="false" />
+            android:name=".SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".Users"
             android:exported="false" />
@@ -60,6 +67,9 @@
             android:name=".SignUp"
             android:exported="false" />
         <activity
+            android:name=".AboutUs"
+            android:exported="false" />
+        <activity
             android:name=".Login"
             android:exported="true">
             <intent-filter>
@@ -68,9 +78,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AboutUs"
-            android:exported="false" />
         <activity
             android:name=".ViewCard"
             android:exported="false" />
@@ -85,8 +92,19 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".Goal_Progress"
+            android:exported="false"></activity>
+        <activity
+            android:name=".AddUser"
             android:exported="false">
+
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
