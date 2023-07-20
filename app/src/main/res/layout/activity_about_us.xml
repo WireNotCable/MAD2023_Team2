@@ -10,6 +10,126 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:navigationIcon="@drawable/menu"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="117dp"
+                    android:layout_height="23dp"
+                    android:layout_marginStart="150dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="144dp"
+                    android:text="About Us"
+                    android:fontFamily="@font/antic"
+                    android:textColor="#4465DA"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="142dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginTop="336dp"
+                    android:layout_marginEnd="164dp"
+                    android:text="OUR MOTTO"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <TextView
+                    android:id="@+id/MottoText"
+                    android:layout_width="355dp"
+                    android:layout_height="176dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/profilepic_background"
+                    android:padding="10dp"
+                    android:text="PennyWise is the Futuristic Finance App of tomorrow that allows you to manage your money at maximum efficiency!"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="142dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="155dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="164dp"
+                    android:text="FEATURES"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/MottoText" />
+
+                <TextView
+                    android:id="@+id/featuresText"
+                    android:layout_width="361dp"
+                    android:layout_height="218dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/profilepic_background"
+                    android:padding="10dp"
+                    android:text="Set a spending limit to make sure you don't overspend a single penny. Keep tabs on your transactions, track your expenditure, plan out your saving and spend wisely with PennyWise Today"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="266dp"
+                    android:layout_height="226dp"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="77dp"
+                    android:layout_marginEnd="100dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:srcCompat="@drawable/clown" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -17,114 +137,5 @@
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
         android:layout_gravity="start" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/menu"
-        app:layout_constraintTop_toTopOf="parent" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".AboutUs">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="117dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="144dp"
-            android:text="About Us"
-            android:fontFamily="@font/antic"
-            android:textColor="#4465DA"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="142dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="155dp"
-            android:layout_marginTop="336dp"
-            android:layout_marginEnd="164dp"
-            android:text="OUR MOTTO"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/MottoText"
-            android:layout_width="355dp"
-            android:layout_height="176dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/profilepic_background"
-            android:padding="10dp"
-            android:text="PennyWise is the Futuristic Finance App of tomorrow that allows you to manage your money at maximum efficiency!"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="142dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="155dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="164dp"
-            android:text="FEATURES"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/MottoText" />
-
-        <TextView
-            android:id="@+id/featuresText"
-            android:layout_width="361dp"
-            android:layout_height="218dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/profilepic_background"
-            android:padding="10dp"
-            android:text="Set a spending limit to make sure you don't overspend a single penny. Keep tabs on your transactions, track your expenditure, plan out your saving and spend wisely with PennyWise Today"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="266dp"
-            android:layout_height="226dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="77dp"
-            android:layout_marginEnd="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            app:srcCompat="@drawable/clown" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
