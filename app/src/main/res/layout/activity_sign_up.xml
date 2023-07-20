@@ -123,7 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="30dp"
-                    android:backgroundTint="#4c4cff"
+                    android:backgroundTint="#4465DA"
                     android:text="Sign Up"
                     android:textSize="18sp"
                     app:cornerRadius="200dp" />
