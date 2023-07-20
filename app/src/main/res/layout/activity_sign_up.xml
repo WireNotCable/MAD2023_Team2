@@ -56,11 +56,11 @@
                 android:padding="8dp"
                 android:inputType="number"/>
             <EditText
-                android:id="@+id/signup_NRIC"
+                android:id="@+id/signup_Name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
-                android:hint="NRIC"
+                android:hint="Name"
                 android:padding="8dp" />
 
 
