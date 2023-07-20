@@ -43,7 +43,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
     private static final int REQUEST_IMAGE_GET = 1;
 
     private ImageView homeBtn;
-    private ImageView EditButton;
+    private TextView EditButton;
     private ImageView ProfilePic;
     private Button ShowProfile;
 
