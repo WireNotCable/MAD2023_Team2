@@ -1,22 +1,18 @@
 package sg.edu.np.mad.pennywise;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import sg.edu.np.mad.pennywise.fragments.CardViewFragment;
-import sg.edu.np.mad.pennywise.fragments.LineChartFragment;
-import sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 
 public class Goal_Progress extends AppCompatActivity {
+
     ProgressBar progressBar;
     ViewPager2 viewPager;
     LinearLayout pagerDots;
@@ -25,25 +21,7 @@ public class Goal_Progress extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_progress);
-        /*int desiredProgress = 60;
-        progressBar = findViewById(R.id.progressBar);
 
-        progressBar.setProgress(0);
-
-        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar,"progress",0,desiredProgress);
-        AnimationSet animationSet = new AnimationSet(true);
-        Animation fadeInAnimation = new AlphaAnimation(0,1);
-        Animation translateAnimation = new TranslateAnimation(-progressBar.getWidth(),0,0,0);
-
-        progressAnimator.setDuration(1000);
-        fadeInAnimation.setDuration(1500);
-        translateAnimation.setDuration(2000);
-
-        animationSet.addAnimation(fadeInAnimation);
-        animationSet.addAnimation(translateAnimation);
-
-        progressAnimator.start();
-        progressBar.setAnimation(animationSet);*/
         viewPager = findViewById(R.id.view_pager);
         pagerDots = findViewById(R.id.pager_dots);
 
@@ -94,6 +72,13 @@ public class Goal_Progress extends AppCompatActivity {
             dot.setImageDrawable(ContextCompat.getDrawable(this,
                     i == selectedPosition ? R.drawable.page_indicator_selected : R.drawable.page_indicator_unselected));
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+
     }
 
 
