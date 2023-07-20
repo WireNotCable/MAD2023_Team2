@@ -33,6 +33,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/background_1"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +49,6 @@
                     android:layout_marginEnd="144dp"
                     android:text="About Us"
                     android:fontFamily="@font/antic"
-                    android:textColor="#4465DA"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

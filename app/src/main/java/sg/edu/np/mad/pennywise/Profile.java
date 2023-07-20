@@ -201,7 +201,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                             // Pass the name to the dialog view
                             TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
                             String name = email.split("@")[0];
-                            profilepic_name.setText(name);
+                            profilepic_name.setText(documentSnapshot.getString("name"));
 
                             // Pass the username to the dialog view
                             TextView profilepic_username = dialogView.findViewById(R.id.profilepic_email);
