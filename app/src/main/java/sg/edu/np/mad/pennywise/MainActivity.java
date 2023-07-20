@@ -9,22 +9,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-
-import android.view.Gravity;
-
 
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-//import android.widget.Toolbar;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,6 +34,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -120,12 +122,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_home);
 
 
-
+        profilepic();
+        getCardNum();
         threeMiddleButtons();
-
         getBalance();
         getDashboardItems();
         viewAllTrans();
+    }
+
+    public void profilepic(){
+        // Retrieve the uid from the shared prefs
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String uid = prefs.getString(MY_UID, "");
+
+        //profile pic
+        ImageView profilepic = findViewById(R.id.home_pfp);
+        // Retrieve the uid from the shared prefs
+        String filename = uid + ".jpg";
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imageRef = storageRef.child("profilepic/" + filename);
+
+        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            // Load the image into the ImageView using Glide
+            Glide.with(this)
+                    .load(uri)
+                    .into(profilepic);
+        }).addOnFailureListener(exception -> {
+            // Handle any errors that occurred while fetching the download URL
+        });
+
+        profilepic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Profile.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -156,6 +189,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    public void getCardNum() {
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String uid = prefs.getString(MY_UID, "");
+        TextView cardNum = findViewById(R.id.home_cardnum);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cardRef = db.collection("users").document(uid).collection("addCard");
+
+        cardRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    // Assuming you have only one document in the "addCard" collection
+                    DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                    Object cardNumText = document.get("number");
+                    if (cardNumText != null) {
+                        StringBuilder formatted = new StringBuilder();
+                        formatted.append(cardNumText.toString().substring(0, 4));
+                        formatted.append(" ");
+                        formatted.append(cardNumText.toString().substring(4, 8));
+                        formatted.append(" ");
+                        formatted.append(cardNumText.toString().substring(8, 12));
+                        formatted.append(" ");
+                        formatted.append(cardNumText.toString().substring(12));
+                        cardNum.setText(formatted);
+                    } else {
+                        // "number" field is not found or is null
+                        cardNum.setText("");
+                    }
+                } else {
+                    // collection is empty or the document is not found
+                    cardNum.setText("");
+                    Toast.makeText(this, "Card does not exist", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // any errors that occurred while fetching the data
+                cardNum.setText("");
+            }
+        });
+    }
 
     ArrayList<Transaction> transactionList = new ArrayList<>();
     //Get dashboard items for recycler view

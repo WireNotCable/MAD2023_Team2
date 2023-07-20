@@ -184,9 +184,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
 
-
-
-
         //Pass Details
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");

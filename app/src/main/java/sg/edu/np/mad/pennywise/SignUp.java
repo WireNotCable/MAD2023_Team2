@@ -36,8 +36,9 @@ import java.util.Map;
 public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private EditText  signupPassword, signupPhoneNum, signupNRIC;
+    private EditText signupEmail, signupPassword, signupPhoneNum, signupName;
     private TextInputEditText signupEmail;
+
     private Button signupButton;
     private TextView loginRedirectText;
 
@@ -74,6 +75,8 @@ public class SignUp extends AppCompatActivity {
         signupEmail = findViewById(R.id.signup_email);
         signupPassword = findViewById(R.id.signup_password);
         signupPhoneNum = findViewById(R.id.signup_contact);
+        signupName = findViewById(R.id.signup_Name);
+
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
@@ -85,6 +88,7 @@ public class SignUp extends AppCompatActivity {
                 String user = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
                 String phoneNum = signupPhoneNum.getText().toString();
+                String name = signupName.getText().toString();
 
                 // data validation
                 if (user.isEmpty()){
@@ -97,6 +101,9 @@ public class SignUp extends AppCompatActivity {
                     signupPhoneNum.setError("Contact number cannot be empty");
                 }
 
+                if (name.isEmpty()){
+                    signupName.setError("Name cannot be empty");
+                }
                 else{
                     auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
@@ -111,6 +118,8 @@ public class SignUp extends AppCompatActivity {
                                 userData.put("email", user);
                                 userData.put("password", password); //just cos we wan add
                                 userData.put("phonenum", phoneNum);
+                                userData.put("name", name);
+
                                 db.collection("users").document(firebaseUser.getUid()).set(userData);
 
                                 Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
