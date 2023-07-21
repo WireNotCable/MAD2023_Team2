@@ -132,7 +132,7 @@ public class EditSetLimit extends AppCompatActivity {
                     if(!TextUtils.isEmpty(EtSpendLimit.getText()) && !TextUtils.isEmpty(EtFallsBelow.getText())) {
                         if (spendLimit > 0 && fallsbelow > 0) {
                             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                            String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+                            String uid = sharedPreferences.getString(MY_UID, "");
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                             Map<String, Object> limitData = new HashMap<>();
@@ -142,7 +142,7 @@ public class EditSetLimit extends AppCompatActivity {
                             limitData.put("warning",fallsbelow);
                             String documentId = "wqeuqiueywue";// Setting a default document Id
                             DocumentReference documentRef = db.collection("users")
-                                    .document(sharedEmail)
+                                    .document(uid)
                                     .collection("setlimit")
                                     .document(documentId);// Override Id if exist
 

@@ -85,7 +85,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         String Expense = sharedPreferences.getString(MY_EXPENSE,"");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
+        CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
         LimitRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -175,9 +175,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         return selectedDate;
     }
 
-    private void GetTotalExpense(String sharedEmail, String StartDate, String EndDate, double spendlimit, double fallsbelow) {
+    private void GetTotalExpense(String uid, String StartDate, String EndDate, double spendlimit, double fallsbelow) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(uid).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             double totalSpend = 0.0;
             if (task.isSuccessful()) {
@@ -199,7 +199,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             }
             int progress = (int)(Math.ceil(totalSpend/spendlimit *100 ) );
             progressBar.setProgress(progress);
-            Log.v("HEUHEUH",String.valueOf(progress));
+            Log.v("Progress",String.valueOf(progress));
             double balance = spendlimit - totalSpend;
             if (balance < fallsbelow || totalSpend > spendlimit) {
                 AvailableBalance.setTextColor(Color.RED);
