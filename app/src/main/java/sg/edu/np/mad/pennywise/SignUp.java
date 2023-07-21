@@ -36,8 +36,7 @@ import java.util.Map;
 public class SignUp extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private EditText  signupPassword, signupPhoneNum, signupName;
-    private TextInputEditText signupEmail;
+    private TextInputEditText signupEmail,signupPassword,signupPhoneNum,signupName;
     private Button signupButton;
     private TextView loginRedirectText;
 
@@ -147,19 +146,6 @@ public class SignUp extends AppCompatActivity {
         });
 
 
-    }
-    private AnimatorSet createBackgroundAnimation(View view) {
-        // Implement the background animation here, e.g., using ObjectAnimator
-        // You can apply alpha, translation, etc. to the view
-        // Return an AnimatorSet that includes all the animations for the background
-        // For example:
-        AnimatorSet animatorSet = new AnimatorSet();
-        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(view, "alpha", 0f, 1f);
-        alphaAnimator.setDuration(1000);
-        animatorSet.play(alphaAnimator);
-        // Add other animations as needed for the background
-
-        return animatorSet;
     }
 
     @Override
