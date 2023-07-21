@@ -220,8 +220,7 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_friends){
-            Intent intent = new Intent(AddTransaction.this, Users.class);
-            startActivity(intent);
+
         }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
