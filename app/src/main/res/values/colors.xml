@@ -8,4 +8,5 @@
     <color name = "yellowish">#f1c232</color>
     <color name = "reddish">#f44336</color>
     <color name = "greenish">#55f90d</color>
+    <color name="light_red">#FF8080</color>
 </resources>

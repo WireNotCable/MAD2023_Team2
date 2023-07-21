@@ -197,8 +197,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
             }
-
-            progressBar.setProgress((int)(Math.ceil(totalSpend/spendlimit)));
+            int progress = (int)(Math.ceil(totalSpend/spendlimit *100 ) );
+            progressBar.setProgress(progress);
+            Log.v("HEUHEUH",String.valueOf(progress));
             double balance = spendlimit - totalSpend;
             if (balance < fallsbelow || totalSpend > spendlimit) {
                 AvailableBalance.setTextColor(Color.RED);
