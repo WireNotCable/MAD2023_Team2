@@ -304,6 +304,10 @@ public class Currency extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(Currency.this, Users.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(Currency.this, Stats.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

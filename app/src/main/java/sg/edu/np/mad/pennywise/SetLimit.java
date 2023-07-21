@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -135,6 +136,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         EndDate = findViewById(R.id.limit_enddate);
         AvailableBalance = findViewById(R.id.balanceText);
         progressBar = findViewById(R.id.setlimit_progressBar);
+
         progressBar.setIndeterminate(false);
 
 
@@ -209,6 +211,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         });
     }
 
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -255,6 +258,10 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (item.getItemId() == R.id.nav_friends){
             Intent intent = new Intent(SetLimit.this, Users.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(SetLimit.this, Stats.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){
