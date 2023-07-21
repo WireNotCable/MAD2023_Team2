@@ -161,4 +161,9 @@ public class SignUp extends AppCompatActivity {
 
         return animatorSet;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
