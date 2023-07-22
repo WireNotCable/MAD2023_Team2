@@ -159,6 +159,7 @@ public class EditSetLimit extends AppCompatActivity {
                                         Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();// Show Message
                                         Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                                         startActivity(intent);
+                                        finish();
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e("Firestore", "Error setting document: " + e.getMessage());
