@@ -294,7 +294,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             Intent intent = new Intent(Stats.this, Profile.class);
             startActivity(intent);
         }
-        lse if (item.getItemId() == R.id.nav_cryptoTracker){
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
             Intent intent = new Intent(Stats.this, CryptoTracker.class);
             startActivity(intent);
         }
