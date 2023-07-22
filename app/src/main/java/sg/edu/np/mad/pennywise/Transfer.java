@@ -1,9 +1,13 @@
 package sg.edu.np.mad.pennywise;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -12,12 +16,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +34,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,17 +45,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class Transfer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     Button test,confirm;
-    TextView name,changelimit,limitamount,remaininggamount;
+    TextView name,changelimit,limitamount,remaininggamount,mobile;
     LinearLayout amountLayout,limitLayout,commentLayout;
-    EditText comment,amount,mobile;
+    EditText comment,amount,title;
     FirebaseAuth auth;
     FirebaseFirestore db;
 
     SharedPreferences sharedPreferences;
     public String GLOBAL_PREFS = "myPrefs";
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -72,7 +85,9 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         mobile = findViewById(R.id.mobile);
         limitamount = findViewById(R.id.textView21);
         remaininggamount = findViewById(R.id.textView22);
-
+        title = findViewById(R.id.editTextText3);
+        title.setFocusable(false);
+        title.setFocusableInTouchMode(false);
         test = findViewById(R.id.GoalTracking);
 
         //FOR NAV BAR
@@ -91,7 +106,9 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
-
+        mobile.setText("Mobile");
+        amount.setText("0.00");
+        comment.setText("Amount Transfer");
 
         test.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +147,40 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             public void onClick(View v) {
                 String phonenum = String.valueOf(mobile.getText());
                 double transferamt = Double.parseDouble(String.valueOf(amount.getText()));
-                String transfercomment = String.valueOf(comment.getText());
-                //find transfer user
-                //write to firestore
-                //show success dialog
+                if (transferamt == 0){
+                    Toast.makeText(getApplicationContext(),"Amount cannot be 0",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String transfercomment = String.valueOf(comment.getText());
+                    checkUserExists(phonenum, new UserExistsCallBack() {
+                        @Override
+                        public void onUserExists(boolean exists, String name, String uid) {
+                            if (exists) {
+                                CollectionReference alltranscationref = db.collection("users").document(uid).collection("alltransaction");
+                                DocumentReference newTranscationRef = alltranscationref.document();
+                                Map<String, Object> transcationData = new HashMap<>();
+                                transcationData.put("amount", transferamt);
+                                Date currentDate = new Date();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+                                transcationData.put("date", dateFormat.format(currentDate));
+                                transcationData.put("title", transfercomment);
+                                transcationData.put("type", "income");
+                                newTranscationRef.set(transcationData);
+
+                                CollectionReference fromtranscationref = db.collection("users").document(auth.getUid()).collection("alltransaction");
+                                DocumentReference fromTranscationref = fromtranscationref.document();
+                                Map<String, Object> transcationData2 = new HashMap<>();
+                                transcationData2.put("amount", transferamt);
+                                transcationData2.put("date", dateFormat.format(currentDate));
+                                transcationData2.put("title", transfercomment);
+                                transcationData2.put("type", "expense");
+                                fromTranscationref.set(transcationData2);
+                                Toast.makeText(getApplicationContext(),"Transfer success",Toast.LENGTH_SHORT).show();
+                                recreate();
+                            }
+                        }
+                    });
+                }
                 //access manifest to gain user contact
             }
         });
@@ -345,6 +392,49 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
     }
     private ArrayList<User> getUserList(){
         ArrayList<User> userList = new ArrayList<User>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            // Read the contacts
+            ContentResolver contentResolver = getContentResolver();
+            Cursor cursor = contentResolver.query(
+                    ContactsContract.Contacts.CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor != null && cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    // Get the contact name
+                    String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                    // Get the contact phone number (if available)
+                    if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor phoneCursor = contentResolver.query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))},
+                                null
+                        );
+
+                        if (phoneCursor != null && phoneCursor.moveToNext()) {
+                            String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            // Add the contact name and phone number to the userList
+                            userList.add(new User(contactName, phoneNumber));
+                        }
+
+                        if (phoneCursor != null) {
+                            phoneCursor.close();
+                        }
+                    }
+                }
+            }
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
         userList.add(new User("test1","12345678"));
         userList.add(new User("test2","23456789"));
         return userList;
