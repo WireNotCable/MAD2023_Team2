@@ -192,11 +192,7 @@ public class EditSetLimit extends AppCompatActivity {
     private void GetData(){
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-
-
         String uid = sharedPreferences.getString(MY_UID,"");
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
         LimitRef.get().addOnCompleteListener(task -> {

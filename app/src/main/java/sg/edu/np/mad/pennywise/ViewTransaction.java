@@ -1,7 +1,9 @@
 package sg.edu.np.mad.pennywise;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -51,8 +53,25 @@ public class ViewTransaction extends AppCompatActivity {
         deletetv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete();
-                Redirect(from);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewTransaction.this);
+                builder.setTitle("Confirm Deletion");
+                builder.setMessage("Are you sure you want to delete?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Call the delete method here after the user confirms the deletion
+                        delete();
+                        Redirect(from);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing when the user cancels the deletion
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

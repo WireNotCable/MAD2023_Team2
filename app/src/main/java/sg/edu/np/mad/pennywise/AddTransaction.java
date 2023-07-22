@@ -219,8 +219,9 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(AddTransaction.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(AddTransaction.this, Goal_Progress.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(AddTransaction.this, Stats.class);
