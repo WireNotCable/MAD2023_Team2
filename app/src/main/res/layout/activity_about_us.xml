@@ -29,6 +29,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </com.google.android.material.appbar.AppBarLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="117dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="144dp"
+            android:text="About Us"
+            android:fontFamily="@font/antic"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#4465DA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -40,28 +56,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="117dp"
-                    android:layout_height="23dp"
-                    android:layout_marginStart="150dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="144dp"
-                    android:text="About Us"
-                    android:fontFamily="@font/antic"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="142dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="155dp"
-                    android:layout_marginTop="336dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="164dp"
                     android:text="OUR MOTTO"
                     android:textSize="24sp"
@@ -69,7 +71,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.6"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
                 <TextView
                     android:id="@+id/MottoText"
@@ -117,11 +119,11 @@
                     android:layout_width="266dp"
                     android:layout_height="226dp"
                     android:layout_marginStart="100dp"
-                    android:layout_marginTop="77dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="100dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/clown" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

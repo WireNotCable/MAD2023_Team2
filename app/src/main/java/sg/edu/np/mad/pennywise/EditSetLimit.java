@@ -23,11 +23,16 @@ import android.widget.Toast;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 
@@ -42,6 +47,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+
+import sg.edu.np.mad.pennywise.models.LimitObject;
 
 public class EditSetLimit extends AppCompatActivity {
 
@@ -71,12 +78,13 @@ public class EditSetLimit extends AppCompatActivity {
         EtSpendLimit= findViewById(R.id.editsetlimit_spendlimit);
         EtFallsBelow = findViewById(R.id.editsetlimit_warning);
 
-        Intent intent = getIntent();
-        selectedStartDate.setText(intent.getStringExtra("StartDate"));
-        selectedEndDate.setText(intent.getStringExtra("EndDate"));
-        EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
-        String Fallsbelow = intent.getStringExtra("FallsBelow");
-        EtFallsBelow.setText(Fallsbelow);
+//        Intent intent = getIntent();
+//        selectedStartDate.setText(intent.getStringExtra("StartDate"));
+//        selectedEndDate.setText(intent.getStringExtra("EndDate"));
+//        EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
+//        String Fallsbelow = intent.getStringExtra("FallsBelow");
+//        EtFallsBelow.setText(Fallsbelow);
+            GetData();
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {//Date Picker
             @Override
@@ -151,6 +159,7 @@ public class EditSetLimit extends AppCompatActivity {
                                         Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();// Show Message
                                         Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
                                         startActivity(intent);
+                                        finish();
                                     })
                                     .addOnFailureListener(e -> {
                                         Log.e("Firestore", "Error setting document: " + e.getMessage());
@@ -179,6 +188,66 @@ public class EditSetLimit extends AppCompatActivity {
 
             }
         });
+    }
+    private void GetData(){
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
+
+
+        String uid = sharedPreferences.getString(MY_UID,"");
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
+        LimitRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    LimitObject limit = new LimitObject(getTodaysDate("Start"), getTodaysDate("End"), 1500, 500);
+                    for (DocumentSnapshot document : documents) {
+                        Map<String, Object> data = document.getData();
+                        if (data != null) {
+                            String Getstartdate = (String) data.get("startdate");
+                            String Getenddate = (String) data.get("enddate");
+                            double getLimit = ((Number) data.get("limit")).doubleValue();
+                            double getFallsBelow = ((Number) data.get("warning")).doubleValue();
+                            limit = new LimitObject(Getstartdate, Getenddate, getLimit, getFallsBelow);
+                        }
+                    }
+                    if (limit != null) {
+                        selectedStartDate.setText(limit.getStartdate());
+                        selectedEndDate.setText(limit.getEnddate());
+                        EtSpendLimit.setText(String.valueOf(limit.getSpendlimit()));
+                        EtFallsBelow.setText(String.valueOf(limit.getFallsbelow()));
+
+
+
+
+
+
+                    }
+                }
+            }
+        });
+    }
+    public String getTodaysDate(String dateType) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth;
+
+        ArrayList<String> monthList = new ArrayList<>(Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
+        if (dateType.equals("Start")) {
+            dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
+        } else if (dateType.equals("End")) {
+            dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        } else {
+            return "";
+        }
+
+        String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
+        return selectedDate;
     }
 
 }

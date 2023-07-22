@@ -35,6 +35,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -45,22 +46,20 @@ import sg.edu.np.mad.pennywise.models.LimitObject;
 
 public class SetLimit extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String GLOBAL_PREFS = "myPrefs";
-    public static final String MY_EMAIL = "MyEmail";
-    public String MY_EXPENSE = "myExpense";
     public String MY_STARTDATE = "myStartDate";
 
-
     public String MY_UID = "MyUID";
-
 
     public String MY_ENDDATE = "myEndDate";
     SharedPreferences sharedPreferences;
 
-    private ImageView homeBtn;
+
     private ImageView EditLimit;
     private TextView StartDate;
     private TextView EndDate;
     private ProgressBar progressBar;
+
+
     private TextView AvailableBalance;
 
 
@@ -86,11 +85,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setCheckedItem(R.id.nav_home);
 
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-        String sharedEmail = sharedPreferences.getString(MY_EMAIL, "");
-
-
         String uid = sharedPreferences.getString(MY_UID,"");
-        String Expense = sharedPreferences.getString(MY_EXPENSE,"");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
@@ -142,11 +137,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         StartDate = findViewById(R.id.limit_startdate);
         EndDate = findViewById(R.id.limit_enddate);
         AvailableBalance = findViewById(R.id.balanceText);
+
         progressBar = findViewById(R.id.setlimit_progressBar);
-
         progressBar.setIndeterminate(false);
-
-
 
 
         EditLimit = findViewById(R.id.limit_icon);
@@ -215,6 +208,10 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                 AvailableBalance.setError("You have reached your spending limit");
             }
             AvailableBalance.setText(String.valueOf(balance) + " ");
+            TextView SpendPercentage = findViewById(R.id.setlimit_percentage);
+            double pct = totalSpend/spendlimit * 100;
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            SpendPercentage.setText(String.valueOf(decimalFormat.format(pct))+"%");
         });
     }
 

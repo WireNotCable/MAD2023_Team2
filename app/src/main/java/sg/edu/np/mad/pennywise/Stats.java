@@ -69,7 +69,6 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
         monthChart = findViewById(R.id.monthly_bar);
         pieChart = findViewById(R.id.category_piechart);
 
-        //FOR NAV BAR
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
@@ -275,9 +274,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             Intent intent = new Intent(Stats.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends) {
-
-        } else if (item.getItemId() == R.id.nav_logout) {
+         else if (item.getItemId() == R.id.nav_logout) {
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
