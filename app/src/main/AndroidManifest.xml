@@ -21,6 +21,9 @@
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
+            android:name=".Stats"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>
@@ -29,7 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Users"
             android:exported="false" />
@@ -92,15 +94,13 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".Goal_Progress"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".AddUser"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

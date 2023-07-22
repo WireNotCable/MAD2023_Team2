@@ -60,6 +60,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:4.0.0'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.0@aar'
     implementation 'nl.dionsegijn:konfetti-core:2.0.2'
+    //Bar Chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
 

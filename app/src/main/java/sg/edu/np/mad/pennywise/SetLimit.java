@@ -1,6 +1,15 @@
 package sg.edu.np.mad.pennywise;
 
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -84,7 +93,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         String Expense = sharedPreferences.getString(MY_EXPENSE,"");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference LimitRef = db.collection("users").document(sharedEmail).collection("setlimit");
+        CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
         LimitRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
@@ -134,6 +143,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         EndDate = findViewById(R.id.limit_enddate);
         AvailableBalance = findViewById(R.id.balanceText);
         progressBar = findViewById(R.id.setlimit_progressBar);
+
         progressBar.setIndeterminate(false);
 
 
@@ -174,9 +184,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         return selectedDate;
     }
 
-    private void GetTotalExpense(String sharedEmail, String StartDate, String EndDate, double spendlimit, double fallsbelow) {
+    private void GetTotalExpense(String uid, String StartDate, String EndDate, double spendlimit, double fallsbelow) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference transactionRef = db.collection("users").document(sharedEmail).collection("alltransaction");
+        CollectionReference transactionRef = db.collection("users").document(uid).collection("alltransaction");
         transactionRef.get().addOnCompleteListener(task -> {
             double totalSpend = 0.0;
             if (task.isSuccessful()) {
@@ -196,8 +206,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
             }
-
-            progressBar.setProgress((int)(Math.ceil(totalSpend/spendlimit)));
+            int progress = (int)(Math.ceil(totalSpend/spendlimit *100 ) );
+            progressBar.setProgress(progress);
+            Log.v("Progress",String.valueOf(progress));
             double balance = spendlimit - totalSpend;
             if (balance < fallsbelow || totalSpend > spendlimit) {
                 AvailableBalance.setTextColor(Color.RED);
@@ -206,6 +217,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             AvailableBalance.setText(String.valueOf(balance) + " ");
         });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -253,6 +265,10 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (item.getItemId() == R.id.nav_friends){
 
+        }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(SetLimit.this, Stats.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);

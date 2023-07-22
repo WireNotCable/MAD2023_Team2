@@ -60,13 +60,44 @@ public class EditProfile extends AppCompatActivity {
         EditText editEmail = findViewById(R.id.editprofile_email);
         EditText editOldPassword = findViewById(R.id.editprofile_password);
         EditText editNewPassword = findViewById(R.id.editprofile_newpassword);
+        EditText editName = findViewById(R.id.editprofile_name);
         // Retrieve the email and password from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String email = prefs.getString(MY_EMAIL, "");
         String password = prefs.getString(MY_PASSWORD, "");
-        String uid = prefs.getString(MY_UID,"");
         editEmail.setText(email);
+        // Retrieve the uid from the shared prefs
+        SharedPreferences sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String UID = prefs.getString(MY_UID, "");
 
+        //Pass Details
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+        usersRef.whereEqualTo("UID", UID)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+
+                            editName.setText(documentSnapshot.getString("name"));
+
+
+                            editEmail.setText(email.toLowerCase());
+
+
+                        } else {
+                            // No matching document found
+                            Log.d(TAG, "No document found for the specified email");
+                        }
+                    } else {
+                        // Error retrieving data
+                        Log.e(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
 
         Button EditProfile_Button = findViewById(R.id.editprofile_button);
 
@@ -78,6 +109,7 @@ public class EditProfile extends AppCompatActivity {
                 String newEmail = editEmail.getText().toString();
                 String oldPassword = editOldPassword.getText().toString();
                 String newPassword = editNewPassword.getText().toString();
+                String newName = editName.getText().toString();
                 if (!newEmail.isEmpty()) {
                     if (isValidEmail(newEmail)) {
 
@@ -88,7 +120,8 @@ public class EditProfile extends AppCompatActivity {
                                         FirebaseAuth auth = FirebaseAuth.getInstance();
                                         FirebaseUser currentUser = auth.getCurrentUser();
                                         FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        db.collection("users").document(auth.getUid()).update("email",newEmail);//Updates Email
+                                        db.collection("users").document(auth.getUid()).update("email",newEmail);//Updates Name
+                                        db.collection("users").document(auth.getUid()).update("name",newName);//Updates Email
                                         db.collection("users").document(auth.getUid()).update("password",newPassword);//Updates Password
                                         currentUser.updateEmail(newEmail);
                                         AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
@@ -103,6 +136,8 @@ public class EditProfile extends AppCompatActivity {
                                                 editor.putString(MY_PASSWORD, newPassword);
                                                 editor.apply(); // Apply the changes to SharedPreferences
                                                 Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(EditProfile.this, Profile.class);
+                                                startActivity(intent);
 
 
                                     }else {

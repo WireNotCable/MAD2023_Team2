@@ -99,6 +99,10 @@ public class AboutUs extends AppCompatActivity implements NavigationView.OnNavig
         else if (item.getItemId() == R.id.nav_friends){
 
         }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(AboutUs.this, Stats.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
