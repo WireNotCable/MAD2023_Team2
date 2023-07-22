@@ -19,12 +19,12 @@
             android:title="View Transactions" />
         <item
             android:id="@+id/nav_set_limit"
-            android:icon="@drawable/bell"
+            android:icon="@drawable/home_limitbtn"
             android:title="Set Limit" />
         <item
-            android:id="@+id/nav_friends"
-            android:icon="@drawable/icon_friends"
-            android:title="Friends" />
+            android:id="@+id/nav_goal"
+            android:icon="@drawable/goal"
+            android:title="Goal Progress" />
         <item
             android:id="@+id/nav_currency"
             android:icon="@drawable/currency_icon"
@@ -42,12 +42,34 @@
             android:icon="@drawable/stats_icon"
             android:title="Statistics" />
         <item
+
+            android:id="@+id/nav_cryptoTracker"
+            android:icon="@drawable/search"
+            android:title="Crypto Tracker" />
+        <item
+            android:icon="@drawable/transfer"
+            android:id="@+id/nav_map"
+            android:title="Map" />
+
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/aboutus_icon"
             android:title="About Us" />
-        <item
-            android:icon="@drawable/logout"
-            android:id="@+id/nav_logout"
-            android:title="Log Out" />
+<!--        <item-->
+<!--            android:icon="@drawable/logout"-->
+<!--            android:id="@+id/nav_logout"-->
+<!--            android:title="Log Out" />-->
+
     </group>
+    <item android:title="">
+        <menu>
+                <item
+                    android:icon="@drawable/logout"
+                    android:id="@+id/nav_logout"
+                    android:title="Log Out" />
+        </menu>
+    </item>
+
+
+
 </menu>

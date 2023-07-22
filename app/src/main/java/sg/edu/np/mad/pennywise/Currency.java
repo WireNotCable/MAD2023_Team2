@@ -289,8 +289,9 @@ public class Currency extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(Currency.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Currency.this, Goal_Progress.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(Currency.this, Stats.class);
@@ -302,6 +303,14 @@ public class Currency extends AppCompatActivity implements NavigationView.OnNavi
             editor.clear();
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(Currency.this,Login.class);
+            startActivity(intent);
+        }else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(Currency.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Currency.this, Maps.class);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -23,7 +23,7 @@ public class CardViewImgHolder extends RecyclerView.ViewHolder {
         txt4 = itemView.findViewById(R.id.adapCardName);
         txt5 = itemView.findViewById(R.id.adapAddress);
         txt6 = itemView.findViewById(R.id.balance);
-        image = itemView.findViewById(R.id.cardimg);
+//        image = itemView.findViewById(R.id.cardimg);
 
     }
 }

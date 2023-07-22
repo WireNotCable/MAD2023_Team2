@@ -96,11 +96,21 @@ public class AboutUs extends AppCompatActivity implements NavigationView.OnNavig
             Intent intent = new Intent(AboutUs.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(AboutUs.this, Goal_Progress.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(AboutUs.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(AboutUs.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(AboutUs.this, Maps.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){

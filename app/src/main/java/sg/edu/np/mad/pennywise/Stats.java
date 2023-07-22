@@ -55,7 +55,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
     PieChart pieChart;
     ArrayList monthlySpendArrayList;
 
-    ArrayList CategoryData;
+    ArrayList<PieEntry> CategoryData;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -87,6 +87,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
         String uid = sharedPreferences.getString(MY_UID, "");
 
         getMonthData(uid);
+
         getCurrentMonthData(uid);
     }
     private void getCurrentMonthData(String uid){
@@ -133,11 +134,14 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
                 for (String category : categoryMap.keySet()) {
                     double totalAmount = categoryMap.get(category);
                     Log.v("HEUWHE",category);
-                    CategoryData.add(new PieEntry((float)(totalAmount/monthSpend * 100),category));
+//                    CategoryData.add(new PieEntry((float)(totalAmount/monthSpend * 100),category));
+                    CategoryData.add(new PieEntry((float)(totalAmount/monthSpend * 100), category));
+
                     Log.v("HEUWHE",String.valueOf(totalAmount +"/" +monthSpend));
                     Log.v("HEUWHE",String.valueOf((float)(totalAmount/monthSpend * 360)));
 
                 }
+                // Once the data is retrieved, update the chart
                 updatePieChart();
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
@@ -178,16 +182,19 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
                             e.printStackTrace(); // Handle or log the exception as needed
                         }
                     }
+                    if(monthSpend!=0){
 
+                    }
                     monthlySpendArrayList.add(new BarEntry(i,(float) monthSpend));
                 }
 
 
-                // Once the data is retrieved, update the chart
-                updateChart();
+
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
             }
+            // Once the data is retrieved, update the chart
+            updateChart();
         });
     }
 
@@ -220,8 +227,13 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
     private void updatePieChart() {
+
         //Set Data
-        PieDataSet pieDataSet = new PieDataSet(CategoryData, "Categories");
+        PieDataSet pieDataSet = new PieDataSet(CategoryData, "Category");
+        if (CategoryData.isEmpty()) {
+            CategoryData.add(new PieEntry(100, "No Data"));
+        }
+
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
 
@@ -274,6 +286,24 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             Intent intent = new Intent(Stats.this, SetLimit.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_profile){
+            Intent intent = new Intent(Stats.this, Profile.class);
+            startActivity(intent);
+        }
+        else if(item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Stats.this, Profile.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(Stats.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Stats.this, Maps.class);
+            startActivity(intent);
+        }
+
          else if (item.getItemId() == R.id.nav_logout) {
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

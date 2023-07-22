@@ -26,6 +26,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,18 +51,21 @@ public class EditProfile extends AppCompatActivity {
     public String MY_PASSWORD = "MyPassword";
     public String MY_UID = "MyUID";
     SharedPreferences sharedPreferences;
-
+    private EditText editEmail;
+    private EditText editOldPassword;
+    private EditText  editNewPassword;
+    private  EditText editName;
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        editEmail = findViewById(R.id.editprofile_email);
+        editOldPassword = findViewById(R.id.editprofile_password);
+        editNewPassword = findViewById(R.id.editprofile_newpassword);
+        editName = findViewById(R.id.editprofile_name);
 
-        EditText editEmail = findViewById(R.id.editprofile_email);
-        EditText editOldPassword = findViewById(R.id.editprofile_password);
-        EditText editNewPassword = findViewById(R.id.editprofile_newpassword);
-        EditText editName = findViewById(R.id.editprofile_name);
         // Retrieve the email and password from the shared prefs
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String email = prefs.getString(MY_EMAIL, "");
@@ -84,8 +89,6 @@ public class EditProfile extends AppCompatActivity {
 
 
                             editName.setText(documentSnapshot.getString("name"));
-
-
                             editEmail.setText(email.toLowerCase());
 
 
@@ -110,37 +113,15 @@ public class EditProfile extends AppCompatActivity {
                 String oldPassword = editOldPassword.getText().toString();
                 String newPassword = editNewPassword.getText().toString();
                 String newName = editName.getText().toString();
-                if (!newEmail.isEmpty()) {
-                    if (isValidEmail(newEmail)) {
-
+                if (!newName.isEmpty()) {
+                    if (!newEmail.isEmpty()) {
+                        if (isValidEmail(newEmail)) {
                             if (!oldPassword.isEmpty()) {
                                 if (oldPassword.equals(password)) {
                                     if (!newPassword.isEmpty()) {
+                                        showConfirmationDialog();
 
-                                        FirebaseAuth auth = FirebaseAuth.getInstance();
-                                        FirebaseUser currentUser = auth.getCurrentUser();
-                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        db.collection("users").document(auth.getUid()).update("email",newEmail);//Updates Name
-                                        db.collection("users").document(auth.getUid()).update("name",newName);//Updates Email
-                                        db.collection("users").document(auth.getUid()).update("password",newPassword);//Updates Password
-                                        currentUser.updateEmail(newEmail);
-                                        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
-                                        currentUser.reauthenticate(credential);
-                                        currentUser.updatePassword(newPassword);
-//                                        PhoneAuthCredential credentials = PhoneAuthProvider.getCredential("","");
-//                                        currentUser.updatePhoneNumber(credentials);
-//                                              Fields updated successfully
-//                                              Update Shared Preferences
-                                                SharedPreferences.Editor editor = prefs.edit();
-                                                editor.putString(MY_EMAIL, newEmail);
-                                                editor.putString(MY_PASSWORD, newPassword);
-                                                editor.apply(); // Apply the changes to SharedPreferences
-                                                Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(EditProfile.this, Profile.class);
-                                                startActivity(intent);
-
-
-                                    }else {
+                                    } else {
                                         editNewPassword.setError("Please Enter New Password");
                                     }
                                 } else {
@@ -152,10 +133,13 @@ public class EditProfile extends AppCompatActivity {
                         } else {
                             editEmail.setError("Please enter a valid email");
                         }
-
+                    } else {
+                        editEmail.setError("Please enter email");
+                    }
                 } else {
-                    editEmail.setError("Please enter email");
+                    editName.setError("Please enter name");
                 }
+
             }
         });
 
@@ -170,9 +154,74 @@ public class EditProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
     public boolean isValidEmail(String email) {//Validate Email
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"; // Regular expression
         Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
         return EMAIL_PATTERN.matcher(email).matches(); // validating
     }
+    private void updateCredentials(){
+        String newEmail = editEmail.getText().toString();
+        String oldPassword = editOldPassword.getText().toString();
+        String newPassword = editNewPassword.getText().toString();
+        String newName = editName.getText().toString();
+        // Get Firebase authentication instance and current user
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        // Get Firebase Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Update user data in Firestore
+        db.collection("users").document(auth.getUid()).update("email", newEmail); // Update Email
+        db.collection("users").document(auth.getUid()).update("name", newName); // Update Name
+        db.collection("users").document(auth.getUid()).update("password", newPassword); // Update Password
+
+        // Update email in Firebase Authentication
+        currentUser.updateEmail(newEmail);
+
+        // Reauthenticate the user to update the password
+        AuthCredential credential = EmailAuthProvider.getCredential(currentUser.getEmail(), oldPassword);
+        currentUser.reauthenticate(credential);
+        currentUser.updatePassword(newPassword);
+
+        // Update Shared Preferences
+        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(MY_EMAIL, newEmail);
+        editor.putString(MY_PASSWORD, newPassword);
+        editor.apply(); // Apply the changes to SharedPreferences
+        // Navigate back to the Profile activity
+        Intent intent = new Intent(EditProfile.this, Profile.class);
+        startActivity(intent);
+        Toast.makeText(EditProfile.this, "Profile Successfully Updated", Toast.LENGTH_SHORT).show();
+    }
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Update");
+        builder.setMessage("Are you sure you want to update your profile?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Call the method to update the profile here
+                updateCredentials();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing, just close the dialog
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 }
