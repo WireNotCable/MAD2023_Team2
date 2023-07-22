@@ -162,9 +162,13 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         };
         requestQueue.add(jsonObjectRequest);
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set the selected item every time the activity is brought to the foreground
+        navigationView.setCheckedItem(R.id.nav_cryptoTracker);
+    }
     //onBackPressed
-
     @Override
     public void onBackPressed() {
         if (backPressedTime + 2000 > System.currentTimeMillis()) {

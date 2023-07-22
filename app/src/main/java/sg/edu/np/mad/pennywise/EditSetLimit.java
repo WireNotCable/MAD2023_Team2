@@ -164,9 +164,6 @@ public class EditSetLimit extends AppCompatActivity {
                                     .addOnFailureListener(e -> {
                                         Log.e("Firestore", "Error setting document: " + e.getMessage());
                                     });
-
-
-
                         }
                         else if (spendLimit <= 0) {
                             EtSpendLimit.setError("Spend Limit must be greater than 0");

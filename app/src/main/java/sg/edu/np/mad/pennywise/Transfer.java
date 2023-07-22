@@ -123,6 +123,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onResume(){
         super.onResume();
+        navigationView.setCheckedItem(R.id.nav_transfer);
         name.setVisibility(View.GONE);
         amountLayout.setVisibility(View.GONE);
         limitLayout.setVisibility(View.GONE);
@@ -469,8 +470,6 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                 });
         return false;
     }
-
-
 
 
 
