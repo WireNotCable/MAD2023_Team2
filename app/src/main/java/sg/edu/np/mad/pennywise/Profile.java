@@ -290,7 +290,7 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             Intent intent = new Intent(Profile.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_stats{
+        else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(Profile.this, Stats.class);
             startActivity(intent);
         }
