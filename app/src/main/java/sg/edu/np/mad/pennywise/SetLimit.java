@@ -260,8 +260,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(SetLimit.this, Transfer.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(SetLimit.this, Goal_Progress.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(SetLimit.this, Stats.class);

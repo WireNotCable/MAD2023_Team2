@@ -432,8 +432,9 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(Transfer.this, SetLimit.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends){
-
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Transfer.this, Goal_Progress.class);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);

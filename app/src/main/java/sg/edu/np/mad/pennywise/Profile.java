@@ -294,9 +294,10 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             Intent intent = new Intent(Profile.this, Stats.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_friends) {
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Profile.this, Goal_Progress.class);
+            startActivity(intent);
         }
-
         else if (item.getItemId() == R.id.nav_logout) {
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

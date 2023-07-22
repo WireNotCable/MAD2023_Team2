@@ -407,12 +407,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, Profile.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.nav_about){
-            Intent intent = new Intent(MainActivity.this, AboutUs.class);
-            startActivity(intent);
-        }
         else if (item.getItemId() == R.id.nav_currency) {
-
             Intent intent = new Intent(MainActivity.this, Currency.class);
             startActivity(intent);
         }
@@ -426,6 +421,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(MainActivity.this,Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(MainActivity.this,Goal_Progress.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(MainActivity.this, Maps.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_about){
+            Intent intent = new Intent(MainActivity.this, AboutUs.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){
