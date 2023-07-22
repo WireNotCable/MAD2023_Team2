@@ -1,70 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_Layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context=".Login">
+    tools:context=".Login"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_list">
 
-    <androidx.cardview.widget.CardView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        app:cardCornerRadius="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="250dp"
+        android:text="Log In"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:cardElevation="20dp">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:padding="24dp">
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Log In"
-                android:textSize="36sp"
-                android:textAlignment="center"
-                android:textStyle="bold"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/login_email"
-                android:layout_marginTop="40dp"
-                android:padding="8dp"
-                android:hint="Email"/>
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/login_password"
-                android:layout_marginTop="40dp"
-                android:padding="8dp"
-                android:hint="Password"/>
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:text="LOGIN"
-                android:id="@+id/login_button"
-                android:textSize="18sp"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="@color/black"
-                app:cornerRadius="200dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/signupRedirectText"
-                android:text="Don't have an account? Sign Up"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"/>
-        </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:hint="Email"
+                    android:padding="8dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/reddish">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:hint="Password"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/reddish"
+                    android:padding="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="50dp"
+                    android:backgroundTint="#4465DA"
+                    android:text="LOGIN"
+                    android:textSize="18sp"
+                    app:cornerRadius="200dp" />
+
+                <TextView
+                    android:id="@+id/signupRedirectText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:padding="8dp"
+                    android:text="Don't have an account? Sign Up"
+                    android:textSize="18sp" />
+            </LinearLayout>
         </ScrollView>
 
     </androidx.cardview.widget.CardView>
+
+
 
 
 

@@ -1,6 +1,7 @@
 package sg.edu.np.mad.pennywise;
 
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +21,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +35,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import sg.edu.np.mad.pennywise.models.LimitObject;
@@ -257,8 +264,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_friends){
-            Intent intent = new Intent(SetLimit.this, Users.class);
-            startActivity(intent);
+
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(SetLimit.this, Stats.class);

@@ -1,54 +1,46 @@
 package sg.edu.np.mad.pennywise;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Transfer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    TextView balance,limit;
-    AutoCompleteTextView chooseuser;
-    EditText amount,comment;
-    Button transfer,test;
-    ImageView homeButton,userIcon;
-    public Double userbalance = Double.valueOf(0);
-    public Double userlimit;
+    Button test,confirm;
+    TextView name,changelimit;
+    LinearLayout amountLayout,limitLayout,commentLayout;
+    EditText comment,amount,mobile;
+    FirebaseAuth auth;
+    FirebaseFirestore db;
 
-    ArrayList<String> friendList = new ArrayList<>();
     SharedPreferences sharedPreferences;
     public String GLOBAL_PREFS = "myPrefs";
 
@@ -62,27 +54,28 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
 
 
         setContentView(R.layout.activity_transfer);
-        balance = findViewById(R.id.DisplayBalance);
-        limit = findViewById(R.id.DisplayLimit);
-        chooseuser = findViewById(R.id.DropdownChoice);
-        amount = findViewById(R.id.InputAmount);
-        comment = findViewById(R.id.InputComments);
-        transfer = findViewById(R.id.TransferButton);
-        test = findViewById(R.id.GoalTracking);
 
-        userIcon = findViewById(R.id.UserIcon);
-
-        userbalance = Double.valueOf(0);
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
 
-        getLimit();
-        getBalance();
+        confirm  = findViewById(R.id.confirm);
+        name = findViewById(R.id.Name);
+        changelimit = findViewById(R.id.changelimit);
+        amountLayout = findViewById(R.id.AmountLayout);
+        limitLayout = findViewById(R.id.LimitLayout);
+        commentLayout = findViewById(R.id.CommentLayout);
+        comment = findViewById(R.id.comment);
+        amount = findViewById(R.id.amount);
+        mobile = findViewById(R.id.mobile);
+
+        test = findViewById(R.id.GoalTracking);
 
         //FOR NAV BAR
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -93,6 +86,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setCheckedItem(R.id.nav_home);
 
 
+
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,180 +94,161 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
             }
         });
+    }
 
 
-
-
-        userIcon.setOnClickListener(new View.OnClickListener() {
+    @Override
+    protected void onResume(){
+        super.onResume();
+        name.setVisibility(View.GONE);
+        amountLayout.setVisibility(View.GONE);
+        limitLayout.setVisibility(View.GONE);
+        changelimit.setVisibility(View.GONE);
+        commentLayout.setVisibility(View.GONE);
+        confirm.setVisibility(View.GONE);
+        mobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Transfer.this,Users.class);
+                showUserListDialog();
+            }
+        });
+        changelimit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Transfer.this,SetLimit.class);
                 startActivity(intent);
             }
         });
-
-        transfer.setOnClickListener(new View.OnClickListener() {
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (friendList.contains(chooseuser.getText().toString())){
-                    if (Double.parseDouble(amount.getText().toString()) > 0 && Double.parseDouble(amount.getText().toString()) <= userbalance && Double.parseDouble(amount.getText().toString()) <= userlimit){
-                        DecimalFormat df = new DecimalFormat("#.##");
-                        df.setRoundingMode(RoundingMode.HALF_UP);
-                        Double roundedValue = Double.parseDouble(df.format(Double.parseDouble(amount.getText().toString())));
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-                        Date currentDate = new Date();
-                        String formattedDate = dateFormat.format(currentDate);
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-                        HashMap<String,Object> transcationData = new HashMap<>();
-                        transcationData.put("amount",roundedValue);
-                        transcationData.put("date",formattedDate);
-                        transcationData.put("title",comment.getText().toString());
-                        if(comment.getText().toString().isEmpty()){
-                            transcationData.put("title","Transfer");
-                        }
-                        transcationData.put("type","expense");
-                        String Fromid = db.collection("users").document(auth.getUid()).collection("alltransaction").document().getId();
-                        db.collection("users").document(auth.getUid()).collection("alltransaction").document(Fromid).set(transcationData);
-
-                        HashMap<String,Object> transcationData2 = new HashMap<>();
-                        transcationData2.put("amount",roundedValue);
-                        transcationData2.put("date",formattedDate);
-                        transcationData2.put("title",comment.getText().toString());
-                        if(comment.getText().toString().isEmpty()){
-                            transcationData2.put("title","Transfer");
-                        }
-                        transcationData2.put("type","income");
-                        String ToUID = chooseuser.getText().toString().trim().split(",")[1];
-                        String Toid = db.collection("users").document(ToUID).collection("alltransaction").document().getId();
-                        db.collection("users").document(ToUID).collection("alltransaction").document(Toid).set(transcationData2);
-                        Toast.makeText(Transfer.this,"Transfer successful",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Transfer.this, MainActivity.class);
-                        startActivity(intent);
-
-                    }
-                    else{
-                        Toast.makeText(Transfer.this,"Invalid amount entered, check if requirements fulfilled",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Toast.makeText(Transfer.this,"Invalid friend choice",Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
+
     }
-
-
-    private void getFriendList() {
-        friendList.clear();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("friendlist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    private void showUserListDialog(){
+        ArrayList<User> userList= getUserList();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_transfer, null);
+        builder.setView(dialogView);
+        RecyclerView recyclerView = dialogView.findViewById(R.id.recycler_view_users);
+        EditText searchbar = dialogView.findViewById(R.id.editTextSearch);
+        AlertDialog alertDialog = builder.create();
+        UserAdapter userAdapter = new UserAdapter(userList, this);
+        userAdapter.setOnUserClickListener(new UserAdapter.OnUserClickListener() {
+            @Override
+            public void onUserClick(User user) {
+                mobile.setText(user.getNumber());
+                checkUserExists(user.getNumber(), new UserExistsCallBack() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                friendList.add(document.getString("name")+","+document.getString("UID"));
-                            }
-                        }else{
-                            chooseuser.setError("Unable to fetch users, please add some friends");
+                    public void onUserExists(boolean exists, String Name, String uid) {
+                        if (exists) {
+                            name.setText(Name);
+                            name.setVisibility(View.VISIBLE);
+                            amountLayout.setVisibility(View.VISIBLE);
+                            limitLayout.setVisibility(View.VISIBLE);
+                            changelimit.setVisibility(View.VISIBLE);
+                            commentLayout.setVisibility(View.VISIBLE);
+                            confirm.setVisibility(View.VISIBLE);
+                        } else {
+                           showConfirmationDialog();
                         }
-
-                        ArrayAdapter adapter = new ArrayAdapter(Transfer.this, android.R.layout.simple_list_item_1,friendList);
-                        chooseuser.setAdapter(adapter);
                     }
                 });
+                alertDialog.dismiss();
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(Transfer.this));
+        recyclerView.setAdapter(userAdapter);
+        searchbar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String query = s.toString().trim();
+                userAdapter.filterList(query);
+            }
+        });
+        alertDialog.show();
+
+
+
     }
-    private void getLimit(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("setlimit")
+    
+    private void showConfirmationDialog() {
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setTitle("User 404");
+        builder2.setMessage("This user does not have an account with us, would you like to share our app?");
+        builder2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, "PUT LINK HERE");
+                intent.setType("text/plain");
+
+                if (intent.resolveActivity(getPackageManager()) != null){
+                    startActivity(intent);
+                }
+            }
+        });
+        builder2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder2.setCancelable(false);
+        builder2.show();
+    }
+    private ArrayList<User> getUserList(){
+        ArrayList<User> userList = new ArrayList<User>();
+        userList.add(new User("test1","12345678"));
+        userList.add(new User("test2","23456789"));
+        return userList;
+    }
+
+    private boolean checkUserExists(String number,UserExistsCallBack callback){
+        db.collection("users")
+                .whereEqualTo("phonenum",number)
+                .limit(1)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
                         if (task.isSuccessful()){
-
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                userlimit = document.getDouble("limit");
-                                return;
-                            }
-                            if (userlimit == null){
-                                limit.setText("Limit : No limit");
-                                userlimit = Double.MAX_VALUE;
+                            boolean exists = !task.getResult().isEmpty();
+                            if (exists){
+                                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                                String name = document.getString("name");
+                                String uid = document.getString("UID");
+                                callback.onUserExists(true,name,uid);
                             }
                             else{
-                                limit.setText("Limit : $"+userlimit);
+                                callback.onUserExists(false,null,null);
                             }
+
                         }
                         else{
+                            callback.onUserExists(false,null,null);
                         }
 
                     }
                 });
+        return false;
     }
-    private void getBalance(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("alltransaction")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            double total = 0.0;
-                            for(QueryDocumentSnapshot document : task.getResult()){
-
-                                if ("expense".equals(document.getString("type"))){
-                                    total -= document.getDouble("amount");
 
 
-                                }
-                                else if ("income".equals(document.getString("type"))){
-                                    Double number = document.getDouble("amount");
-                                    total += number;
 
-                                }
-                            }
-                            balance = findViewById(R.id.DisplayBalance);
-                            balance.setText("Balance : $"+total);
-                            userbalance = total;
-                        }
-                    }
-                });
-    }
-    @Override
-    protected void onResume(){
-        friendList.clear();
-        super.onResume();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        db.collection("users").document(auth.getUid()).collection("friendlist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
 
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                friendList.add(document.getString("name")+","+document.getString("UID"));
-                            }
-                        }else{
-                            chooseuser.setError("Unable to fetch users, please add some friends");
-                        }
-
-                        ArrayAdapter adapter = new ArrayAdapter(Transfer.this, android.R.layout.simple_list_item_1,friendList);
-                        chooseuser.setAdapter(adapter);
-                    }
-                });
-    }
 
     @Override
     public void onBackPressed() {
@@ -324,8 +299,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_friends){
-            Intent intent = new Intent(Transfer.this, Users.class);
-            startActivity(intent);
+
         }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
