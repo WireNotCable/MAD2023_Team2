@@ -41,6 +41,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import sg.edu.np.mad.pennywise.models.LimitObject;
 
@@ -266,6 +267,15 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(SetLimit.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(SetLimit.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(SetLimit.this, Maps.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){

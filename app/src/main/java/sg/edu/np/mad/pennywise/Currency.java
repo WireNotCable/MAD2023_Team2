@@ -304,6 +304,14 @@ public class Currency extends AppCompatActivity implements NavigationView.OnNavi
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(Currency.this,Login.class);
             startActivity(intent);
+        }else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(Currency.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Currency.this, Maps.class);
+            startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

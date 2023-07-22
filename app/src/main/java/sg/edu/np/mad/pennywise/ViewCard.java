@@ -167,6 +167,15 @@ public class ViewCard extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(ViewCard.this, Stats.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(ViewCard.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(ViewCard.this, Maps.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
