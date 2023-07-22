@@ -21,6 +21,9 @@
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
         <activity
+            android:name=".CryptoTracker"
+            android:exported="false" />
+        <activity
             android:name=".Stats"
             android:exported="false" />
         <activity
@@ -100,7 +103,7 @@
             android:exported="false" />
         <activity
             android:name=".AddUser"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

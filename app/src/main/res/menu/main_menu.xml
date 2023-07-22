@@ -42,6 +42,10 @@
             android:icon="@drawable/stats_icon"
             android:title="Statistics" />
         <item
+            android:id="@+id/nav_cryptoTracker"
+            android:icon="@drawable/search"
+            android:title="Crypto Tracker" />
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/aboutus_icon"
             android:title="About Us" />
