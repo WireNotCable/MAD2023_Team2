@@ -276,8 +276,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_friends) {
-            Intent intent = new Intent(Stats.this, Users.class);
-            startActivity(intent);
+
         } else if (item.getItemId() == R.id.nav_logout) {
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

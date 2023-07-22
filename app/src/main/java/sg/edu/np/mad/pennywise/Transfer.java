@@ -29,13 +29,17 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Transfer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     Button test,confirm;
-    TextView name,changelimit;
+    TextView name,changelimit,limitamount,remaininggamount;
     LinearLayout amountLayout,limitLayout,commentLayout;
     EditText comment,amount,mobile;
     FirebaseAuth auth;
@@ -66,6 +70,8 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         comment = findViewById(R.id.comment);
         amount = findViewById(R.id.amount);
         mobile = findViewById(R.id.mobile);
+        limitamount = findViewById(R.id.textView21);
+        remaininggamount = findViewById(R.id.textView22);
 
         test = findViewById(R.id.GoalTracking);
 
@@ -122,12 +128,41 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String phonenum = String.valueOf(mobile.getText());
+                double transferamt = Double.parseDouble(String.valueOf(amount.getText()));
+                String transfercomment = String.valueOf(comment.getText());
+                //find transfer user
+                //write to firestore
+                //show success dialog
+                //access manifest to gain user contact
+            }
+        });
+        amount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // No action needed before text changed.
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String input = charSequence.toString();
+
+                int decimalIndex = input.indexOf(".");
+                if (decimalIndex != -1 && input.length() - decimalIndex > 3) {
+                    input = input.substring(0, decimalIndex + 3);
+                    amount.setText(input);
+                    amount.setSelection(input.length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // No action needed after text changed.
             }
         });
 
-
     }
+
     private void showUserListDialog(){
         ArrayList<User> userList= getUserList();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -146,12 +181,41 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                     public void onUserExists(boolean exists, String Name, String uid) {
                         if (exists) {
                             name.setText(Name);
+                            getLimit(new SetLimitCallback() {
+                                @Override
+                                public void onSetLimitData(String startDate, String endDate, double limit) {
+                                     if (limit != Double.MAX_VALUE){
+                                        limitamount.setText(String.valueOf(limit));
+                                        getRemaining(startDate,endDate, new RemainingCallback(){
+                                            @Override
+                                            public void onSetLimitData(double remain) {
+                                                if (remain != Double.MAX_VALUE){
+                                                    if (limit - remain > 0){
+                                                        remaininggamount.setText(String.valueOf(limit-remain));
+                                                    }
+                                                    else{
+                                                        remaininggamount.setText(String.valueOf(0));
+                                                    }
+                                                }
+                                            }
+                                        });
+                                     }
+                                     else{
+                                         limitamount.setText("No Limit");
+                                         remaininggamount.setText("Unlimited");
+
+                                     }
+                                }
+                            });
                             name.setVisibility(View.VISIBLE);
                             amountLayout.setVisibility(View.VISIBLE);
                             limitLayout.setVisibility(View.VISIBLE);
                             changelimit.setVisibility(View.VISIBLE);
                             commentLayout.setVisibility(View.VISIBLE);
                             confirm.setVisibility(View.VISIBLE);
+
+
+
                         } else {
                            showConfirmationDialog();
                         }
@@ -180,6 +244,76 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         alertDialog.show();
 
 
+
+    }
+    private void getLimit(SetLimitCallback callback){
+        db.collection("users").document(auth.getUid()).collection("setlimit")
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if  (task.isSuccessful()){
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (querySnapshot != null && !querySnapshot.isEmpty()){
+                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                String startDate = documentSnapshot.getString("startdate");
+                                String endDate = documentSnapshot.getString("enddate");
+                                double limit = documentSnapshot.getDouble("limit");
+                                callback.onSetLimitData(startDate,endDate,limit);
+                            }
+                            else{
+                                callback.onSetLimitData(null,null,Double.MAX_VALUE);
+                            }
+                        }
+                        else{
+                            callback.onSetLimitData(null,null,Double.MAX_VALUE);
+                        }
+                    }
+                });
+    }
+    private void getRemaining(String startdate,String enddate,RemainingCallback callback){
+        Date start = null;
+        Date end = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        try{
+            start = dateFormat.parse(startdate);
+            end = dateFormat.parse(enddate);
+        }
+        catch (ParseException e){
+            callback.onSetLimitData(Double.MAX_VALUE);
+        }
+        Date finalStart = start;
+        Date finalEnd = end;
+        db.collection("users").document(auth.getUid()).collection("alltransaction")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            double amount = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                Date date = new Date();
+                                String type = document.getString("type");
+                                double transcationamt = document.getDouble("amount");
+                                try{
+                                    date = dateFormat.parse(document.getString("date"));
+                                }
+                                catch (ParseException e){
+                                    callback.onSetLimitData(Double.MAX_VALUE);
+                                }
+                                if (date != null && date.compareTo(finalStart) >= 0 && date.compareTo(finalEnd) <= 0 && type == "expense") {
+                                    amount += transcationamt;
+                                }
+
+                            }
+                            callback.onSetLimitData(amount);
+                        }
+                        else{
+                            callback.onSetLimitData(Double.MAX_VALUE);
+                        }
+                    }
+                });
 
     }
     
