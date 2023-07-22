@@ -208,10 +208,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                 AvailableBalance.setTextColor(Color.RED);
                 AvailableBalance.setError("You have reached your spending limit");
             }
-            AvailableBalance.setText(String.valueOf(balance) + " ");
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            AvailableBalance.setText(String.valueOf(decimalFormat.format(balance) + " "));
             TextView SpendPercentage = findViewById(R.id.setlimit_percentage);
             double pct = totalSpend/spendlimit * 100;
-            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
             SpendPercentage.setText(String.valueOf(decimalFormat.format(pct))+"%");
         });
     }

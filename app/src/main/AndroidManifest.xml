@@ -43,9 +43,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Users"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".Users"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".Transfer"
             android:exported="false" />
@@ -111,8 +111,8 @@
             android:exported="false"></activity>
         <activity
             android:name=".AddUser"
-            android:exported="false" />
-            android:exported="false"></activity>
+            android:exported="false" >
+            </activity>
         <activity android:name=".Maps"
             android:exported="false"></activity>
         <meta-data
