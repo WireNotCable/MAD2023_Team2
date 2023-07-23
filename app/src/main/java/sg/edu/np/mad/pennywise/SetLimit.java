@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -20,13 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -207,10 +199,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                 AvailableBalance.setTextColor(Color.RED);
                 AvailableBalance.setError("You have reached your spending limit");
             }
-            AvailableBalance.setText(String.valueOf(balance) + " ");
+            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            AvailableBalance.setText(String.valueOf(decimalFormat.format(balance) + " "));
             TextView SpendPercentage = findViewById(R.id.setlimit_percentage);
             double pct = totalSpend/spendlimit * 100;
-            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
             SpendPercentage.setText(String.valueOf(decimalFormat.format(pct))+"%");
         });
     }
@@ -261,7 +254,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(SetLimit.this, Goal_Progress.class);
+            Intent intent = new Intent(SetLimit.this, Goal_Progress_Individual.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
@@ -270,6 +263,15 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(SetLimit.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(SetLimit.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(SetLimit.this, Maps.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){

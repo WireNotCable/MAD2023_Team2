@@ -19,7 +19,7 @@
             android:title="View Transactions" />
         <item
             android:id="@+id/nav_set_limit"
-            android:icon="@drawable/bell"
+            android:icon="@drawable/home_limitbtn"
             android:title="Set Limit" />
         <item
             android:id="@+id/nav_goal"
@@ -41,6 +41,10 @@
             android:id="@+id/nav_stats"
             android:icon="@drawable/stats_icon"
             android:title="Statistics" />
+        <item
+            android:id="@+id/nav_cryptoTracker"
+            android:icon="@drawable/search"
+            android:title="Crypto Tracker" />
         <item
             android:icon="@drawable/maplocation"
             android:id="@+id/nav_map"

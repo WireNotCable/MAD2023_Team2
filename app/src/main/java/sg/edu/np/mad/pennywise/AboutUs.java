@@ -97,7 +97,7 @@ public class AboutUs extends AppCompatActivity implements NavigationView.OnNavig
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(AboutUs.this, Goal_Progress.class);
+            Intent intent = new Intent(AboutUs.this, Goal_Progress_Individual.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
@@ -106,6 +106,15 @@ public class AboutUs extends AppCompatActivity implements NavigationView.OnNavig
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(AboutUs.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(AboutUs.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(AboutUs.this, Maps.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){

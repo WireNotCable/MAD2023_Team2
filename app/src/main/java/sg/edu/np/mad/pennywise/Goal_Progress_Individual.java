@@ -31,7 +31,7 @@ public class Goal_Progress_Individual extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goal_progress_individual);
+        setContentView(R.layout.activity_goal_progress_indivisual);
 
         viewPager = findViewById(R.id.view_pager);
         pagerDots = findViewById(R.id.pager_dots);
@@ -91,14 +91,14 @@ public class Goal_Progress_Individual extends AppCompatActivity {
         Shape.DrawableShape drawableShape = new Shape.DrawableShape(AppCompatResources.getDrawable(this,R.drawable.ic_android_black_24dp),true);
         EmitterConfig emitterConfig = new Emitter(300, TimeUnit.MILLISECONDS).max(300);
         konfettiView.start(
-                new PartyFactory(emitterConfig)
-                        .shapes(Shape.Circle.INSTANCE,Shape.Square.INSTANCE, drawableShape)
-                        .spread(135)
-                        .position(0f,0f,1f,1f)
-                        .sizes(new Size(8,50,10))
-                        .timeToLive(15000)
-                        .fadeOutEnabled(true)
-                        .build()
+            new PartyFactory(emitterConfig)
+                    .shapes(Shape.Circle.INSTANCE,Shape.Square.INSTANCE, drawableShape)
+                    .spread(135)
+                    .position(0f,0f,1f,1f)
+                    .sizes(new Size(8,50,10))
+                    .timeToLive(15000)
+                    .fadeOutEnabled(true)
+                    .build()
 
         );
 

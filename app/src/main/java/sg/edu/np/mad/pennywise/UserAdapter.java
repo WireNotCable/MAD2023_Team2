@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
+
+import sg.edu.np.mad.pennywise.models.User;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserAdapterViewHolder>{
     private ArrayList<User> userList,filteredList;
