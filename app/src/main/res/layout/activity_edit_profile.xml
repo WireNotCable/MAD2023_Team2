@@ -39,7 +39,7 @@
                 android:text="Edit Profile"
                 android:fontFamily="@font/antic"
                 android:textAlignment="center"
-                android:textColor="#4465DA"
+                android:textColor="@color/black"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 />

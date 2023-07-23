@@ -5,7 +5,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="viewCard1">View Card</string>
-    <string name="createBtn">Add New Card</string>
+    <string name="createBtn">Add</string>
     <string name="currency1">Currency</string>
     <string name="addCard">Add Card</string>
     <string name="expiryDate">Expiry Date</string>
