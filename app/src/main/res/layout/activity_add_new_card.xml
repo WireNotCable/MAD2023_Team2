@@ -147,6 +147,7 @@
                         android:layout_marginTop="20dp"
                         android:text="@string/submit"
                         android:textSize="18sp"
+                        android:backgroundTint="#4465DA"
                         app:cornerRadius="20dp" />
                 </LinearLayout>
             </LinearLayout>

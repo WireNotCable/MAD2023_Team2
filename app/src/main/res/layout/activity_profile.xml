@@ -10,14 +10,14 @@
     tools:openDrawer="start"
     >
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/nav_view"
-        app:headerLayout="@layout/header"
-        app:menu="@menu/main_menu"
-        android:layout_gravity="start"
-        />
+<!--    <com.google.android.material.navigation.NavigationView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/nav_view"-->
+<!--        app:headerLayout="@layout/header"-->
+<!--        app:menu="@menu/main_menu"-->
+<!--        android:layout_gravity="start"-->
+<!--        />-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -40,12 +40,12 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="176dp"
             android:fontFamily="@font/antic"
             android:text="Profile"
-            android:textColor="#4465DA"
-            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -53,14 +53,15 @@
 
         <TextView
             android:id="@+id/Profile_Edit"
-            android:layout_width="51dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="Edit"
-            android:textStyle=""
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/edit"
+            android:gravity="center"
+            android:padding="10dp"
             android:textColor="#4465DA"
-            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

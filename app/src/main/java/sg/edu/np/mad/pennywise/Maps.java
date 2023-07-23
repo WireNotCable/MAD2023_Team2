@@ -118,21 +118,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
         locationRequest.setInterval(60000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setFastestInterval(5000);
-        LocationCallback locationCallback = new LocationCallback(){
-            @Override
-            public void onLocationResult(LocationResult locationResult){
-                Toast.makeText(getApplicationContext(),"location result is = "+locationResult, Toast.LENGTH_LONG).show();
-                if (locationResult == null){
-                    Toast.makeText(getApplicationContext(),"Current location is null", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                for (Location location:locationResult.getLocations()){
-                    if (location != null){
-                        Toast.makeText(getApplicationContext(),"Current location is "+location.getLongitude(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        };
+        LocationCallback locationCallback = new LocationCallback();
+
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback,null);
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {

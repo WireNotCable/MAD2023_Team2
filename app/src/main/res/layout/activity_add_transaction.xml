@@ -40,10 +40,11 @@
             android:id="@+id/addtrans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="164dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="85dp"
+            android:layout_marginTop="5dp"
             android:text="Add transaction"
-            android:textSize="16dp"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -100,6 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:text="Click to Select Date"
+                        android:fontFamily="@font/manrope_regular"
                         android:textStyle="italic"
                         android:textSize="20dp"
                         android:textColor="@color/white"
@@ -110,6 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="30dp"
+                        android:fontFamily="@font/manrope_regular"
                         android:text="Enter Description :"
                         android:textSize="20dp" />
 
@@ -129,6 +132,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="30dp"
                         android:text="Enter Amount :"
+                        android:fontFamily="@font/manrope_regular"
                         android:textSize="20dp" />
 
                     <EditText
@@ -146,6 +150,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="30dp"
+                        android:fontFamily="@font/manrope_regular"
                         android:text="Type :"
                         android:textSize="20dp" />
 
