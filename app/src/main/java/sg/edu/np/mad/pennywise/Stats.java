@@ -286,6 +286,10 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             Intent intent = new Intent(Stats.this, SetLimit.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(Stats.this, Stats.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_profile){
             Intent intent = new Intent(Stats.this, Profile.class);
             startActivity(intent);

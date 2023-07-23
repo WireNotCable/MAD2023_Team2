@@ -10,62 +10,67 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/white"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme"
-                app:navigationIcon="@drawable/menu"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/white"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="?attr/actionBarTheme"
+                    app:navigationIcon="@drawable/menu"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="About Us"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="117dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="144dp"
-            android:text="About Us"
-            android:fontFamily="@font/antic"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#4465DA"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_1"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
 
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="142dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_marginStart="155dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="164dp"
                     android:text="OUR MOTTO"
+                    android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -78,10 +83,12 @@
                     android:layout_width="355dp"
                     android:layout_height="176dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/profilepic_background"
+                    android:background="@drawable/box_background"
                     android:padding="10dp"
+                    android:textAlignment="center"
                     android:text="PennyWise is the Futuristic Finance App of tomorrow that allows you to manage your money at maximum efficiency!"
                     android:textSize="20sp"
+                    android:fontFamily="@font/manrope_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -94,6 +101,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="164dp"
                     android:text="FEATURES"
+                    android:textColor="@color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -106,10 +114,12 @@
                     android:layout_width="361dp"
                     android:layout_height="218dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/profilepic_background"
+                    android:background="@drawable/box_background"
                     android:padding="10dp"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="Set a spending limit to make sure you don't overspend a single penny. Keep tabs on your transactions, track your expenditure, plan out your saving and spend wisely with PennyWise Today"
                     android:textSize="20sp"
+                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView6" />

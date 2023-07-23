@@ -69,7 +69,6 @@
                     android:id="@+id/dropdown_menu_layout"
                     android:layout_marginTop="8dp"
                     android:orientation="vertical"
-                    android:padding="12dp"
                     android:paddingBottom="10dp">
 
                     <LinearLayout
@@ -86,12 +85,14 @@
                             android:layout_marginStart="10dp"
                             android:layout_weight="1.0"
                             android:text="Convert From"
+                            android:fontFamily="@font/manrope_regular"
                             android:textColor="#000000"/>
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
                             android:text="Convert To"
+                            android:fontFamily="@font/manrope_regular"
                             android:textColor="#000000"/>
 
                     </LinearLayout>
@@ -154,6 +155,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_weight="1.0"
+                            android:fontFamily="@font/manrope_regular"
                             android:text="Amount To Convert"
                             android:textColor="#000000"/>
                         <TextView
@@ -161,9 +163,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
+                            android:fontFamily="@font/manrope_regular"
                             android:text="Conversion Rate"
                             android:textColor="#000000"
-                            android:gravity="center"/>
+                            android:gravity="left"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -175,11 +178,14 @@
                         <EditText
                             android:id="@+id/amountToConvertValueEditText"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="40dp"
                             android:layout_marginStart="10dp"
                             android:layout_weight="1.0"
+                            android:padding="10dp"
+                            android:layout_marginTop="5dp"
                             android:inputType="number"
                             android:maxLines="1"
+                            android:background="@android:drawable/editbox_background"
                             android:singleLine="true"
                             android:text=""
                             android:textColor="#000000"
@@ -211,8 +217,9 @@
                         android:gravity="center"
                         android:paddingTop="7dp"
                         android:paddingBottom="7dp"
+                        android:backgroundTint="#4465DA"
                         android:text="Convert"
-                        android:textColor="#000000"/>
+                        android:textColor="@color/white"/>
 
                 </RelativeLayout>
 

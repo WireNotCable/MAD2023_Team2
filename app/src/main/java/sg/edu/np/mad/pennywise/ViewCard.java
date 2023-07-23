@@ -163,6 +163,10 @@ public class ViewCard extends AppCompatActivity implements NavigationView.OnNavi
             Intent intent = new Intent(ViewCard.this, Goal_Progress.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(ViewCard.this, Maps.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(ViewCard.this, Stats.class);
             startActivity(intent);

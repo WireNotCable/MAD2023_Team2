@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="20dp"
     android:background="@drawable/background_gradient"
     tools:ignore="NamespaceTypo">
     <nl.dionsegijn.konfetti.xml.KonfettiView
@@ -50,12 +51,15 @@
             android:layout_marginRight="10dp"
             tools:listitem="@layout/friendcardview" />
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButton4"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/add" />
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:text="ADD"
+            android:backgroundTint="#4465DA"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
     </LinearLayout>
 
 
