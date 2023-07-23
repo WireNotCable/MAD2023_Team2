@@ -290,7 +290,7 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(ViewAllTransactions.this, Goal_Progress.class);
+            Intent intent = new Intent(ViewAllTransactions.this, Goal_Progress_Individual.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){

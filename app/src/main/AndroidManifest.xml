@@ -23,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PennyWise"
         tools:targetApi="31">
+        <activity
+            android:name=".Goal_Progress"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -42,10 +45,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-<!--        <activity-->
-<!--            android:name=".Users"-->
-<!--            android:exported="false" />-->
+        </activity> <!-- <activity -->
+        <!-- android:name=".Users" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".Transfer"
             android:exported="false" />
@@ -105,16 +107,17 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
-            android:name=".Goal_Progress"
-            android:exported="false"></activity>
+            android:name=".Goal_Progress_Individual"
+            android:exported="false" />
         <activity
             android:name=".AddUser"
-            android:exported="false" >
-            </activity>
-        <activity android:name=".Maps"
             android:exported="false"></activity>
+        <activity
+            android:name=".Maps"
+            android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

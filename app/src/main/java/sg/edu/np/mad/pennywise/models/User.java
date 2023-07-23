@@ -1,50 +1,27 @@
 package sg.edu.np.mad.pennywise.models;
 
 public class User {
-    private String username;
-    private String password;
-    private String NRIC;
-    private String ContactNo;
+    private String name;
+    private String number;
 
-    public User(){
-
-    }
-    public User(String username, String password,String NRIC,String ContactNo) {
-        this.username = username;
-        this.password = password;
-        this.NRIC = NRIC;
-        this.ContactNo = ContactNo;
+    public User(String name, String number) {
+        this.name = name;
+        this.number = number;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNumber() {
+        return number;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNRIC() {
-        return NRIC;
-    }
-
-    public String getContactNo() {
-        return ContactNo;
-    }
-
-    public void setNRIC(String NRIC) {
-        this.NRIC = NRIC;
-    }
-
-    public void setContactNo(String contactNo) {
-        ContactNo = contactNo;
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

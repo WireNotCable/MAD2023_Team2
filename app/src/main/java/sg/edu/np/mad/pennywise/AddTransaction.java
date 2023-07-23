@@ -11,12 +11,10 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -28,7 +26,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -225,7 +222,7 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(AddTransaction.this, Goal_Progress.class);
+            Intent intent = new Intent(AddTransaction.this, Goal_Progress_Individual.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_stats){
