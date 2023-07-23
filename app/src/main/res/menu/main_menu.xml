@@ -46,7 +46,7 @@
             android:id="@+id/nav_cryptoTracker"
             android:icon="@drawable/search"
             android:title="Crypto Tracker" />
-
+        <item
             android:icon="@drawable/transfer"
             android:id="@+id/nav_map"
             android:title="Map" />
