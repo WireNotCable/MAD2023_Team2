@@ -198,13 +198,13 @@
 
         <ImageView
             android:id="@+id/limit_icon"
-            android:layout_width="52dp"
-            android:layout_height="49dp"
+            android:layout_width="49dp"
+            android:layout_height="45dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bell" />
+            app:srcCompat="@drawable/home_limitbtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

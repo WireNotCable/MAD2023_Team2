@@ -1,61 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ADD8E6">
+    tools:context=".CryptoTracker"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    >
 
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:elevation="10dp"
-        android:padding="10dp"
-        android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:id="@+id/nav_view"
+        app:headerLayout="@layout/header"
+        app:menu="@menu/main_menu"
+        android:layout_gravity="start"
+        />
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ADD8E6"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@color/white">
 
-        <TextView
-            android:id="@+id/trackerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/manrope_bold"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="20sp" />
 
-    </androidx.appcompat.widget.Toolbar>
 
-    <EditText
-        android:id="@+id/idEdtSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:background="#43FFFFFF"
-        android:drawableStart="@drawable/search"
-        android:drawablePadding="10dp"
-        android:fontFamily="@font/manrope_bold"
-        android:hint="Search Currency..."
-        android:padding="15dp"
-        android:text=""
-        android:textColor="@color/white"
-        android:textColorHint="#808080"
-        android:textSize="20sp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/idRVCurrencies"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/idEdtSearch"/>
+        android:background="#ADD8E6">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
 
-</RelativeLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:navigationIcon="@drawable/menu"
+            ></androidx.appcompat.widget.Toolbar>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:elevation="10dp"
+            android:padding="10dp"
+            android:visibility="gone" />
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/crypto_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ADD8E6"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextColor="@color/white">
+
+            <TextView
+                android:id="@+id/trackerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_bold"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <EditText
+            android:id="@+id/idEdtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/crypto_toolbar"
+            android:background="#43FFFFFF"
+            android:drawableStart="@drawable/search"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/manrope_bold"
+            android:hint="Search Currency..."
+            android:padding="15dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textColorHint="#808080"
+            android:textSize="20sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/idRVCurrencies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/idEdtSearch"/>
+
+    </RelativeLayout>
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

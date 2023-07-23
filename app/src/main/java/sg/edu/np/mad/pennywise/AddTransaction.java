@@ -28,6 +28,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,7 +94,6 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
                     public void onPositiveButtonClick(Long selection) {
                         String date = new SimpleDateFormat("dd-MMM-yyy", Locale.getDefault()).format(new Date(selection));
                         textView.setText(date);
-
                     }
                 });
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
@@ -114,6 +114,8 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
                 EditText amtEt = findViewById(R.id.addTransAmount);
                 String amountstr = amtEt.getText().toString();
 
+                String formattedAmount = "";
+
                 // data validation
                 if (title.isEmpty()) {
                     titleEt.setError("Description cannot be empty!");
@@ -127,11 +129,15 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
                 else{
                     try {
                         amount = Double.parseDouble(amountstr);
+                        amount = Math.round(amount * 100.0) / 100.0;
+                        amountstr = String.valueOf(amount);
                     } catch (NumberFormatException e) {
                         amtEt.setError("Invalid amount!");
                         return;
                     }
                 }
+
+                // Radio buttons
                 String type = "";
                 RadioGroup radioGroup = findViewById(R.id.typeRadio);
                 int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
@@ -143,7 +149,6 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
                 else{
                     return;
                 }
-
                 // Send data to firestore
                 if (date!=null&&!date.isEmpty() && !title.isEmpty() && !amountstr.isEmpty() && !type.isEmpty()){
                     Transaction transaction = new Transaction("", title, date, amount, type);
@@ -225,6 +230,15 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
         }
         else if (item.getItemId() == R.id.nav_stats){
             Intent intent = new Intent(AddTransaction.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(AddTransaction.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(AddTransaction.this, Maps.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){

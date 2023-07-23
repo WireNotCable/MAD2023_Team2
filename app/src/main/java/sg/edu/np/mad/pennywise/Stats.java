@@ -290,6 +290,20 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
             Intent intent = new Intent(Stats.this, Profile.class);
             startActivity(intent);
         }
+        else if(item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Stats.this, Profile.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(Stats.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Stats.this, Maps.class);
+            startActivity(intent);
+        }
+
          else if (item.getItemId() == R.id.nav_logout) {
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

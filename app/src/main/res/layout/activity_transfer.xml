@@ -22,14 +22,6 @@
     </com.google.android.material.navigation.NavigationView>
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/menu"></androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,6 +29,15 @@
         android:background="#FFFFFF"
         android:orientation="vertical"
         tools:context=".Transfer">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:navigationIcon="@drawable/menu"></androidx.appcompat.widget.Toolbar>
 
 
         <EditText
@@ -67,18 +68,20 @@
                 android:text="Enter mobile : "
                 android:textColor="#FFFFFF" />
 
-            <EditText
+            <TextView
                 android:id="@+id/mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#222222"
                 android:ems="10"
                 android:inputType="text"
                 android:text="Mobile"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <TextView
