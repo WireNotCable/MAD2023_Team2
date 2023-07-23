@@ -111,8 +111,8 @@
             android:exported="false"></activity>
         <activity
             android:name=".AddUser"
-            android:exported="false" >
-            </activity>
+            android:exported="false">
+        </activity>
         <activity android:name=".Maps"
             android:exported="false"></activity>
         <meta-data
