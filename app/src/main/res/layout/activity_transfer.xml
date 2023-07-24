@@ -17,9 +17,7 @@
         android:id="@+id/nav_view"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
-        android:layout_gravity="start"
-        >
-
+        android:layout_gravity="start">
     </com.google.android.material.navigation.NavigationView>
 
 
@@ -57,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_margin="20dp"
             android:background="#222222"
             android:orientation="vertical">
 
@@ -100,6 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:background="#222222"
+            android:layout_margin="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -150,6 +150,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -175,6 +176,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -201,8 +203,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
             android:backgroundTint="#000000"
             android:text="Change Limit"
+            android:layout_marginHorizontal="20dp"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -210,6 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_margin="20dp"
             android:background="#222222"
             android:orientation="vertical">
 
@@ -249,6 +254,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Go TO GOAL TRACKING"
+            android:layout_margin="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"

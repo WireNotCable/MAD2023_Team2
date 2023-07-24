@@ -87,9 +87,9 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         mobile = findViewById(R.id.mobile);
         limitamount = findViewById(R.id.textView21);
         remaininggamount = findViewById(R.id.textView22);
-        title = findViewById(R.id.editTextText3);
-        title.setFocusable(false);
-        title.setFocusableInTouchMode(false);
+//        title = findViewById(R.id.editTextText3);
+//        title.setFocusable(false);
+//        title.setFocusableInTouchMode(false);
         test = findViewById(R.id.GoalTracking);
 
         //FOR NAV BAR
