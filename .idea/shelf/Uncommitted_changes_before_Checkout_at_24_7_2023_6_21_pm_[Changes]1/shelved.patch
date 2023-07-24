@@ -1,0 +1,17 @@
+Index: app/src/main/java/sg/edu/np/mad/pennywise/Transfer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/Transfer.java b/app/src/main/java/sg/edu/np/mad/pennywise/Transfer.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/Transfer.java	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/Transfer.java	
+@@ -115,7 +115,7 @@
+         test.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                Intent intent = new Intent(Transfer.this, Goal_Progress_Individual.class);
++                Intent intent = new Intent(Transfer.this, Goal_Progress.class);
+                 startActivity(intent);
+             }
+         });
