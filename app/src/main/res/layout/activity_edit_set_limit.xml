@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
                 android:text="Set Limit"
-                android:textColor="#4465DA"
+                android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -134,14 +134,14 @@
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
-                app:layout_constraintVertical_bias="0.355" />
+                app:layout_constraintVertical_bias="0.177" />
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
-                android:layout_marginTop="116dp"
+                android:layout_marginTop="96dp"
                 android:text="Falls Below"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -164,13 +164,13 @@
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView16"
-                app:layout_constraintVertical_bias="0.583" />
+                app:layout_constraintVertical_bias="0.42" />
 
             <Button
                 android:id="@+id/editsetlimit_setbutton"
                 android:layout_width="237dp"
                 android:layout_height="57dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="28dp"
                 android:backgroundTint="#4465DA"
                 android:text="Set"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -181,6 +181,8 @@
                 android:id="@+id/editsetlimit_close"
                 android:layout_width="37dp"
                 android:layout_height="45dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/close_icon" />

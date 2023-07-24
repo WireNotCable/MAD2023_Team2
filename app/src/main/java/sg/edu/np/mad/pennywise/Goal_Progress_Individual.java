@@ -289,6 +289,11 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
             Intent intent = new Intent(Goal_Progress_Individual.this, Currency.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_set_limit) {
+
+            Intent intent = new Intent(Goal_Progress_Individual.this, SetLimit.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_home){
             Intent intent = new Intent(Goal_Progress_Individual.this, MainActivity.class);
             startActivity(intent);
