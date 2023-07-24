@@ -227,6 +227,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
     private void updatePieChart() {
+//        Log.v("LENGTH",String.valueOf(CategoryData.size()));
 
         //Set Data
         PieDataSet pieDataSet = new PieDataSet(CategoryData, "Category");
