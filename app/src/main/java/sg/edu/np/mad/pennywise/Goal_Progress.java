@@ -11,4 +11,9 @@ public class Goal_Progress extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_progress);
     }
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+    }
 }

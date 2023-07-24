@@ -115,7 +115,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Transfer.this, Goal_Progress_Individual.class);
+                Intent intent = new Intent(Transfer.this, Goal_Progress.class);
                 startActivity(intent);
             }
         });
