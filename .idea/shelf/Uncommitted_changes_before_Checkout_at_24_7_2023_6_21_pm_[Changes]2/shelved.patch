@@ -1,0 +1,33 @@
+Index: app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package sg.edu.np.mad.pennywise;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.content.ContextCompat;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.viewpager2.widget.ViewPager2;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.ProgressBar;\r\n\r\nimport sg.edu.np.mad.pennywise.fragments.CardViewFragment;\r\nimport sg.edu.np.mad.pennywise.fragments.LineChartFragment;\r\nimport sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;\r\n\r\n\r\npublic class Goal_Progress extends AppCompatActivity {\r\n    ProgressBar progressBar;\r\n    ViewPager2 viewPager;\r\n    LinearLayout pagerDots;\r\n    int NUM_PAGES = 3;\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_goal_progress);\r\n        /*int desiredProgress = 60;\r\n        progressBar = findViewById(R.id.progressBar);\r\n\r\n        progressBar.setProgress(0);\r\n\r\n        ObjectAnimator progressAnimator = ObjectAnimator.ofInt(progressBar,\"progress\",0,desiredProgress);\r\n        AnimationSet animationSet = new AnimationSet(true);\r\n        Animation fadeInAnimation = new AlphaAnimation(0,1);\r\n        Animation translateAnimation = new TranslateAnimation(-progressBar.getWidth(),0,0,0);\r\n\r\n        progressAnimator.setDuration(1000);\r\n        fadeInAnimation.setDuration(1500);\r\n        translateAnimation.setDuration(2000);\r\n\r\n        animationSet.addAnimation(fadeInAnimation);\r\n        animationSet.addAnimation(translateAnimation);\r\n\r\n        progressAnimator.start();\r\n        progressBar.setAnimation(animationSet);*/\r\n        viewPager = findViewById(R.id.view_pager);\r\n        pagerDots = findViewById(R.id.pager_dots);\r\n\r\n        viewPager.setAdapter(new ProgressPagerAdapter(this));\r\n\r\n        createCarouselButtons();\r\n\r\n        // Set a listener to handle page changes and update carousel buttons accordingly\r\n        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {\r\n            @Override\r\n            public void onPageSelected(int position) {\r\n                updateCarouselButtons(position);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void createCarouselButtons() {\r\n        for (int i = 0; i < NUM_PAGES; i++) {\r\n            ImageView dot = new ImageView(this);\r\n            int size = getResources().getDimensionPixelSize(R.dimen.carousel_button_size);\r\n            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);\r\n            int margin = getResources().getDimensionPixelSize(R.dimen.carousel_button_margin);\r\n            params.setMargins(margin, 0, margin, 0);\r\n            dot.setLayoutParams(params);\r\n            dot.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.page_indicator_unselected));\r\n            dot.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    int position = pagerDots.indexOfChild(v);\r\n                    if (position >= 0) {\r\n                        viewPager.setCurrentItem(position, true);\r\n                    }\r\n                }\r\n            });\r\n            pagerDots.addView(dot);\r\n\r\n\r\n\r\n        }\r\n\r\n\r\n        updateCarouselButtons(0);\r\n    }\r\n\r\n    private void updateCarouselButtons(int selectedPosition) {\r\n        for (int i = 0; i < pagerDots.getChildCount(); i++) {\r\n            ImageView dot = (ImageView) pagerDots.getChildAt(i);\r\n            dot.setImageDrawable(ContextCompat.getDrawable(this,\r\n                    i == selectedPosition ? R.drawable.page_indicator_selected : R.drawable.page_indicator_unselected));\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java b/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java	(revision 2352e536a61bc573b27928936d76d0ff084a7cad)
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java	(date 1690194093324)
+@@ -1,19 +1,14 @@
+ package sg.edu.np.mad.pennywise;
+ 
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.core.content.ContextCompat;
+-import androidx.fragment.app.Fragment;
+-import androidx.viewpager2.widget.ViewPager2;
+-
+ import android.os.Bundle;
+ import android.view.View;
+ import android.widget.ImageView;
+ import android.widget.LinearLayout;
+ import android.widget.ProgressBar;
+ 
+-import sg.edu.np.mad.pennywise.fragments.CardViewFragment;
+-import sg.edu.np.mad.pennywise.fragments.LineChartFragment;
+-import sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.core.content.ContextCompat;
++import androidx.viewpager2.widget.ViewPager2;
+ 
+ 
+ public class Goal_Progress extends AppCompatActivity {

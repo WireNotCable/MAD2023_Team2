@@ -1,0 +1,491 @@
+Index: app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java b/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java
+--- a/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/Goal_Progress.java	
+@@ -2,23 +2,40 @@
+ 
+ import android.app.Dialog;
+ import android.content.DialogInterface;
++import android.content.Intent;
+ import android.os.Bundle;
+ import android.view.View;
+-import android.widget.EditText;
+ import android.widget.ImageView;
+ 
++import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AlertDialog;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.android.gms.tasks.Task;
++import com.google.android.material.textfield.TextInputEditText;
+ import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.CollectionReference;
++import com.google.firebase.firestore.DocumentReference;
+ import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
++import com.google.firebase.firestore.QuerySnapshot;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.Map;
+ 
+-public class Goal_Progress extends AppCompatActivity {
++public class Goal_Progress extends AppCompatActivity{
+     RecyclerView recyclerGoal;
+     ImageView addProgress;
+     FirebaseAuth auth;
+     FirebaseFirestore db;
++    ArrayList<Goals> goalsList;
++    ProgressMainAdapter adapter;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+ 
+@@ -35,31 +52,78 @@
+     @Override
+     protected void onResume() {
+         super.onResume();
++        goalsList = new ArrayList<Goals>();
++
++        GetData();
++
++        recyclerGoal.setLayoutManager(new LinearLayoutManager(Goal_Progress.this));
+ 
+         addProgress.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 AddProgressDialog();
+-                recreate();
+             }
+-        });
++
++        });
++    }
++
++    private void GetData() {
++        db.collection("users").document(auth.getUid()).collection("goals")
++                .get()
++                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
++                    @Override
++                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
++                        for (QueryDocumentSnapshot document : queryDocumentSnapshots){
++                            String name = document.getString("name");
++                            double goalamt = document.getLong("amount").doubleValue();
++                            String uid = document.getId();
++                            double currentamt = document.getLong("current").doubleValue();
++                            goalsList.add(new Goals(uid,name,goalamt,currentamt));
++
++
++                        }
++                        adapter = new ProgressMainAdapter(goalsList,Goal_Progress.this);
++                        recyclerGoal.setAdapter(adapter);
++                    }
++                });
++
++
+     }
+ 
+-    private void AddProgressDialog(){
++    private void AddProgressDialog() {
+         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+-        dialogBuilder.setTitle("Custom Dialog");
++        dialogBuilder.setTitle("New Goal");
+         dialogBuilder.setView(R.layout.dialog_new_progress);
+-
+         dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                 Dialog dialog = (Dialog) dialogInterface;
+-                EditText editText = dialog.findViewById(R.id.inputprogresstitle);
+-                EditText numberEditText = dialog.findViewById(R.id.inputprogressamt);
++                TextInputEditText editText = dialog.findViewById(R.id.inputprogresstitle);
++                TextInputEditText numberEditText = dialog.findViewById(R.id.inputprogressamt);
+ 
+                 String text = editText.getText().toString();
+                 int number = Integer.parseInt(numberEditText.getText().toString());
+-                
++                db.collection("users").document(auth.getUid()).collection("goals").whereEqualTo("name", text)
++                        .get()
++                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
++                            @Override
++                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
++                                if (!task.getResult().isEmpty()) {
++                                    editText.setError("Progress already exists!");
++                                } else {
++                                    CollectionReference fromtranscationref = db.collection("users").document(auth.getUid()).collection("goals");
++                                    DocumentReference fromTranscationref = fromtranscationref.document();
++                                    Map<String, Object> transcationData2 = new HashMap<>();
++                                    transcationData2.put("name", text);
++                                    transcationData2.put("amount", number);
++                                    transcationData2.put("current",0);
++                                    fromTranscationref.set(transcationData2);
++                                    dialogInterface.dismiss();
++                                    recreate();
++
++                                }
++                            }
++                        }); //change to extra func
+             }
+         });
+ 
+@@ -69,8 +133,11 @@
+                 dialogInterface.dismiss();
+             }
+         });
+-        dialogBuilder.setCancelable(false);
++
+         AlertDialog dialog = dialogBuilder.create();
+         dialog.show();
+     }
++
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_transfer.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_transfer.xml b/app/src/main/res/layout/activity_transfer.xml
+--- a/app/src/main/res/layout/activity_transfer.xml	
++++ b/app/src/main/res/layout/activity_transfer.xml	
+@@ -41,11 +41,12 @@
+             app:navigationIcon="@drawable/menu"></androidx.appcompat.widget.Toolbar>
+ 
+ 
+-        <TextView
++        <EditText
+             android:id="@+id/editTextText3"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:clickable="false"
++            android:focusable="false"
+             android:ems="10"
+             android:gravity="center"
+             android:inputType="none"
+Index: app/src/main/java/sg/edu/np/mad/pennywise/Goals.java
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/Goals.java b/app/src/main/java/sg/edu/np/mad/pennywise/Goals.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/Goals.java	
+@@ -0,0 +1,47 @@
++package sg.edu.np.mad.pennywise;
++
++public class Goals {
++    private String uid;
++    private String name;
++    private double amount;
++    private double current;
++
++    public Goals(String uid, String name, double amount, double current) {
++        this.uid = uid;
++        this.name = name;
++        this.amount = amount;
++        this.current = current;
++    }
++
++    public String getUid() {
++        return uid;
++    }
++
++    public void setUid(String uid) {
++        this.uid = uid;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public double getAmount() {
++        return amount;
++    }
++
++    public void setAmount(double amount) {
++        this.amount = amount;
++    }
++
++    public double getCurrent() {
++        return current;
++    }
++
++    public void setCurrent(double current) {
++        this.current = current;
++    }
++}
+Index: app/src/main/java/sg/edu/np/mad/pennywise/ProgressMainAdapter.java
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/ProgressMainAdapter.java b/app/src/main/java/sg/edu/np/mad/pennywise/ProgressMainAdapter.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/ProgressMainAdapter.java	
+@@ -0,0 +1,131 @@
++package sg.edu.np.mad.pennywise;
++
++import android.app.Activity;
++import android.content.Context;
++import android.content.Intent;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.ImageButton;
++import android.widget.ImageView;
++import android.widget.ProgressBar;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AlertDialog;
++import androidx.cardview.widget.CardView;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.FirebaseFirestore;
++
++import java.text.DecimalFormat;
++import java.util.ArrayList;
++
++public class ProgressMainAdapter extends RecyclerView.Adapter<ProgressMainAdapter.GoalProgressViewHolder> {
++    private ArrayList<Goals> goalList;
++    private Context context;
++    private FirebaseFirestore db;
++    private FirebaseAuth auth;
++
++    public ProgressMainAdapter(ArrayList<Goals> goalList, Context context) {
++        this.goalList = goalList;
++        this.context = context;
++        db = FirebaseFirestore.getInstance();
++        auth = FirebaseAuth.getInstance();
++    }
++
++    @NonNull
++    @Override
++    public GoalProgressViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_goal, parent, false);
++
++        return new GoalProgressViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull GoalProgressViewHolder holder, int position) {
++        DecimalFormat decimalFormat = new DecimalFormat("0.00");
++        holder.title.setText(goalList.get(position).getName());
++        holder.value.setText(decimalFormat.format(goalList.get(position).getCurrent()) + " / " + decimalFormat.format(goalList.get(position).getAmount()));
++        holder.percentage.setText(String.valueOf((int) (goalList.get(position).getCurrent() / goalList.get(position).getAmount())) + "%");
++        holder.bar.setProgress((int) (goalList.get(position).getCurrent() / goalList.get(position).getAmount()));
++        holder.progrescard.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                String uid = goalList.get(position).getUid();
++                Intent intent = new Intent(v.getContext(), Goal_Progress_Individual.class);
++                intent.putExtra("UID", uid);
++                v.getContext().startActivity(intent);
++            }
++        });
++        holder.menu.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                showOptionsDialog(v.getContext(), goalList.get(position).getUid());
++            }
++        });
++
++    }
++
++    private void showOptionsDialog(Context context, String uid) {
++        AlertDialog.Builder builder = new AlertDialog.Builder(context);
++        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_options_menu, null);
++        builder.setView(dialogView);
++        TextView deleteButton = dialogView.findViewById(R.id.progressmenudelete);
++        ImageView cancel = dialogView.findViewById(R.id.progressmenucancel);
++        AlertDialog dialog = builder.create();
++        deleteButton.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                db.collection("users").document(auth.getUid()).collection("goals").document(uid)
++                        .delete()
++                        .addOnSuccessListener(new OnSuccessListener<Void>() {
++                            @Override
++                            public void onSuccess(Void unused) {
++                                Toast.makeText(context,"Progress deleted", Toast.LENGTH_SHORT).show();
++                            }
++                        });
++
++                dialog.dismiss();
++                ((Activity) context).recreate();
++            }
++        });
++        cancel.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                dialog.dismiss();
++            }
++        });
++
++        dialog.show();
++    }
++
++    @Override
++    public int getItemCount() {
++        return goalList.size();
++    }
++
++
++    public class GoalProgressViewHolder extends RecyclerView.ViewHolder {
++        private TextView title, value,percentage;
++        private ProgressBar bar;
++        private ImageView menu;
++        private CardView progrescard;
++
++        public GoalProgressViewHolder(@NonNull View itemView) {
++            super(itemView);
++
++            title = itemView.findViewById(R.id.progresstitle);
++            value = itemView.findViewById(R.id.progressvalue);
++            bar = itemView.findViewById(R.id.progressprogressbar);
++            menu = itemView.findViewById(R.id.progressmenu);
++            percentage = itemView.findViewById(R.id.progresspercentage);
++            progrescard = itemView.findViewById(R.id.progresscard);
++        }
++    }
++
++}
+Index: app/src/main/java/sg/edu/np/mad/pennywise/onItemClickListener.java
+===================================================================
+diff --git a/app/src/main/java/sg/edu/np/mad/pennywise/onItemClickListener.java b/app/src/main/java/sg/edu/np/mad/pennywise/onItemClickListener.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/sg/edu/np/mad/pennywise/onItemClickListener.java	
+@@ -0,0 +1,4 @@
++package sg.edu.np.mad.pennywise;
++
++public interface onItemClickListener {
++}
+Index: app/src/main/res/layout/dialog_options_menu.xml
+===================================================================
+diff --git a/app/src/main/res/layout/dialog_options_menu.xml b/app/src/main/res/layout/dialog_options_menu.xml
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/res/layout/dialog_options_menu.xml	
+@@ -0,0 +1,42 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content">
++
++    <androidx.cardview.widget.CardView
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent">
++
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:layout_width="match_parent"
++            android:layout_height="match_parent">
++
++            <ImageView
++                android:id="@+id/progressmenucancel"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_margin="10dp"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent"
++                app:srcCompat="@drawable/close_icon" />
++
++            <TextView
++                android:id="@+id/progressmenudelete"
++                android:layout_width="match_parent"
++                android:layout_height="60dp"
++                android:layout_marginTop="44dp"
++                android:drawableLeft="@drawable/delete"
++                android:gravity="center_vertical"
++                android:paddingStart="20dp"
++                android:text="   Delete"
++                android:textSize="20sp"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++
++    </androidx.cardview.widget.CardView>
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/recyclerview_goal.xml
+===================================================================
+diff --git a/app/src/main/res/layout/recyclerview_goal.xml b/app/src/main/res/layout/recyclerview_goal.xml
+--- a/app/src/main/res/layout/recyclerview_goal.xml	
++++ b/app/src/main/res/layout/recyclerview_goal.xml	
+@@ -10,6 +10,7 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="5dp"
++        android:layout_marginTop="5dp"
+         app:cardCornerRadius="20dp"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent">
+@@ -36,10 +37,11 @@
+                 style="?android:attr/progressBarStyleHorizontal"
+                 android:layout_width="135dp"
+                 android:layout_height="wrap_content"
++                android:layout_marginStart="10dp"
+                 android:layout_marginTop="63dp"
+                 android:progress="60"
+                 android:progressTint="#FFFFFF"
+-                app:layout_constraintEnd_toStartOf="@+id/progressimage"
++                app:layout_constraintStart_toEndOf="@+id/progressvalue"
+                 app:layout_constraintTop_toTopOf="parent" />
+ 
+             <TextView
+@@ -53,16 +55,6 @@
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@+id/progresstitle" />
+ 
+-            <ImageView
+-                android:id="@+id/progressimage"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
+-                android:layout_marginEnd="44dp"
+-                app:layout_constraintEnd_toStartOf="@+id/progressmenu"
+-                app:layout_constraintTop_toTopOf="parent"
+-                tools:srcCompat="@tools:sample/avatars"
+-                android:src="@drawable/saving1"/>
+-
+             <ImageButton
+                 android:id="@+id/progressmenu"
+                 android:layout_width="30dp"
+@@ -72,6 +64,19 @@
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:srcCompat="@drawable/menu" />
++
++            <TextView
++                android:id="@+id/progresspercentage"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="4dp"
++                android:layout_marginEnd="20dp"
++                android:text="Progress%"
++                android:textColor="#FFFFFF"
++                android:textSize="34sp"
++                android:textStyle="bold"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintTop_toBottomOf="@+id/progressmenu" />
+         </androidx.constraintlayout.widget.ConstraintLayout>
+     </androidx.cardview.widget.CardView>
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
