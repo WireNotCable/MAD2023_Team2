@@ -1,46 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+    <ImageView
+        android:id="@+id/MenuProgressCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:srcCompat="@drawable/close_icon" />
+
+    <TextView
+        android:id="@+id/MenuProgressDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:hint="Progress Name"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/reddish">
+        android:layout_marginBottom="20dp"
+        android:drawableLeft="@drawable/delete"
+        android:paddingStart="30dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="Delete"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="51dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/CreateProgressName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="12dp"
-        android:hint="Goal Amount"
-        app:endIconMode="clear_text"
-        app:endIconTint="@color/reddish">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/CreateProgressAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

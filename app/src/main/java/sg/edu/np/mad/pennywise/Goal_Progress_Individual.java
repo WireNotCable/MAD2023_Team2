@@ -1,9 +1,12 @@
 package sg.edu.np.mad.pennywise;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -11,6 +14,7 @@ import android.widget.ProgressBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import java.util.concurrent.TimeUnit;
@@ -27,14 +31,23 @@ public class Goal_Progress_Individual extends AppCompatActivity {
     ProgressBar progressBar;
     ViewPager2 viewPager;
     LinearLayout pagerDots;
+    EditText ititle;
+    RecyclerView recyclerViewi;
+    ImageView back;
+    ImageButton add;
     int NUM_PAGES = 3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_progress_indivisual);
 
+
         viewPager = findViewById(R.id.view_pager);
         pagerDots = findViewById(R.id.pager_dots);
+        ititle = findViewById(R.id.ProgressTitle);
+        back = findViewById(R.id.Progress_Indiviual_back);
+        recyclerViewi = findViewById(R.id.IndivisualProgressView);
+        add = findViewById(R.id.imageButton4);
         viewPager.setAdapter(new ProgressPagerAdapter(this));
 
         createCarouselButtons();
@@ -46,6 +59,19 @@ public class Goal_Progress_Individual extends AppCompatActivity {
                 updateCarouselButtons(position);
             }
         });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     private void createCarouselButtons() {
@@ -87,21 +113,30 @@ public class Goal_Progress_Individual extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("UID")) {
+            String value = intent.getStringExtra("UID");
+            ititle.setText(value);
+
+        }
+
+
+    }
+    private void AnimateConfetti(){
         KonfettiView konfettiView = findViewById(R.id.konfettiView);
         Shape.DrawableShape drawableShape = new Shape.DrawableShape(AppCompatResources.getDrawable(this,R.drawable.ic_android_black_24dp),true);
         EmitterConfig emitterConfig = new Emitter(300, TimeUnit.MILLISECONDS).max(300);
         konfettiView.start(
-            new PartyFactory(emitterConfig)
-                    .shapes(Shape.Circle.INSTANCE,Shape.Square.INSTANCE, drawableShape)
-                    .spread(135)
-                    .position(0f,0f,1f,1f)
-                    .sizes(new Size(8,50,10))
-                    .timeToLive(15000)
-                    .fadeOutEnabled(true)
-                    .build()
+                new PartyFactory(emitterConfig)
+                        .shapes(Shape.Circle.INSTANCE,Shape.Square.INSTANCE, drawableShape)
+                        .spread(135)
+                        .position(0f,0f,1f,1f)
+                        .sizes(new Size(8,50,10))
+                        .timeToLive(15000)
+                        .fadeOutEnabled(true)
+                        .build()
 
         );
-
     }
     private int getScreenHeight() {
         WindowManager windowManager = getWindowManager();
