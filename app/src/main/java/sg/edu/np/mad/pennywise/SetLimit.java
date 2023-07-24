@@ -2,6 +2,8 @@ package sg.edu.np.mad.pennywise;
 
 
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,13 +21,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -79,41 +85,9 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = sharedPreferences.getString(MY_UID,"");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
-        LimitRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
-                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                    LimitObject limit = new LimitObject(getTodaysDate("Start"), getTodaysDate("End"), 1500, 500);
-                    for (DocumentSnapshot document : documents) {
-                        Map<String, Object> data = document.getData();
-                        if (data != null) {
-                            String Getstartdate = (String) data.get("startdate");
-                            String Getenddate = (String) data.get("enddate");
-                             double getLimit = ((Number) data.get("limit")).doubleValue();
-                             double getFallsBelow = ((Number) data.get("warning")).doubleValue();
-                            limit = new LimitObject(Getstartdate, Getenddate, getLimit, getFallsBelow);
-                        }
-                    }
-                    if (limit != null) {
-                        StartDate.setText(limit.getStartdate());
-                        EndDate.setText(limit.getEnddate());
-//                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+        GetData();
 
 
-                        GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
-
-                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(MY_STARTDATE, limit.getStartdate());
-                        editor.putString(MY_ENDDATE, limit.getEnddate());
-                        editor.apply();
-                    }
-                }
-            }
-        });
     }
     @Override
     protected void onResume() {
@@ -205,6 +179,49 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             double pct = totalSpend/spendlimit * 100;
 
             SpendPercentage.setText(String.valueOf(decimalFormat.format(pct))+"%");
+        });
+    }
+
+
+
+
+    private void GetData(){
+        sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+        String uid = sharedPreferences.getString(MY_UID,"");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference LimitRef = db.collection("users").document(uid).collection("setlimit");
+        LimitRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null) {
+                    List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                    LimitObject limit = new LimitObject(getTodaysDate("Start"), getTodaysDate("End"), 1500, 500);
+                    for (DocumentSnapshot document : documents) {
+                        Map<String, Object> data = document.getData();
+                        if (data != null) {
+                            String Getstartdate = (String) data.get("startdate");
+                            String Getenddate = (String) data.get("enddate");
+                            double getLimit = ((Number) data.get("limit")).doubleValue();
+                            double getFallsBelow = ((Number) data.get("warning")).doubleValue();
+                            limit = new LimitObject(Getstartdate, Getenddate, getLimit, getFallsBelow);
+                        }
+                    }
+                    if (limit != null) {
+                        StartDate.setText(limit.getStartdate());
+                        EndDate.setText(limit.getEnddate());
+//                        FallsBelow.setText("$" + String.valueOf(limit.getFallsbelow()));
+
+
+                        GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
+
+                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(MY_STARTDATE, limit.getStartdate());
+                        editor.putString(MY_ENDDATE, limit.getEnddate());
+                        editor.apply();
+                    }
+                }
+            }
         });
     }
 

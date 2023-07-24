@@ -2,9 +2,11 @@ package sg.edu.np.mad.pennywise;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -14,14 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,7 +49,7 @@ import nl.dionsegijn.konfetti.core.models.Size;
 import nl.dionsegijn.konfetti.xml.KonfettiView;
 
 
-public class Goal_Progress_Individual extends AppCompatActivity {
+public class Goal_Progress_Individual extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ProgressBar progressBar;
     ViewPager2 viewPager;
     LinearLayout pagerDots;
@@ -54,6 +62,10 @@ public class Goal_Progress_Individual extends AppCompatActivity {
     FirebaseFirestore db;
     Goal_Indivisual_Adapter adapter;
     ArrayList<IndivisualGoalI> progressList;
+    public static final String GLOBAL_PREFS = "myPrefs";
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
     int NUM_PAGES = 3;
 
     @Override
@@ -61,11 +73,24 @@ public class Goal_Progress_Individual extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_progress_indivisual);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
+
 
         viewPager = findViewById(R.id.view_pager);
         pagerDots = findViewById(R.id.pager_dots);
         ititle = findViewById(R.id.ProgressTitle);
-        back = findViewById(R.id.Progress_Indiviual_back);
+//        back = findViewById(R.id.Progress_Indiviual_back);
         recyclerViewi = findViewById(R.id.IndivisualProgressView);
         recyclerViewi.setLayoutManager(new LinearLayoutManager(this));
         add = findViewById(R.id.imageButton4);
@@ -83,12 +108,12 @@ public class Goal_Progress_Individual extends AppCompatActivity {
                 updateCarouselButtons(position);
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,6 +251,83 @@ public class Goal_Progress_Individual extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.nav_add_transactions){
+            Intent intent = new Intent(Goal_Progress_Individual.this, AddTransaction.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_view_transactions){
+            Intent intent = new Intent(Goal_Progress_Individual.this, ViewAllTransactions.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_card){
+            Intent intent = new Intent(Goal_Progress_Individual.this, ViewCard.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_profile){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Profile.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_about){
+            Intent intent = new Intent(Goal_Progress_Individual.this, AboutUs.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_currency) {
+
+            Intent intent = new Intent(Goal_Progress_Individual.this, Currency.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_home){
+            Intent intent = new Intent(Goal_Progress_Individual.this, MainActivity.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_transfer){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Transfer.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_goal){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Goal_Progress_Individual.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Maps.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_stats){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Stats.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_cryptoTracker){
+            Intent intent = new Intent(Goal_Progress_Individual.this, CryptoTracker.class);
+            startActivity(intent);
+        }
+
+        else if (item.getItemId() == R.id.nav_map){
+            Intent intent = new Intent(Goal_Progress_Individual.this, Maps.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_logout){
+            SharedPreferences sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(Goal_Progress_Individual.this,Login.class);
+            startActivity(intent);
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 

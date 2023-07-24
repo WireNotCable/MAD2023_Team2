@@ -22,9 +22,7 @@
 
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ADD8E6">
@@ -38,12 +36,12 @@
             android:theme="?attr/actionBarTheme"
             app:navigationIcon="@drawable/menu"
             ></androidx.appcompat.widget.Toolbar>
+
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_width="56dp"
+            android:layout_height="59dp"
+            android:layout_centerInParent="true"
             android:elevation="10dp"
             android:padding="10dp"
             android:visibility="gone" />
