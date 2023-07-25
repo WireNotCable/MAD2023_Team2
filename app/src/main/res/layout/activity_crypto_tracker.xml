@@ -5,12 +5,12 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CryptoTracker"
+    tools:context=".MainActivity"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
     >
 
-    <com.google.android.material.navigation.NavigationView
+<com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
@@ -22,55 +22,31 @@
 
 
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ADD8E6">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:navigationIcon="@drawable/menu"
-            ></androidx.appcompat.widget.Toolbar>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="56dp"
-            android:layout_height="59dp"
-            android:layout_centerInParent="true"
-            android:elevation="10dp"
-            android:padding="10dp"
-            android:visibility="gone" />
-
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/crypto_toolbar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="#ADD8E6"
             android:minHeight="?attr/actionBarSize"
-            app:titleTextColor="@color/white">
-
-            <TextView
-                android:id="@+id/trackerTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/manrope_bold"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-        </androidx.appcompat.widget.Toolbar>
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/menu"></androidx.appcompat.widget.Toolbar>
 
         <EditText
             android:id="@+id/idEdtSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/crypto_toolbar"
+            android:layout_marginTop="37dp"
+            android:layout_marginBottom="37dp"
             android:background="#43FFFFFF"
             android:drawableStart="@drawable/search"
             android:drawablePadding="10dp"
@@ -80,16 +56,43 @@
             android:text=""
             android:textColor="@color/white"
             android:textColorHint="#808080"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/idRVCurrencies"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVCurrencies"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/idEdtSearch"/>
+            android:layout_width="411dp"
+            android:layout_height="454dp"
+            android:background="#ADD8E6"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/idEdtSearch" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="36dp"
+            android:fontFamily="@font/manrope_bold"
+            android:text="Crypto Tracker"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/idEdtSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
