@@ -3,9 +3,13 @@ package sg.edu.np.mad.pennywise2;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,13 +19,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -29,11 +36,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +82,8 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     NavigationView navigationView;
     Toolbar toolbar;
     int NUM_PAGES = 3;
+    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +113,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
         add = findViewById(R.id.imageButton4);
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        progressList=  new ArrayList<IndivisualGoalI>();
-        viewPager.setAdapter(new ProgressPagerAdapter(this,progressList));
+        progressList = new ArrayList<IndivisualGoalI>();
 
         createCarouselButtons();
 
@@ -117,61 +133,137 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(Goal_Progress_Individual.this);
-                View dialogView = inflater.inflate(R.layout.dialog_progress_create, null);
+                LinearLayout layout = new LinearLayout(Goal_Progress_Individual.this);
+                layout.setOrientation(LinearLayout.VERTICAL);
 
-                TextInputEditText name = dialogView.findViewById(R.id.CreateProgressName);
-                TextInputEditText amount = dialogView.findViewById(R.id.CreateProgressAmount);
+                getLayoutInflater().inflate(R.layout.dialog_progress_create, layout, true);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                alertDialogBuilder.setView(dialogView);
-                alertDialogBuilder.setTitle("New Saving");
+                TextInputEditText name = layout.findViewById(R.id.CreateProgressName);
+                TextInputEditText amount = layout.findViewById(R.id.CreateProgressAmount);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Goal_Progress_Individual.this);
+                alertDialogBuilder.setView(layout);
+                alertDialogBuilder.setTitle("Create Progress");
 
                 alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (!value.isEmpty()){
+
+                        if (!value.isEmpty()) {
                             String inputname = String.valueOf(name.getText()).trim();
                             String inputamount = amount.getText().toString().trim();
-                            if (inputamount.isEmpty() && inputname.isEmpty()){
+                            if (!inputamount.isEmpty() && !inputname.isEmpty()) {
                                 double finalamount = Double.parseDouble(inputamount);
-                                HashMap<String,Object> data = new HashMap<>();
-                                data.put("name",inputname);
-                                data.put("amount",finalamount);
+                                HashMap<String, Object> data = new HashMap<>();
+                                data.put("name", inputname);
+                                data.put("amount", finalamount);
                                 Date date = new Date();
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-                                data.put("date",sdf.format(date));
+                                data.put("date", sdf.format(date));
                                 db.collection("users").document(auth.getUid()).collection("goals").document(value).collection("savings").document().set(data);
-                                Toast.makeText(getApplicationContext(),"New progress added",Toast.LENGTH_SHORT).show();
-                                recreate();
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),"name/amount inputted invalid", Toast.LENGTH_SHORT).show();
+                                db.collection("users").document(auth.getUid()).collection("goals").document(value).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot shot = task.getResult();
+                                                    double current = Double.parseDouble(String.valueOf(shot.getLong("current")));
+                                                    current += finalamount;
+                                                    db.collection("users").document(auth.getUid()).collection("goals").document(value)
+                                                            .update("current", current)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        Toast.makeText(getApplicationContext(), "New progress added", Toast.LENGTH_SHORT).show();
+
+                                                                        recreate();
+                                                                    }
+                                                                }
+                                                            });
+                                                }
+                                            }
+                                        });
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "name/amount inputted invalid", Toast.LENGTH_SHORT).show();
                             }
 
                         }
-
 
                     }
                 });
                 alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int i) {
+                        dialog.cancel();
                     }
                 });
-
-                // Show the AlertDialog
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
             }
         });
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("UID")) {
+            value = intent.getStringExtra("UID");
+            db.collection("users").document(auth.getUid()).collection("goals").document(value)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                String name = document.getString("name");
+                                double amount = document.getDouble("amount");
+                                double current = document.getDouble("current");
+                                ititle.setText(name);
+                                if (current >= amount){
+                                    //animation
+                                    AnimateConfetti();
+
+
+                                    Intent intent = new Intent();
+                                    intent.setAction(Intent.ACTION_SEND);
+                                    intent.putExtra(Intent.EXTRA_TEXT, "I have completed my Goal!");
+                                    intent.setType("text/plain");
+
+                                    if (intent.resolveActivity(getPackageManager()) != null){
+                                        startActivity(intent);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+            getData();
+
+        }
+        viewPager.setAdapter(new ProgressPagerAdapter(this, value));
 
     }
-    private void getData(){
+
+    private void getData() {
         progressList.clear();
-        progressList.add(new IndivisualGoalI("test",8.299,"2/3/4","1234567"));
-        adapter = new Goal_Indivisual_Adapter(progressList,Goal_Progress_Individual.this);
-        recyclerViewi.setAdapter(adapter);
+        db.collection("users").document(auth.getUid()).collection("goals").document(value).collection("savings")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String name = document.getString("name");
+                                String date = document.getString("date");
+                                String uid = document.getId();
+                                double amount = document.getDouble("amount");
+                                progressList.add(new IndivisualGoalI(name, amount, date, uid));
+                            }
+                            adapter = new Goal_Indivisual_Adapter(progressList, Goal_Progress_Individual.this);
+                            recyclerViewi.setAdapter(adapter);
+                        }
+                    }
+                });
+
+
     }
 
     private void createCarouselButtons() {
@@ -212,13 +304,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     @Override
     public void onResume() {
         super.onResume();
-        navigationView.setCheckedItem(R.id.nav_goal);
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("UID")) {
-            value = intent.getStringExtra("UID");
-            ititle.setText(value);
-            getData();
-        }
+
 
 
     }
@@ -265,76 +351,118 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.nav_add_transactions){
+        if (item.getItemId() == R.id.nav_add_transactions) {
             Intent intent = new Intent(Goal_Progress_Individual.this, AddTransaction.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_view_transactions){
+        } else if (item.getItemId() == R.id.nav_view_transactions) {
             Intent intent = new Intent(Goal_Progress_Individual.this, ViewAllTransactions.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_card){
+        } else if (item.getItemId() == R.id.nav_card) {
             Intent intent = new Intent(Goal_Progress_Individual.this, ViewCard.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_profile){
+        } else if (item.getItemId() == R.id.nav_profile) {
             Intent intent = new Intent(Goal_Progress_Individual.this, Profile.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_about){
+        } else if (item.getItemId() == R.id.nav_about) {
             Intent intent = new Intent(Goal_Progress_Individual.this, AboutUs.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_currency) {
+        } else if (item.getItemId() == R.id.nav_currency) {
 
             Intent intent = new Intent(Goal_Progress_Individual.this, Currency.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_set_limit) {
+        } else if (item.getItemId() == R.id.nav_set_limit) {
 
             Intent intent = new Intent(Goal_Progress_Individual.this, SetLimit.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_home){
+        } else if (item.getItemId() == R.id.nav_home) {
             Intent intent = new Intent(Goal_Progress_Individual.this, MainActivity.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_transfer){
+        } else if (item.getItemId() == R.id.nav_transfer) {
             Intent intent = new Intent(Goal_Progress_Individual.this, Transfer.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(Goal_Progress_Individual.this, Goal_Progress.class);
+        } else if (item.getItemId() == R.id.nav_goal) {
+            Intent intent = new Intent(Goal_Progress_Individual.this, Goal_Progress_Individual.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_map){
+        } else if (item.getItemId() == R.id.nav_map) {
             Intent intent = new Intent(Goal_Progress_Individual.this, Maps.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_stats){
+        } else if (item.getItemId() == R.id.nav_stats) {
             Intent intent = new Intent(Goal_Progress_Individual.this, Stats.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_cryptoTracker){
+        } else if (item.getItemId() == R.id.nav_cryptoTracker) {
             Intent intent = new Intent(Goal_Progress_Individual.this, CryptoTracker.class);
             startActivity(intent);
-        }
-
-        else if (item.getItemId() == R.id.nav_map){
+        } else if (item.getItemId() == R.id.nav_map) {
             Intent intent = new Intent(Goal_Progress_Individual.this, Maps.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.nav_logout){
+        } else if (item.getItemId() == R.id.nav_logout) {
             SharedPreferences sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(Goal_Progress_Individual.this,Login.class);
+            Intent intent = new Intent(Goal_Progress_Individual.this, Login.class);
             startActivity(intent);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+    private void takeScreenshotAndShare() {
+        View rootView = getWindow().getDecorView().getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        Bitmap screenshot = Bitmap.createBitmap(rootView.getDrawingCache());
+        rootView.setDrawingCacheEnabled(false);
 
+        try {
+            // Save the screenshot to a file
+            File screenshotFile = saveScreenshotToFile(screenshot);
 
+            // Create a content URI for the image file
+            Uri screenshotUri = Uri.fromFile(screenshotFile);
+
+            // Prepare the sharing intent
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/*");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "I have completed my goal!");
+
+            // Show the chooser to share to social media
+            startActivity(Intent.createChooser(shareIntent, "Share via"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private File saveScreenshotToFile(Bitmap screenshot) throws IOException {
+        File directory = new File(Environment.getExternalStorageDirectory(), "Screenshots");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        File screenshotFile = new File(directory, "screenshot.png");
+        FileOutputStream outputStream = new FileOutputStream(screenshotFile);
+        screenshot.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
+        outputStream.flush();
+        outputStream.close();
+
+        // Add the screenshot to the gallery
+        MediaStore.Images.Media.insertImage(getContentResolver(), screenshotFile.getAbsolutePath(), "Screenshot", "Screenshot taken by app");
+
+        return screenshotFile;
+    }
+
+    @RequiresApi(api = 23)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, continue with the sharing action
+                takeScreenshotAndShare();
+            } else {
+                // Permission denied, handle this case (e.g., show a message or explain why the permission is needed)
+            }
+        }
+    }
 }
+
+

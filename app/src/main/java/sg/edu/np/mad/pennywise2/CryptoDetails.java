@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,31 +42,57 @@ public class CryptoDetails extends AppCompatActivity {
     private void generateLineGraph(LineChart lineChart, CryptoModel cryptoObject) {
         // Create a list of entries for the LineChart
         List<Entry> entries = new ArrayList<>();
+        double pecentage1h = cryptoObject.getPercentChange1h();
+        double pecentage24h = cryptoObject.getPercentChange24h();
+        double pecentage7d = cryptoObject.getPercentChange7d();
+        double pecentage30d = cryptoObject.getPercentChange30d();
+        double pecentage60d = cryptoObject.getPercentChange60d();
+        double pecentage90d = cryptoObject.getPercentChange90d();
+        pecentage1h = Math.abs(pecentage1h);
+        pecentage24h = Math.abs(pecentage24h);
+        pecentage7d = Math.abs(pecentage7d);
+        pecentage30d = Math.abs(pecentage30d);
+        pecentage60d = Math.abs(pecentage60d);
+        pecentage90d = Math.abs(pecentage90d);
+        Log.v("Test",String.valueOf(pecentage1h));
+
 
         // Add data points for percent change over different time intervals
-        entries.add(new Entry(6, (float) cryptoObject.getPercentChange1h()));
-        entries.add(new Entry(5, (float) cryptoObject.getPercentChange24h()));
-        entries.add(new Entry(4, (float) cryptoObject.getPercentChange7d()));
-        entries.add(new Entry(3, (float) cryptoObject.getPercentChange30d()));
-        entries.add(new Entry(2, (float) cryptoObject.getPercentChange60d()));
-        entries.add(new Entry(1, (float) cryptoObject.getPercentChange90d()));
+        entries.add(new Entry(1, (float) cryptoObject.getPrice()*(100- (float) pecentage1h)));
+        entries.add(new Entry(2, (float) cryptoObject.getPrice()*(100- (float) pecentage24h)));
+        entries.add(new Entry(3, (float) cryptoObject.getPrice()*(100- (float) pecentage7d)));
+        entries.add(new Entry(4, (float) cryptoObject.getPrice()*(100- (float) pecentage30d)));
+        entries.add(new Entry(5, (float) cryptoObject.getPrice()*(100- (float) pecentage60d)));
+        entries.add(new Entry(6, (float) cryptoObject.getPrice()*(100- (float) pecentage90d)));
 
-        LineDataSet dataSet = new LineDataSet(entries, cryptoObject.getName());
-        dataSet.setColor(Color.BLUE);
+
+        for (Entry entry : entries) {
+            Log.v("Entry Values", "x: " + entry.getX() + ", y: " + entry.getY());
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "Label for the dataset");
+        dataSet.setColor(R.color.greenish);
+        dataSet.setCircleColor(R.color.reddish);
         dataSet.setLineWidth(2f);
-        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setCircleRadius(5f);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextColor(R.color.red);
 
-        List<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(dataSet);
-
-        // Create a LineData object from the datasets
-        LineData lineData = new LineData(dataSets);
-
-        // Set the LineData to the LineChart
+        LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
 
-        // Customize the LineChart as needed
-        // For example, set labels, legend, etc.
-        // ...
+        // Customize the X-axis and Y-axis if needed
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        YAxis yAxisLeft = lineChart.getAxisLeft();
+        YAxis yAxisRight = lineChart.getAxisRight();
+        yAxisLeft.setAxisMinimum((float)cryptoObject.getPrice());
+        yAxisRight.setAxisMinimum((float)cryptoObject.getPrice());
+
+        // Refresh the chart
+        lineChart.invalidate();
     }
+
 }
