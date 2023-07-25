@@ -259,7 +259,12 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 //                });
 //    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set the selected item every time the activity is brought to the foreground
+        navigationView.setCheckedItem(R.id.nav_set_limit);
+    }
 
     @Override
     public void onBackPressed() {
