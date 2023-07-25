@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise2;
 
 public class IndivisualGoalI {
     private String name;

@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise2;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,9 +7,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 
-import sg.edu.np.mad.pennywise.fragments.CardViewFragment;
-import sg.edu.np.mad.pennywise.fragments.LineChartFragment;
-import sg.edu.np.mad.pennywise.fragments.ProgressBarFragment;
+import sg.edu.np.mad.pennywise2.fragments.CardViewFragment;
+import sg.edu.np.mad.pennywise2.fragments.LineChartFragment;
+import sg.edu.np.mad.pennywise2.fragments.ProgressBarFragment;
 
 public class ProgressPagerAdapter extends FragmentStateAdapter {
     private ArrayList<IndivisualGoalI> progressList;

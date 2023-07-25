@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import sg.edu.np.mad.pennywise.models.CryptoModel;
+import sg.edu.np.mad.pennywise2.models.CryptoModel;
 
 public class CryptoDetails extends AppCompatActivity {
 

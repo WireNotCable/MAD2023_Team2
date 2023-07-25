@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise;
+package sg.edu.np.mad.pennywise2;
 
 import android.content.Intent;
 import android.view.View;
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import sg.edu.np.mad.pennywise.models.CryptoModel;
+import sg.edu.np.mad.pennywise2.models.CryptoModel;
 
 public class CryptoViewholder extends RecyclerView.ViewHolder {
 
