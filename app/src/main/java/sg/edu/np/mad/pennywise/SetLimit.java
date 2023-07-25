@@ -215,11 +215,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 
                         GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
 
-                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(MY_STARTDATE, limit.getStartdate());
-                        editor.putString(MY_ENDDATE, limit.getEnddate());
-                        editor.apply();
+//                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = prefs.edit();
+//                        editor.putString(MY_STARTDATE, limit.getStartdate());
+//                        editor.putString(MY_ENDDATE, limit.getEnddate());
+//                        editor.apply();
                     }
                 }
             }
