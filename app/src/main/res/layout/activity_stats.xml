@@ -49,39 +49,68 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/background4"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <!-- Title for PieChart -->
+                <TextView
+                    android:id="@+id/textViewPieChartTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="Category"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Title for BarChart -->
+
                 <com.github.mikephil.charting.charts.PieChart
-                            android:id="@+id/category_piechart"
-                            android:layout_width="350dp"
-                            android:layout_height="276dp"
-                            android:layout_marginStart="22dp"
-                            android:layout_marginTop="66dp"
-                            android:layout_marginEnd="22dp"
-                            app:layout_constraintHorizontal_bias="0.47"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    android:id="@+id/category_piechart"
+                    android:layout_width="335dp"
+                    android:layout_height="275dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="22dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.718"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewPieChartTitle" />
 
-                        <com.github.mikephil.charting.charts.BarChart
-                            android:id="@+id/monthly_bar"
-                            android:layout_width="350dp"
-                            android:layout_height="276dp"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginTop="88dp"
-                            android:layout_marginEnd="30dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.937"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/category_piechart" />
+                <TextView
+                    android:id="@+id/textViewBarChartTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Monthly Spending"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/manrope_bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/category_piechart" />
 
-
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/monthly_bar"
+                    android:layout_width="350dp"
+                    android:layout_height="276dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.937"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewBarChartTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
         </androidx.core.widget.NestedScrollView>
 

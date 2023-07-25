@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,7 +135,31 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
                         JSONObject quote = dataObj.getJSONObject("quote");
                         JSONObject USD = quote.getJSONObject("USD");
                         double price = USD.getDouble("price");
-                        modelCryptos.add(new CryptoModel(name, symbol, price));
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        String formattedPrice = df.format(price);
+                        double percentChange1h = USD.getDouble("percent_change_1h");
+                        DecimalFormat df2 = new DecimalFormat("#.##");
+                        String formattedpercentChange1h = df2.format(percentChange1h);
+                        double percentChange24h = USD.getDouble("percent_change_24h");
+                        DecimalFormat df3 = new DecimalFormat("#.##");
+                        String formattedpercentChange24h = df3.format(percentChange24h);
+
+                        double percentChange7d = USD.getDouble("percent_change_7d");
+                        DecimalFormat df4 = new DecimalFormat("#.##");
+                        String formattedpercentChange7d = df4.format(percentChange7d);
+
+                        double percentChange30d = USD.getDouble("percent_change_30d");
+                        DecimalFormat df5 = new DecimalFormat("#.##");
+                        String formattedpercentChange30d = df5.format(percentChange30d);
+
+                        double percentChange60d = USD.getDouble("percent_change_60d");
+                        DecimalFormat df6 = new DecimalFormat("#.##");
+                        String formattedpercentChange60d = df6.format(percentChange60d);
+
+                        double percentChange90d = USD.getDouble("percent_change_90d");
+                        DecimalFormat df7 = new DecimalFormat("#.##");
+                        String formattedpercentChange90d = df7.format(percentChange90d);
+                        modelCryptos.add(new CryptoModel(name, symbol, Double.valueOf(formattedPrice), Double.valueOf(formattedpercentChange1h), Double.valueOf(formattedpercentChange24h), Double.valueOf(formattedpercentChange7d), Double.valueOf(formattedpercentChange30d), Double.valueOf(formattedpercentChange60d), Double.valueOf(formattedpercentChange90d)));
                     }
                     adapterCrypto.notifyDataSetChanged();
                 } catch (JSONException e) {
@@ -222,7 +247,7 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(CryptoTracker.this, Goal_Progress_Individual.class);
+            Intent intent = new Intent(CryptoTracker.this, Goal_Progress.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
