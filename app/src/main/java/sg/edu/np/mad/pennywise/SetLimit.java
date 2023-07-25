@@ -4,16 +4,21 @@ package sg.edu.np.mad.pennywise;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -86,15 +91,11 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
         String uid = sharedPreferences.getString(MY_UID,"");
 
         GetData();
+//        Message();
 
 
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Set the selected item every time the activity is brought to the foreground
-        navigationView.setCheckedItem(R.id.nav_set_limit);
-    }
+
 
 
     @Override
@@ -214,17 +215,56 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 
                         GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
 
-                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(MY_STARTDATE, limit.getStartdate());
-                        editor.putString(MY_ENDDATE, limit.getEnddate());
-                        editor.apply();
+//                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = prefs.edit();
+//                        editor.putString(MY_STARTDATE, limit.getStartdate());
+//                        editor.putString(MY_ENDDATE, limit.getEnddate());
+//                        editor.apply();
                     }
                 }
             }
         });
     }
 
+    // Declare the launcher at the top of your Activity/Fragment:
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
+
+
+    // Declare the launcher at the top of your Activity/Fragment:
+//    private void Message(){
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            System.out.println("Fetching FCM registration token failed");
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        String token = task.getResult();
+//
+//                        // Log and toast
+//
+//                        Log.v("TOKEN",token);
+//                        Toast.makeText(SetLimit.this, "This is your token" + token, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set the selected item every time the activity is brought to the foreground
+        navigationView.setCheckedItem(R.id.nav_set_limit);
+    }
 
     @Override
     public void onBackPressed() {
@@ -271,7 +311,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(SetLimit.this, Goal_Progress_Individual.class);
+            Intent intent = new Intent(SetLimit.this, Goal_Progress.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
@@ -287,10 +327,6 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
 
-        else if (item.getItemId() == R.id.nav_map){
-            Intent intent = new Intent(SetLimit.this, Maps.class);
-            startActivity(intent);
-        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

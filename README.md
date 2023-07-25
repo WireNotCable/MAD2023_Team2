@@ -71,13 +71,14 @@ Tasks/features of each student:
     * Recurring transaction record
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
+    * Splash Screen
     * Multiple cards feature (still undecided)
 
 * Koh Wen Bin - S10242132
     * View Income/Expense Statistics
+    * Smart notifications remind user to use the app
 * Koay Yeow Teik - S10242544
     * Improve the account sign up interface/make sure user email is legit by sending an actual email
-    * Smart notifications?
     * financial goal tracking with milestones to track ( may require a savings feature )
     * Rewards programme
     * Text recognition 

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
-
+        Message();
         profilepic();
         getCardNum();
         threeMiddleButtons();
