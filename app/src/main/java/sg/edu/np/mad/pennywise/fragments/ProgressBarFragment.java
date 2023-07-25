@@ -1,23 +1,25 @@
 package sg.edu.np.mad.pennywise.fragments;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import sg.edu.np.mad.pennywise.R;
 
@@ -25,12 +27,17 @@ import sg.edu.np.mad.pennywise.R;
 public class ProgressBarFragment extends Fragment {
     ProgressBar progressBar;
     TextView progressValue;
+    FirebaseAuth auth;
+    FirebaseFirestore db;
     int desiredProgress = 60;
+    String uid;
     /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }*/
-
+    public ProgressBarFragment(String uid){
+        this.uid = uid;
+    }
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,8 +46,10 @@ public class ProgressBarFragment extends Fragment {
 
         progressBar = rootView.findViewById(R.id.progressBar);
         progressValue = rootView.findViewById(R.id.progressValue);
-
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         progressBar.setProgress(0);
+
 
 
 
@@ -50,7 +59,23 @@ public class ProgressBarFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        startAnimation();
+        db.collection("users").document(auth.getUid()).collection("goals").document(uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()){
+                                double amount = document.getDouble("amount");
+                                double current = document.getDouble("current");
+                                desiredProgress = (int)(current/amount*100);
+                                startAnimation();
+
+                            }
+                        }
+                    }
+                });
     }
 
     private void startAnimation() {

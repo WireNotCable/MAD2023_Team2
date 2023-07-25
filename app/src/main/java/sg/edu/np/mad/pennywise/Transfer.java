@@ -1,5 +1,6 @@
 package sg.edu.np.mad.pennywise;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,13 +18,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -52,7 +53,7 @@ import java.util.Map;
 import sg.edu.np.mad.pennywise.models.User;
 
 public class Transfer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    Button test,confirm;
+    Button confirm;
     TextView name,changelimit,limitamount,remaininggamount,mobile;
     LinearLayout amountLayout,limitLayout,commentLayout;
     EditText comment,amount,title;
@@ -62,6 +63,8 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
     SharedPreferences sharedPreferences;
     public String GLOBAL_PREFS = "myPrefs";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+    private static final int REQUEST_CODE_CONTACTS_PERMISSION = 1001;
+
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -90,7 +93,6 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
 //        title = findViewById(R.id.editTextText3);
 //        title.setFocusable(false);
 //        title.setFocusableInTouchMode(false);
-        test = findViewById(R.id.GoalTracking);
 
         //FOR NAV BAR
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -111,14 +113,10 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         mobile.setText("Mobile");
         amount.setText("0.00");
         comment.setText("Amount Transfer");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_CONTACTS_PERMISSION);
+        }
 
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Transfer.this, Goal_Progress.class);
-                startActivity(intent);
-            }
-        });
     }
 
 
@@ -376,7 +374,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, "PUT LINK HERE");
+                intent.putExtra(Intent.EXTRA_TEXT, "Download Pennywise! https://www.youtube.com/watch?v=TMw9UNXVDG0");
                 intent.setType("text/plain");
 
                 if (intent.resolveActivity(getPackageManager()) != null){
