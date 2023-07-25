@@ -1,12 +1,18 @@
 package sg.edu.np.mad.pennywise;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.DecimalFormat;
@@ -14,9 +20,12 @@ import java.util.ArrayList;
 
 import sg.edu.np.mad.pennywise.models.CryptoModel;
 
-public class CryptoAdaptor extends RecyclerView.Adapter<CryptoAdaptor.ViewHolder> {
+public class CryptoAdaptor extends RecyclerView.Adapter<CryptoViewholder> {
 
     private ArrayList<CryptoModel> CryptoModels;
+    public CryptoAdaptor(ArrayList<CryptoModel> CryptoModels){
+        this.CryptoModels = CryptoModels;
+    }
     private Context context;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
 
@@ -30,19 +39,18 @@ public class CryptoAdaptor extends RecyclerView.Adapter<CryptoAdaptor.ViewHolder
         notifyDataSetChanged();
     }
 
-    @NonNull
-    @Override
-    public CryptoAdaptor.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+    public CryptoViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.crypto_recycler, parent, false);
-        return new ViewHolder(view); // Pass the inflated view to ViewHolder constructor
+        return new CryptoViewholder(view, CryptoModels);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull CryptoAdaptor.ViewHolder holder, int position) {
+    public void onBindViewHolder(CryptoViewholder holder, int position) {
         CryptoModel modelCrypto = CryptoModels.get(position);
         holder.currencyName.setText(modelCrypto.getName());
         holder.symbol.setText(modelCrypto.getSymbol());
-        holder.rate.setText("$ " + df2.format(modelCrypto.getPrice()));
+        holder.rate.setText("$ " + modelCrypto.getPrice());
+
     }
 
     @Override
@@ -50,15 +58,6 @@ public class CryptoAdaptor extends RecyclerView.Adapter<CryptoAdaptor.ViewHolder
         return CryptoModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView currencyName, symbol, rate;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            currencyName = itemView.findViewById(R.id.CurrencyName);
-            symbol = itemView.findViewById(R.id.Symbol);
-            rate = itemView.findViewById(R.id.CurrencyRate);
-        }
-    }
 }
+

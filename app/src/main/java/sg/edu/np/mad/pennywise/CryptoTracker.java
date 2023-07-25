@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,7 +135,31 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
                         JSONObject quote = dataObj.getJSONObject("quote");
                         JSONObject USD = quote.getJSONObject("USD");
                         double price = USD.getDouble("price");
-                        modelCryptos.add(new CryptoModel(name, symbol, price));
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        String formattedPrice = df.format(price);
+                        double percentChange1h = USD.getDouble("percentChange1h");
+                        DecimalFormat df2 = new DecimalFormat("#.##");
+                        String formattedpercentChange1h = df2.format(percentChange1h);
+                        double percentChange24h = USD.getDouble("percentChange24h");
+                        DecimalFormat df3 = new DecimalFormat("#.##");
+                        String formattedpercentChange24h = df3.format(percentChange24h);
+
+                        double percentChange7d = USD.getDouble("percentChange7d");
+                        DecimalFormat df4 = new DecimalFormat("#.##");
+                        String formattedpercentChange7d = df4.format(percentChange7d);
+
+                        double percentChange30d = USD.getDouble("percentChange30d");
+                        DecimalFormat df5 = new DecimalFormat("#.##");
+                        String formattedpercentChange30d = df5.format(percentChange30d);
+
+                        double percentChange60d = USD.getDouble("percentChange60d");
+                        DecimalFormat df6 = new DecimalFormat("#.##");
+                        String formattedpercentChange60d = df6.format(percentChange60d);
+
+                        double percentChange90d = USD.getDouble("percentChange90d");
+                        DecimalFormat df7 = new DecimalFormat("#.##");
+                        String formattedpercentChange90d = df7.format(percentChange90d);
+                        modelCryptos.add(new CryptoModel(name, symbol, Double.valueOf(formattedPrice), Double.valueOf(formattedpercentChange1h), Double.valueOf(formattedpercentChange24h), Double.valueOf(formattedpercentChange7d), Double.valueOf(formattedpercentChange30d), Double.valueOf(formattedpercentChange60d), Double.valueOf(formattedpercentChange90d)));
                     }
                     adapterCrypto.notifyDataSetChanged();
                 } catch (JSONException e) {
