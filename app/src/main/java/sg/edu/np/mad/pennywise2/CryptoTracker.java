@@ -258,6 +258,10 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
             Intent intent = new Intent(CryptoTracker.this, AboutUs.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.nav_home){
+            Intent intent = new Intent(CryptoTracker.this, MainActivity.class);
+            startActivity(intent);
+        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
