@@ -74,14 +74,14 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
-        Toolbar toolbar = findViewById(R.id.crypto_toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.crypto_toolbar);
+//        setSupportActionBar(toolbar);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         searchEdt = findViewById(R.id.idEdtSearch);
         currenciesRV = findViewById(R.id.idRVCurrencies);
-        progressBar = findViewById(R.id.progressBar);
+//        progressBar = findViewById(R.id.progressBar);
         modelCryptos = new ArrayList<>();
         adapterCrypto = new CryptoAdaptor(modelCryptos,this);
         currenciesRV.setLayoutManager(new LinearLayoutManager(this));
@@ -119,13 +119,13 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
     }
 
     private void getCurrencyData() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         String url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                progressBar.setVisibility(View.GONE);
+//                progressBar.setVisibility(View.GONE);
                 try {
                     JSONArray dataArray = response.getJSONArray("data");
                     for (int i=0; i<dataArray.length(); i++) {
@@ -256,6 +256,10 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         }
         else if (item.getItemId() == R.id.nav_about){
             Intent intent = new Intent(CryptoTracker.this, AboutUs.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.nav_home){
+            Intent intent = new Intent(CryptoTracker.this, MainActivity.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_logout){
