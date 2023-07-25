@@ -95,12 +95,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 
 
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Set the selected item every time the activity is brought to the foreground
-        navigationView.setCheckedItem(R.id.nav_set_limit);
-    }
+
 
 
     @Override
@@ -311,7 +306,7 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(SetLimit.this, Goal_Progress_Individual.class);
+            Intent intent = new Intent(SetLimit.this, Goal_Progress.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
@@ -327,10 +322,6 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             startActivity(intent);
         }
 
-        else if (item.getItemId() == R.id.nav_map){
-            Intent intent = new Intent(SetLimit.this, Maps.class);
-            startActivity(intent);
-        }
         else if (item.getItemId() == R.id.nav_logout){
             sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();

@@ -212,6 +212,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     @Override
     public void onResume() {
         super.onResume();
+        navigationView.setCheckedItem(R.id.nav_goal);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("UID")) {
             value = intent.getStringExtra("UID");
@@ -303,7 +304,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_goal){
-            Intent intent = new Intent(Goal_Progress_Individual.this, Goal_Progress_Individual.class);
+            Intent intent = new Intent(Goal_Progress_Individual.this, Goal_Progress.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.nav_map){
