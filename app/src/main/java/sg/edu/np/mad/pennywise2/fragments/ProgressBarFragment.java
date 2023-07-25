@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise.fragments;
+package sg.edu.np.mad.pennywise2.fragments;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import sg.edu.np.mad.pennywise.R;
+import sg.edu.np.mad.pennywise2.R;
 
 
 public class ProgressBarFragment extends Fragment {

@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise.fragments;
+package sg.edu.np.mad.pennywise2.fragments;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,8 +33,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import sg.edu.np.mad.pennywise.IndivisualGoalI;
-import sg.edu.np.mad.pennywise.R;
+import sg.edu.np.mad.pennywise2.IndivisualGoalI;
+import sg.edu.np.mad.pennywise2.R;
 
 
 public class LineChartFragment extends Fragment {
