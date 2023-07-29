@@ -197,8 +197,10 @@
                         android:gravity="center"
                         android:paddingTop="7dp"
                         android:paddingBottom="7dp"
+                        android:backgroundTint="#4465DA"
                         android:text="Convert"
-                        android:textColor="#000000"/>
+                        app:cornerRadius="20dp"
+                        android:textColor="#FFFFFF"/>
 
                 </RelativeLayout>
 

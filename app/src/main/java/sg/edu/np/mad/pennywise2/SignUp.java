@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
@@ -86,13 +88,17 @@ public class SignUp extends AppCompatActivity {
                 if (user.isEmpty()){
                     signupEmail.setError("Email cannot be empty");
                 }
+                Boolean validEmail = isValidEmail(user);
+                if (validEmail != true){
+                    signupEmail.setError("Invalid email");
+                    return;
+                }
                 if (password.isEmpty()){
                     signupPassword.setError("Password cannot be empty");
                 }
                 if (phoneNum.isEmpty()){
                     signupPhoneNum.setError("Contact number cannot be empty");
                 }
-
                 if (name.isEmpty()){
                     signupName.setError("Name cannot be empty");
                 }
@@ -146,4 +152,19 @@ public class SignUp extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    private boolean isValidEmail(String email) {
+        // Email regex pattern
+        String emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(emailPattern);
+
+        // Match the input email with the pattern
+        Matcher matcher = pattern.matcher(email);
+
+        // Return true if the email matches the pattern, otherwise false
+        return matcher.matches();
+    }
+
 }

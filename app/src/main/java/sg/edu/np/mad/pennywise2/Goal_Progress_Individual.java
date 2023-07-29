@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,7 +71,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     EditText ititle;
     RecyclerView recyclerViewi;
     ImageView back;
-    ImageButton add;
+    Button add;
     String value;
     FirebaseAuth auth;
     FirebaseFirestore db;

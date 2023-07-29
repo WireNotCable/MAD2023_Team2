@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import java.util.HashMap;
 
 public class Goal_Progress extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     RecyclerView recyclerView;
-    ImageView createprogress;
+    Button createprogress;
     FirebaseFirestore db;
     FirebaseAuth auth;
     ArrayList<Goal> goalList;

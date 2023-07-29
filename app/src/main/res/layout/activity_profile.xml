@@ -63,7 +63,7 @@
             android:background="@drawable/edit"
             android:gravity="center"
             android:padding="10dp"
-            android:textColor="#4465DA"
+            android:backgroundTint="#4465DA"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
