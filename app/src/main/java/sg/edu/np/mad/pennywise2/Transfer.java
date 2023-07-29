@@ -77,6 +77,11 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
 
         setContentView(R.layout.activity_transfer);
 
+        // Remove title in homepage
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         sharedPreferences = getSharedPreferences(GLOBAL_PREFS,MODE_PRIVATE);
 
         confirm  = findViewById(R.id.confirm);

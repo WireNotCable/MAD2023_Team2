@@ -33,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import sg.edu.np.mad.pennywise2.IndivisualGoalI;
+import sg.edu.np.mad.pennywise2.models.IndivisualGoalI;
 import sg.edu.np.mad.pennywise2.R;
 
 

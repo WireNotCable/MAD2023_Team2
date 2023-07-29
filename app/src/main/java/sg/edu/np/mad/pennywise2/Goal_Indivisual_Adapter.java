@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import sg.edu.np.mad.pennywise2.models.IndivisualGoalI;
+
 public class Goal_Indivisual_Adapter extends RecyclerView.Adapter<Goal_Indivisual_Adapter.ProgressViewHolder> {
     private ArrayList<IndivisualGoalI> progressList;
     private Context context;

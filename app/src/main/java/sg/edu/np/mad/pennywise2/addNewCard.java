@@ -45,6 +45,7 @@ public class addNewCard extends AppCompatActivity {
         String csvnum = String.valueOf(random.nextInt(900) + 100);
         CSVNumber.setText(csvnum);//random.nextInt(100));//999-100 + 1)+100
         ExpiryDate.setText(LocalDate.now().plusYears(5).format(DateTimeFormatter.ofPattern("MM/yy")));
+
         /*myValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
         myValidation.addValidation(this,R.id.bankCardNum, "^(\\d{4}[- ]){3}\\d{4}|\\d{16}$",R.string.invalid_banknumber);

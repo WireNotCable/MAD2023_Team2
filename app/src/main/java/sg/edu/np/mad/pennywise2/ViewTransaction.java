@@ -28,6 +28,11 @@ public class ViewTransaction extends AppCompatActivity {
         setContentView(R.layout.activity_view_transaction);
         getData();
 
+        // Remove title in homepage
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         TextView canceltv = findViewById(R.id.closeIndiv);
 
         Intent receivingEnd = getIntent();

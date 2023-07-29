@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Shared preference
     public String GLOBAL_PREFS = "myPrefs";
-    public String MY_EMAIL = "MyEmail";
 
     public String MY_EXPENSE= "myExpense";
 

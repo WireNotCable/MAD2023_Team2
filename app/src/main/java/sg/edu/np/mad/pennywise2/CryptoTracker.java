@@ -60,11 +60,17 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crypto_tracker);
+
         //NAV BAR
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         nav_toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(nav_toolbar);
+
+        // Remove title in homepage
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         navigationView.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, nav_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

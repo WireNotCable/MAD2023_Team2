@@ -31,6 +31,7 @@ public class CryptoDetails extends AppCompatActivity {
         TextView Name= findViewById(R.id.Namific);
         TextView Price= findViewById(R.id.Pricific);
         LineChart linechart = findViewById(R.id.lineChart);
+
         Intent ReceiveID= getIntent();
         CryptoModel cryptoObject =(CryptoModel) ReceiveID.getSerializableExtra("CryptoObject");
         Symbols.setText(cryptoObject.getSymbol());
