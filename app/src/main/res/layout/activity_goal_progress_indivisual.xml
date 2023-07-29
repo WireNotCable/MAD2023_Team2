@@ -28,7 +28,6 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_gradient"
         android:orientation="vertical"
         tools:ignore="NamespaceTypo">
 
@@ -54,7 +53,6 @@
                     android:layout_height="40dp"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme"
-                    android:background="@drawable/background_gradient"
                     app:navigationIcon="@drawable/menu"
                     ></androidx.appcompat.widget.Toolbar>
 
@@ -109,12 +107,17 @@
                 android:layout_marginRight="10dp"
                 tools:listitem="@layout/recyclerview_individual_progress_history" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/imageButton4"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
+                android:textSize="18sp"
+                android:backgroundTint="#4465DA"
+                android:text="Add Progress"
+                app:cornerRadius="20dp"
                 app:srcCompat="@drawable/add" />
+
         </LinearLayout>
 
 

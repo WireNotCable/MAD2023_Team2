@@ -8,7 +8,6 @@
     tools:context=".MainActivity"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    android:background="@drawable/background_1"
     >
 
     <com.google.android.material.navigation.NavigationView
@@ -20,14 +19,12 @@
         android:layout_gravity="start"
         />
 
-
-
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingHorizontal="20dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -70,17 +67,19 @@
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
-        <ImageView
+        <Button
             android:id="@+id/MainProgressCreate"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:background="#45BD66"
+            android:textSize="18sp"
+            android:backgroundTint="#4465DA"
+            android:text="Add Progress"
+            app:cornerRadius="20dp"
             app:srcCompat="@drawable/add" />
-
     </RelativeLayout>
 
 

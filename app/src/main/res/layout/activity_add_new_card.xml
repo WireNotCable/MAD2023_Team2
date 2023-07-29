@@ -33,27 +33,35 @@
                 android:background="@drawable/border"
                 android:orientation="vertical"
                 android:paddingHorizontal="20dp">
-                <ImageView
-                    android:id="@+id/makecardBtn"
-                    android:layout_width="38dp"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/back" />
 
-                <TextView
-                    android:id="@+id/addCardTitle"
-                    android:layout_width="80dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="138dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="177dp"
-                    android:text="@string/addCard"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/makecardBtn"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/makecardBtn"
+                        android:layout_width="38dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/back" />
+
+                    <TextView
+                        android:id="@+id/addCardTitle"
+                        android:layout_width="139dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="58dp"
+                        android:layout_marginEnd="177dp"
+                        android:fontFamily="@font/manrope_bold"
+                        android:text="@string/addCard"
+                        android:textSize="30sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/makecardBtn" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/cardNumTitle"
