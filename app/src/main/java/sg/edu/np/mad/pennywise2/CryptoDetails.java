@@ -43,12 +43,14 @@ public class CryptoDetails extends AppCompatActivity {
     private void generateLineGraph(LineChart lineChart, CryptoModel cryptoObject) {
         // Create a list of entries for the LineChart
         List<Entry> entries = new ArrayList<>();
+        //gets the API values of the change in crypto percentage based on the different times.
         double pecentage1h = cryptoObject.getPercentChange1h();
         double pecentage24h = cryptoObject.getPercentChange24h();
         double pecentage7d = cryptoObject.getPercentChange7d();
         double pecentage30d = cryptoObject.getPercentChange30d();
         double pecentage60d = cryptoObject.getPercentChange60d();
         double pecentage90d = cryptoObject.getPercentChange90d();
+        //converts the percentage values to positive so that the graph is able to take in the values
         pecentage1h = Math.abs(pecentage1h);
         pecentage24h = Math.abs(pecentage24h);
         pecentage7d = Math.abs(pecentage7d);
