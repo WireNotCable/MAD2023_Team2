@@ -142,6 +142,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
+    // get user current location
     private void getCurrentLocation(){
         // Request permission if not granted
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED
@@ -184,6 +185,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
                 "&key=AIzaSyAVFyRUxiLvUNtdJqJRBkH5XuALEVGCC_Y";
         FetchRouteData fetchRouteData = new FetchRouteData(mMap);
         fetchRouteData.execute(url);
+
+        // Travel mode : walk
         walk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,6 +205,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
                 fetchRouteData.execute(url);
             }
         });
+        // Travel mode : drive
         drive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -264,5 +268,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
         if (location.equals("bank")){
             getBankMarker();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
