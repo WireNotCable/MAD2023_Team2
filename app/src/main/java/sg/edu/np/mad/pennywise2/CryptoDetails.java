@@ -61,12 +61,12 @@ public class CryptoDetails extends AppCompatActivity {
 
 
         // Add data points for percent change over different time intervals
-        entries.add(new Entry(1, (float) cryptoObject.getPrice()*(100- (float) pecentage1h)));
-        entries.add(new Entry(2, (float) cryptoObject.getPrice()*(100- (float) pecentage24h)));
-        entries.add(new Entry(3, (float) cryptoObject.getPrice()*(100- (float) pecentage7d)));
-        entries.add(new Entry(4, (float) cryptoObject.getPrice()*(100- (float) pecentage30d)));
-        entries.add(new Entry(5, (float) cryptoObject.getPrice()*(100- (float) pecentage60d)));
-        entries.add(new Entry(6, (float) cryptoObject.getPrice()*(100- (float) pecentage90d)));
+        entries.add(new Entry(1, (float) cryptoObject.getPrice()*(100- (float) pecentage90d)));
+        entries.add(new Entry(2, (float) cryptoObject.getPrice()*(100- (float) pecentage60d)));
+        entries.add(new Entry(3, (float) cryptoObject.getPrice()*(100- (float) pecentage30d)));
+        entries.add(new Entry(4, (float) cryptoObject.getPrice()*(100- (float) pecentage7d)));
+        entries.add(new Entry(5, (float) cryptoObject.getPrice()*(100- (float) pecentage24h)));
+        entries.add(new Entry(6, (float) cryptoObject.getPrice()*(100- (float) pecentage1h)));
 
 
         for (Entry entry : entries) {
