@@ -22,7 +22,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +39,7 @@ public class SignUp extends AppCompatActivity {
     private TextInputEditText signupEmail,signupPassword,signupPhoneNum,signupName;
     private Button signupButton;
     private TextView loginRedirectText;
+    private FirebaseFirestore db;
 
 
     //Shared preference //
@@ -42,7 +47,7 @@ public class SignUp extends AppCompatActivity {
     public String MY_EMAIL = "MyEmail";
     SharedPreferences sharedPreferences;
 
-
+    // animation for the card view of the sign up box and view declaration
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +75,13 @@ public class SignUp extends AppCompatActivity {
         signupPassword = findViewById(R.id.signup_password);
         signupPhoneNum = findViewById(R.id.signup_contact);
         signupName = findViewById(R.id.signup_name);
+        db = FirebaseFirestore.getInstance();
 
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
 
-
+        //sign up button and check data for validation
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,31 +109,41 @@ public class SignUp extends AppCompatActivity {
                     signupName.setError("Name cannot be empty");
                 }
                 else{
-                    auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                   checkphonenum(phoneNum, new OnQueryCompleteListener() {
+                       @Override
+                       public void onQueryComplete(boolean hasMatchingDocument) {
+                           if (!hasMatchingDocument){
+                               auth.createUserWithEmailAndPassword(user, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser firebaseUser = auth.getCurrentUser();
-                                sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                Map<String, Object> userData = new HashMap<>();
-                                userData.put("UID",auth.getUid());
-                                userData.put("email", user);
-                                userData.put("password", password); //just cos we wan add
-                                userData.put("phonenum", phoneNum);
-                                userData.put("name", name);
+                                   @Override
+                                   public void onComplete(@NonNull Task<AuthResult> task) {
+                                       if(task.isSuccessful()){
+                                           FirebaseUser firebaseUser = auth.getCurrentUser();
+                                           sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                                           FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                           Map<String, Object> userData = new HashMap<>();
+                                           userData.put("UID",auth.getUid());
+                                           userData.put("email", user);
+                                           userData.put("password", password); //just cos we wan add
+                                           userData.put("phonenum", phoneNum);
+                                           userData.put("name", name);
 
-                                db.collection("users").document(firebaseUser.getUid()).set(userData);
+                                           db.collection("users").document(firebaseUser.getUid()).set(userData);
 
-                                Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUp.this, Login.class));
-                            }
-                            else{
-                                Toast.makeText(SignUp.this, "Sign Up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                                           Toast.makeText(SignUp.this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                                           startActivity(new Intent(SignUp.this, Login.class));
+                                       }
+                                       else{
+                                           Toast.makeText(SignUp.this, "Sign Up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                       }
+                                   }
+                               });
+                           }
+                           else{
+                               Toast.makeText(SignUp.this,"Contact already exists!",Toast.LENGTH_SHORT).show();
+                           }
+                       }
+                   });
 
                     loginRedirectText.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -147,12 +163,31 @@ public class SignUp extends AppCompatActivity {
 
 
     }
+    //check if the phone number exists in the firestore
+    private void checkphonenum(String phoneNum,OnQueryCompleteListener callback){
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String contact = document.getString("phonenum");
+                                if (contact == phoneNum){
+                                    callback.onQueryComplete(true);
+                                }
+                            }
+                            callback.onQueryComplete(false);
+                        }
 
+                    }
+                });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
+    //check if email is valid
     private boolean isValidEmail(String email) {
         // Email regex pattern
         String emailPattern = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";

@@ -46,6 +46,7 @@ public class LineChartFragment extends Fragment {
         this.uid = uid;
     }
 
+    // getting view and setting line chart
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,15 +56,12 @@ public class LineChartFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         Description description = new Description();
 
-// Set the text for the description label
         String yourDescriptionText = "Recent 6M";
         description.setText(yourDescriptionText);
 
-// Optionally, you can customize other properties of the description, such as text size, color, and position.
         description.setTextSize(12f); // Set the text size of the description label
         description.setTextColor(R.color.darkblue); // Set the text color of the description label
 
-// Set the description to the LineChart
         lineChart.setDescription(description);
         return rootView;
     }
@@ -76,7 +74,7 @@ public class LineChartFragment extends Fragment {
         animateDataPoints();
         animateAxis();
     }
-
+    //animation for data points
     private void animateDataPoints() {
         // Get the data object from the LineChart
         LineData data = lineChart.getData();
@@ -106,7 +104,7 @@ public class LineChartFragment extends Fragment {
             }
         }, 0);
     }
-
+    //animation for line
     private void animateAxis() {
         // Animate the X-axis with a delay to allow the chart to draw first
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -117,7 +115,7 @@ public class LineChartFragment extends Fragment {
             }
         }, 0);
     }
-
+    //setting line chart data recent amount for recent month to the left and display the last 6M of savings into the goal
     private void setLineChartData() {
         ArrayList<IndivisualGoalI> progressList = new ArrayList<IndivisualGoalI>();
         double[] monthSum = new double[6];

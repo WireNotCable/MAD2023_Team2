@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import sg.edu.np.mad.pennywise2.models.Goal;
+
 public class MainGoalProgressAdapter extends RecyclerView.Adapter<MainGoalProgressAdapter.MainProgressViewHolder> {
     private ArrayList<Goal> goalList;
     private Context context;

@@ -55,7 +55,7 @@ public class ProgressBarFragment extends Fragment {
 
         return rootView;
     }
-
+    //getting the progress data in percentage
     @Override
     public void onResume(){
         super.onResume();
@@ -77,7 +77,7 @@ public class ProgressBarFragment extends Fragment {
                     }
                 });
     }
-
+    //circular progress bar animation
     private void startAnimation() {
         // Animate ProgressBar and TextView with fadeIn and translate animations
         AnimationSet animationSet = new AnimationSet(true);

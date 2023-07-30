@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import sg.edu.np.mad.pennywise2.OnQueryCompleteListener;
 import sg.edu.np.mad.pennywise2.R;
 
 
@@ -33,6 +34,7 @@ public class CardViewFragment extends Fragment {
     public CardViewFragment(String uid) {
         this.uid = uid;
     }
+    //getting data to show current and remaining amount for goal
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_card_view,container,false);
@@ -66,6 +68,7 @@ public class CardViewFragment extends Fragment {
 
         animateTextViews();
     }
+    // card number values animation
     private void animateTextViews() {
         // Format the desiredProgress as currency with locale-specific formatting
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,6 +47,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -82,9 +85,9 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     NavigationView navigationView;
     Toolbar toolbar;
     int NUM_PAGES = 3;
-    private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CODE_PERMISSIONS = 1001;
 
-
+    //setting item views and detecting if certain items are clicked
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +138,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 //                finish();
 //            }
 //        });
+        //adding a new savings associated with the goal
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +155,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
                 alertDialogBuilder.setTitle("Create Progress");
 
                 alertDialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    //add new data to firestore once values are validated
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -208,6 +213,8 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
                 alertDialog.show();
             }
         });
+        // check if the goal has been fulfilled each time the page reloads
+        // take screen shot and play confetti animation to share to social media
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("UID")) {
             value = intent.getStringExtra("UID");
@@ -225,16 +232,18 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
                                 if (current >= amount){
                                     //animation
                                     AnimateConfetti();
-
-
-                                    Intent intent = new Intent();
-                                    intent.setAction(Intent.ACTION_SEND);
-                                    intent.putExtra(Intent.EXTRA_TEXT, "I have completed my Goal!");
-                                    intent.setType("text/plain");
-
-                                    if (intent.resolveActivity(getPackageManager()) != null){
-                                        startActivity(intent);
+                                    if (checkStoragePermission()) {
+                                        takeScreenshotAndShare();
+                                    } else {
+                                        // Request permissions
+                                            ActivityCompat.requestPermissions(Goal_Progress_Individual.this,
+                                                    new String[]{
+                                                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                            Manifest.permission.READ_EXTERNAL_STORAGE
+                                                    },
+                                                    REQUEST_CODE_PERMISSIONS);
                                     }
+
                                 }
                             }
                         }
@@ -246,7 +255,57 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
         viewPager.setAdapter(new ProgressPagerAdapter(this, value));
 
     }
+    // check if the access to gallery is allowed
+    private boolean checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            return true; // Permission is granted
+        } else {
+            return false; // Permission is not granted
+        }
+    }
+    // take screenshot
+    private void takeScreenshotAndShare() {
+        View rootView = getWindow().getDecorView().getRootView();
+        rootView.setDrawingCacheEnabled(true);
+        Bitmap screenshotBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
+        rootView.setDrawingCacheEnabled(false);
 
+        String textToAdd = "I have completed my goal!";
+
+        // Add text to the screenshot
+        if (!textToAdd.isEmpty()) {
+            screenshotBitmap = addTextToBitmap(screenshotBitmap, textToAdd);
+        }
+
+        // Share the screenshot
+        shareScreenshot(screenshotBitmap);
+    }
+    // add text to ss
+    private Bitmap addTextToBitmap(Bitmap bitmap, String text) {
+        // Add your code here to draw the text on the bitmap
+        // You can use Canvas and Paint to draw the text on the bitmap
+        // For simplicity, we'll just return the original bitmap for now
+        return bitmap;
+    }
+    //create intent to share ss
+    private void shareScreenshot(Bitmap bitmap) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/png");
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        String imagePath = MediaStore.Images.Media.insertImage(
+                getContentResolver(),
+                bitmap,
+                "screenshot",
+                "Screenshot taken with text"
+        );
+
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(imagePath));
+        startActivity(Intent.createChooser(shareIntent, "Share Screenshot"));
+    }
+    // get the goal data asscoiated to the user and goal id
     private void getData() {
         progressList.clear();
         db.collection("users").document(auth.getUid()).collection("goals").document(value).collection("savings")
@@ -270,7 +329,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 
 
     }
-
+    // viewpager carousell button creation
     private void createCarouselButtons() {
         for (int i = 0; i < NUM_PAGES; i++) {
             ImageView dot = new ImageView(this);
@@ -297,7 +356,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 
         updateCarouselButtons(0);
     }
-
+    // change page and color of carousell button when clicked
     private void updateCarouselButtons(int selectedPosition) {
         for (int i = 0; i < pagerDots.getChildCount(); i++) {
             ImageView dot = (ImageView) pagerDots.getChildAt(i);
@@ -313,7 +372,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 
 
     }
-
+    //confetti animation
     private void AnimateConfetti() {
         KonfettiView konfettiView = findViewById(R.id.konfettiView);
         Shape.DrawableShape drawableShape = new Shape.DrawableShape(AppCompatResources.getDrawable(this, R.drawable.ic_android_black_24dp), true);
@@ -330,7 +389,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
 
         );
     }
-
+    // its in the name
     private int getScreenHeight() {
         WindowManager windowManager = getWindowManager();
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -344,7 +403,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
-
+    // nav bar to show
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -353,7 +412,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
             super.onBackPressed();
         }
     }
-
+    // nav bar items clicked
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions) {
@@ -411,63 +470,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void takeScreenshotAndShare() {
-        View rootView = getWindow().getDecorView().getRootView();
-        rootView.setDrawingCacheEnabled(true);
-        Bitmap screenshot = Bitmap.createBitmap(rootView.getDrawingCache());
-        rootView.setDrawingCacheEnabled(false);
 
-        try {
-            // Save the screenshot to a file
-            File screenshotFile = saveScreenshotToFile(screenshot);
-
-            // Create a content URI for the image file
-            Uri screenshotUri = Uri.fromFile(screenshotFile);
-
-            // Prepare the sharing intent
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("image/*");
-            shareIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "I have completed my goal!");
-
-            // Show the chooser to share to social media
-            startActivity(Intent.createChooser(shareIntent, "Share via"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private File saveScreenshotToFile(Bitmap screenshot) throws IOException {
-        File directory = new File(Environment.getExternalStorageDirectory(), "Screenshots");
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        File screenshotFile = new File(directory, "screenshot.png");
-        FileOutputStream outputStream = new FileOutputStream(screenshotFile);
-        screenshot.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
-        outputStream.flush();
-        outputStream.close();
-
-        // Add the screenshot to the gallery
-        MediaStore.Images.Media.insertImage(getContentResolver(), screenshotFile.getAbsolutePath(), "Screenshot", "Screenshot taken by app");
-
-        return screenshotFile;
-    }
-
-    @RequiresApi(api = 23)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, continue with the sharing action
-                takeScreenshotAndShare();
-            } else {
-                // Permission denied, handle this case (e.g., show a message or explain why the permission is needed)
-            }
-        }
-    }
 }
 
 

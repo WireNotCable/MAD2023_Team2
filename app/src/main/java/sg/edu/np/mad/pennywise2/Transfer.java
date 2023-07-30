@@ -69,6 +69,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
+    //oncreate setting views and checking permissions manifest
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
 
     }
 
-
+    //extra code for onresume
     @Override
     protected void onResume(){
         super.onResume();
@@ -148,6 +149,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                 startActivity(intent);
             }
         });
+        //double check user exists and adding data to receiver and sender
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +192,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                 //access manifest to gain user contact
             }
         });
+        //make sure amount entered always 2dp
         amount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -215,7 +218,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         });
 
     }
-
+    //show pop up of user contacts + 3 fake contacts from user phone list
     private void showUserListDialog(){
         ArrayList<User> userList= getUserList();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -279,6 +282,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(Transfer.this));
         recyclerView.setAdapter(userAdapter);
+        //search bar to filter all contacts
         searchbar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -299,6 +303,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
 
 
     }
+    //make sure the amount transfered is not over the limit set from another function
     private void getLimit(SetLimitCallback callback){
         db.collection("users").document(auth.getUid()).collection("setlimit")
                 .limit(1)
@@ -325,6 +330,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                     }
                 });
     }
+    // make sure the user does not go over the spending limit set within the date range
     private void getRemaining(String startdate,String enddate,RemainingCallback callback){
         Date start = null;
         Date end = null;
@@ -369,7 +375,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                 });
 
     }
-    
+    // if user transferring to does not have a registered account pop up show to share the app
     private void showConfirmationDialog() {
         AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
         builder2.setTitle("User 404");
@@ -379,7 +385,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, "Download Pennywise! https://www.youtube.com/watch?v=TMw9UNXVDG0");
+                intent.putExtra(Intent.EXTRA_TEXT, "Download Pennywise! https://play.google.com/store/apps/details?id=sg.edu.np.mad.pennywise2");
                 intent.setType("text/plain");
 
                 if (intent.resolveActivity(getPackageManager()) != null){
@@ -396,6 +402,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         builder2.setCancelable(false);
         builder2.show();
     }
+    //get the user list by checking for permissions to access contacts and then adding to userList (3 fake data for testing)
     private ArrayList<User> getUserList(){
         ArrayList<User> userList = new ArrayList<User>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
@@ -443,9 +450,10 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         }
         userList.add(new User("test1","12345678"));
         userList.add(new User("test2","23456789"));
+        userList.add(new User("kohwenbin777@gmail.com","98578287"));
         return userList;
     }
-
+    //check if user exists in the firebase via contact number
     private boolean checkUserExists(String number,UserExistsCallBack callback){
         db.collection("users")
                 .whereEqualTo("phonenum",number)
@@ -455,7 +463,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
-                            boolean exists = !task.getResult().isEmpty();
+                            boolean exists = !task  .getResult().isEmpty();
                             if (exists){
                                 DocumentSnapshot document = task.getResult().getDocuments().get(0);
                                 String name = document.getString("name");
@@ -476,7 +484,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
         return false;
     }
 
-
+    // for nav bar to show
 
     @Override
     public void onBackPressed() {
@@ -486,7 +494,7 @@ public class Transfer extends AppCompatActivity implements NavigationView.OnNavi
             super.onBackPressed();
         }
     }
-
+    //when certain nav bar item is clicked
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_add_transactions){

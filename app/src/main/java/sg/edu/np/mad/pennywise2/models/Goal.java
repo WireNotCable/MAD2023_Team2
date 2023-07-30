@@ -1,4 +1,4 @@
-package sg.edu.np.mad.pennywise2;
+package sg.edu.np.mad.pennywise2.models;
 
 public class Goal {
     private String uid;

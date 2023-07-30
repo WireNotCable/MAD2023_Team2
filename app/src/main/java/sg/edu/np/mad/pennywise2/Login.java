@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
     public String MY_UID = "MyUID";
     public String MY_PASSWORD = "MyPassword";
     SharedPreferences sharedPreferences;
-
+    //view decalration and login button
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class Login extends AppCompatActivity {
         cardView = findViewById(R.id.card);
         // When login button is clicked
         loginButton.setOnClickListener(new View.OnClickListener() {
+            //check if textbox is not empty and check firestore if data inputted is valid
             @Override
             public void onClick(View v) {
                 String email = loginEmail.getText().toString();
@@ -119,6 +120,7 @@ public class Login extends AppCompatActivity {
         animateCardViewAndItems();
         createBackgroundAnimation();
     }
+    //animation of login cardview
     private void animateCardViewAndItems() {
         cardView.setTranslationY(1000f);
         cardView.setAlpha(0f);
@@ -134,6 +136,7 @@ public class Login extends AppCompatActivity {
 
         animatorSet.start();
     }
+    //animation of background gradient
     private void createBackgroundAnimation() {
         AnimationDrawable animationDrawable = (AnimationDrawable) loginLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2500);
