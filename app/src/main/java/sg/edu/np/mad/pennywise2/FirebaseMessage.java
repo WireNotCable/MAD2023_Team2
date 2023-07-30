@@ -28,8 +28,7 @@ public class FirebaseMessage extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+
         Log.v( "From: " , remoteMessage.getFrom());
 
 
@@ -38,12 +37,11 @@ public class FirebaseMessage extends FirebaseMessagingService {
             Log.v( "Notification Body: " , remoteMessage.getNotification().getBody());
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+       // PASS DATA TO sendNotification method
         sendNotification( remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
     }
 
-    private void sendNotification(String title, String body) {
+    private void sendNotification(String title, String body) {// MAKE NOTIFICATION APPEAR ON TOP
 
         String channelId = "PennyWise Channel";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -58,18 +56,6 @@ public class FirebaseMessage extends FirebaseMessagingService {
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);
         manager.notify(101, notificationBuilder.build());
     }
-
-
-//        String channelId = "fcm_default_channel";
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder =
-//                new NotificationCompat.Builder(this, channelId)
-//                        .setSmallIcon(R.drawable.clown_clear)
-//                        .setContentTitle("Penny Wise")
-//                        .setContentText(messageBody)
-//                        .setAutoCancel(true)
-//                        .setSound(defaultSoundUri)
-//                        .setContentIntent(pendingIntent);
 
 
 

@@ -122,24 +122,22 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                 intent.putExtra("StartDate", StartDate.getText().toString());
                 intent.putExtra("EndDate", EndDate.getText().toString());
 
-//                intent.putExtra("SpendLimit", SpendLimit);
-//                intent.putExtra("FallsBelow", FallsBelow);
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    public String getTodaysDate(String dateType) {
+    public String getTodaysDate(String dateType) {//Get Date base of 1st / 30th of the month
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth;
 
         ArrayList<String> monthList = new ArrayList<>(Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
-        if (dateType.equals("Start")) {
+        if (dateType.equals("Start")) {//First day
             dayOfMonth = calendar.getActualMinimum(Calendar.DAY_OF_MONTH);
-        } else if (dateType.equals("End")) {
+        } else if (dateType.equals("End")) {//Last Day
             dayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         } else {
             return "";
@@ -171,18 +169,23 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
             } else {
                 Log.e("TotalExpense", "Error getting documents: ", task.getException());
             }
+            // PROGRESS BAR
             int progress = (int)(Math.ceil(totalSpend/spendlimit *100 ) );
             progressBar.setProgress(progress);
             Log.v("Progress",String.valueOf(progress));
+
+            //CHECK IF USER OVER SPEND
             double balance = spendlimit - totalSpend;
             if (balance < fallsbelow || totalSpend > spendlimit) {
-                AvailableBalance.setTextColor(Color.RED);
+                AvailableBalance.setTextColor(Color.RED);// Warning
                 AvailableBalance.setError("You have reached your spending limit");
             }
+
+            //PROGRESS BAR PCT
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
             AvailableBalance.setText(String.valueOf(decimalFormat.format(balance) + " "));
             TextView SpendPercentage = findViewById(R.id.setlimit_percentage);
-            double pct = totalSpend/spendlimit * 100;
+            double pct = totalSpend/spendlimit * 100; // PCT Spend
 
             SpendPercentage.setText(String.valueOf(decimalFormat.format(pct))+"%");
         });
@@ -219,12 +222,6 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
 
 
                         GetTotalExpense(uid,limit.getStartdate(),limit.getEnddate(),limit.getSpendlimit(),limit.getFallsbelow());
-
-//                        SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = prefs.edit();
-//                        editor.putString(MY_STARTDATE, limit.getStartdate());
-//                        editor.putString(MY_ENDDATE, limit.getEnddate());
-//                        editor.apply();
                     }
                 }
             }
@@ -240,29 +237,6 @@ public class SetLimit extends AppCompatActivity implements NavigationView.OnNavi
                     // TODO: Inform user that that your app will not show notifications.
                 }
             });
-
-
-    // Declare the launcher at the top of your Activity/Fragment:
-//    private void Message(){
-//        FirebaseMessaging.getInstance().getToken()
-//                .addOnCompleteListener(new OnCompleteListener<String>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<String> task) {
-//                        if (!task.isSuccessful()) {
-//                            System.out.println("Fetching FCM registration token failed");
-//                            return;
-//                        }
-//
-//                        // Get new FCM registration token
-//                        String token = task.getResult();
-//
-//                        // Log and toast
-//
-//                        Log.v("TOKEN",token);
-//                        Toast.makeText(SetLimit.this, "This is your token" + token, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//    }
 
     @Override
     protected void onResume() {

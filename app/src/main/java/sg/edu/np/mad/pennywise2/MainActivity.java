@@ -369,7 +369,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void Message(){
-        FirebaseMessaging.getInstance().subscribeToTopic("News")
+        // SUBSCRIBE TO NEWS
+        //WILL RECEIVE MESSAGE FROM FIREBASE
+        FirebaseMessaging.getInstance().subscribeToTopic("News")//TOPIC SUBSCRIBED
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

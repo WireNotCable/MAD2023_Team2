@@ -67,14 +67,7 @@ public class EditSetLimit extends AppCompatActivity {
         EtSpendLimit= findViewById(R.id.editsetlimit_spendlimit);
         EtFallsBelow = findViewById(R.id.editsetlimit_warning);
 
-
-//        Intent intent = getIntent();
-//        selectedStartDate.setText(intent.getStringExtra("StartDate"));
-//        selectedEndDate.setText(intent.getStringExtra("EndDate"));
-//        EtSpendLimit.setText(intent.getStringExtra("SpendLimit"));
-//        String Fallsbelow = intent.getStringExtra("FallsBelow");
-//        EtFallsBelow.setText(Fallsbelow);
-            GetData();
+        GetData();
 
         selectedStartDate.setOnClickListener(new View.OnClickListener() {//Date Picker
             @Override
@@ -126,52 +119,52 @@ public class EditSetLimit extends AppCompatActivity {
                 int compareDate = startDate.compareTo(endDate);
                 double spendLimit = Double.parseDouble(EtSpendLimit.getText().toString());
                 double fallsbelow = Double.parseDouble(EtFallsBelow.getText().toString());
-                if(compareDate <= 0){
-                    if(!TextUtils.isEmpty(EtSpendLimit.getText()) && !TextUtils.isEmpty(EtFallsBelow.getText())) {
-                        if (spendLimit > 0 && fallsbelow > 0) {
-                            sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
-                            String uid = sharedPreferences.getString(MY_UID, "");
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                if (compareDate <= 0) {
+                    if (!TextUtils.isEmpty(EtSpendLimit.getText())) {
+                        if (!TextUtils.isEmpty(EtFallsBelow.getText())) {
+                            if (spendLimit > 0) {
+                                if (fallsbelow > 0) {
+                                    sharedPreferences = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
+                                    String uid = sharedPreferences.getString(MY_UID, "");
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                            Map<String, Object> limitData = new HashMap<>();
-                            limitData.put("startdate",startDate);
-                            limitData.put("enddate",endDate);
-                            limitData.put("limit",spendLimit);
-                            limitData.put("warning",fallsbelow);
-                            String documentId = "wqeuqiueywue";// Setting a default document Id
-                            DocumentReference documentRef = db.collection("users")
-                                    .document(uid)
-                                    .collection("setlimit")
-                                    .document(documentId);// Override Id if exist
+                                    Map<String, Object> limitData = new HashMap<>();
+                                    limitData.put("startdate", startDate);
+                                    limitData.put("enddate", endDate);
+                                    limitData.put("limit", spendLimit);
+                                    limitData.put("warning", fallsbelow);
+                                    String documentId = "wqeuqiueywue"; // Setting a default document Id
+                                    DocumentReference documentRef = db.collection("users")
+                                            .document(uid)
+                                            .collection("setlimit")
+                                            .document(documentId); // Override Id if exist
 
-                            documentRef.set(limitData, SetOptions.merge())
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show();// Show Message
-                                        Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
-                                        startActivity(intent);
-                                        finish();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.e("Firestore", "Error setting document: " + e.getMessage());
-                                    });
+                                    documentRef.set(limitData, SetOptions.merge())
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(EditSetLimit.this, "Update Successful", Toast.LENGTH_SHORT).show(); // Show Message
+                                                Intent intent = new Intent(EditSetLimit.this, SetLimit.class);
+                                                startActivity(intent);
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("Firestore", "Error setting document: " + e.getMessage());
+                                            });
+                                } else {
+                                    EtFallsBelow.setError("Warning  must be greater than 0");
+                                }
+                            } else {
+                                EtSpendLimit.setError("Spend Limit must be greater than 0");
+                            }
+                        } else {
+                            EtFallsBelow.setError("Warning must not be empty");
                         }
-                        else if (spendLimit <= 0) {
-                            EtSpendLimit.setError("Spend Limit must be greater than 0");
-
-                        } else if (fallsbelow <= 0) {
-                            EtFallsBelow.setError("Warning  must be greater than 0");
-                        }
-                    }
-                    else if(TextUtils.isEmpty(EtSpendLimit.getText())){
+                    } else {
                         EtSpendLimit.setError("Spend Limit must not be empty");
                     }
-                    else if(TextUtils.isEmpty(EtFallsBelow.getText())){
-                        EtFallsBelow.setError("Warning must no be empty");
-                    }
-                }
-                else if(compareDate > 0){
+                } else if (compareDate > 0) {
                     selectedEndDate.setError("End Date must be greater than start date");
                 }
+
 
             }
         });
@@ -203,12 +196,6 @@ public class EditSetLimit extends AppCompatActivity {
                         selectedEndDate.setText(limit.getEnddate());
                         EtSpendLimit.setText(String.valueOf(limit.getSpendlimit()));
                         EtFallsBelow.setText(String.valueOf(limit.getFallsbelow()));
-
-
-
-
-
-
                     }
                 }
             }
@@ -232,5 +219,11 @@ public class EditSetLimit extends AppCompatActivity {
         String selectedDate = dayOfMonth + "-" + monthList.get(month) + "-" + year;
         return selectedDate;
     }
+
+    private void SetLimit()
+    {
+
+    }
+
 
 }

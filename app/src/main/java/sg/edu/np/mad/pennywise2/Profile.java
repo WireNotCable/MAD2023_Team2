@@ -152,7 +152,8 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
             getDownloadUrl(imageRef);
         }).addOnFailureListener(e -> {
             // Handle any errors
-            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please add a profile pic ", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -200,7 +201,6 @@ public class Profile extends AppCompatActivity implements NavigationView.OnNavig
                             String email = prefs.getString(MY_EMAIL, "");
                             // Pass the name to the dialog view
                             TextView profilepic_name = dialogView.findViewById(R.id.profilepic_name);
-                            String name = email.split("@")[0];
                             profilepic_name.setText(documentSnapshot.getString("name"));
 
                             // Pass the username to the dialog view

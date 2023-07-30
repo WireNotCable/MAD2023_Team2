@@ -161,7 +161,7 @@ public class Stats extends AppCompatActivity implements NavigationView.OnNavigat
 
                 monthlySpendArrayList = new ArrayList();
 
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 12; i++) {// ACCORDING TO MONTH
                     double monthSpend = 0.0;
 
                     for (DocumentSnapshot document : documents) {
