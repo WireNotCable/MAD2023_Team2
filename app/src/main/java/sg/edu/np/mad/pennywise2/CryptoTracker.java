@@ -61,7 +61,7 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crypto_tracker);
 
-        //NAV BAR
+        //Nav bar
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         nav_toolbar = findViewById(R.id.toolbar);
@@ -80,14 +80,11 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
 
-//        Toolbar toolbar = findViewById(R.id.crypto_toolbar);
-//        setSupportActionBar(toolbar);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         searchEdt = findViewById(R.id.idEdtSearch);
         currenciesRV = findViewById(R.id.idRVCurrencies);
-//        progressBar = findViewById(R.id.progressBar);
         modelCryptos = new ArrayList<>();
         adapterCrypto = new CryptoAdaptor(modelCryptos,this);
         currenciesRV.setLayoutManager(new LinearLayoutManager(this));
@@ -125,14 +122,13 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
     }
 
     private void getCurrencyData() {
-//        progressBar.setVisibility(View.VISIBLE);
         String url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-//                progressBar.setVisibility(View.GONE);
                 try {
+                    //gets the API data and stores in the arraylist
                     JSONArray dataArray = response.getJSONArray("data");
                     for (int i=0; i<dataArray.length(); i++) {
                         JSONObject dataObj = dataArray.getJSONObject(i);
@@ -177,11 +173,13 @@ public class CryptoTracker extends AppCompatActivity implements NavigationView.O
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //test if data is gotten or failed
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(CryptoTracker.this, "Fail to get the data.", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
+            //API key and url for API details and data
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> header = new HashMap<>();
                 header.put("X-CMC_PRO_API_KEY","2df2c2a9-5e14-457c-9bab-618931401512");

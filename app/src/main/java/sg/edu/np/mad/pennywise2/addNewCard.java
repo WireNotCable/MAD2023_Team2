@@ -32,6 +32,7 @@ public class addNewCard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //get card details by auto generating so as to not get actual card details first
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_card);
         ImageView homeBtn = findViewById(R.id.makecardBtn);
@@ -90,7 +91,7 @@ public class addNewCard extends AppCompatActivity {
                 NameCard.setError("Please input a name for your new card!");
            }
 
-
+//Validation commented out because code for adding new card where inputting numbers is allowed is commented out
 //                if(NameCard.length()==0){
 //                    Toast.makeText(getApplicationContext(),"Enter A Name.",Toast.LENGTH_SHORT).show();
 //                }
