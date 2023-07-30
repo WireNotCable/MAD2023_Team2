@@ -109,7 +109,7 @@ public class SignUp extends AppCompatActivity {
                     signupName.setError("Name cannot be empty");
                 }
                 else{
-                   checkphonenum(phoneNum, new OnQueryCompleteListener() {
+                   checkphonenum(phoneNum.trim(), new OnQueryCompleteListener() {
                        @Override
                        public void onQueryComplete(boolean hasMatchingDocument) {
                            if (!hasMatchingDocument){
@@ -173,7 +173,7 @@ public class SignUp extends AppCompatActivity {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String contact = document.getString("phonenum");
-                                if (contact == phoneNum){
+                                if (contact.equalsIgnoreCase(phoneNum)){
                                     callback.onQueryComplete(true);
                                 }
                             }

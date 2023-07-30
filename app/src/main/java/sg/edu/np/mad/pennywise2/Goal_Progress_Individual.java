@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -232,17 +233,24 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
                                 if (current >= amount){
                                     //animation
                                     AnimateConfetti();
-                                    if (checkStoragePermission()) {
-                                        takeScreenshotAndShare();
-                                    } else {
-                                        // Request permissions
-                                            ActivityCompat.requestPermissions(Goal_Progress_Individual.this,
-                                                    new String[]{
-                                                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                            Manifest.permission.READ_EXTERNAL_STORAGE
-                                                    },
-                                                    REQUEST_CODE_PERMISSIONS);
-                                    }
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (checkStoragePermission()) {
+                                                takeScreenshotAndShare();
+                                            } else {
+                                                // Request permissions
+                                                ActivityCompat.requestPermissions(Goal_Progress_Individual.this,
+                                                        new String[]{
+                                                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                                Manifest.permission.READ_EXTERNAL_STORAGE
+                                                        },
+                                                        REQUEST_CODE_PERMISSIONS);
+                                            }
+                                        }
+                                    }, 5000);
+
 
                                 }
                             }
