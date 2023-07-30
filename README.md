@@ -67,6 +67,8 @@ Tasks/features of each student:
 ## Stage 2
 * Ong Xin Yin - S10243745
     * Google maps to locate nearby banks/atms and find route
+    * improve ui
+      
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
     * Splash Screen
@@ -74,10 +76,10 @@ Tasks/features of each student:
 * Koh Wen Bin - S10242132
     * View Income/Expense Statistics
     * Smart notifications remind user to use the app
+      
 * Koay Yeow Teik - S10242544
-    * Improve the account sign up interface/make sure user email is legit by sending an actual email
-    * financial goal tracking with milestones to track ( may require a savings feature )
-    * Rewards programme
+    * Improve the account sign up interface
+    * financial goal tracking 
 
 
 ## Acknowledgments
