@@ -246,6 +246,12 @@ public class ViewAllTransactions extends AppCompatActivity implements ViewTransR
         // Set the selected item every time the activity is brought to the foreground
         navigationView.setCheckedItem(R.id.nav_view_transactions);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

@@ -23,6 +23,7 @@ import sg.edu.np.mad.pennywise2.models.CryptoModel;
 public class CryptoAdaptor extends RecyclerView.Adapter<CryptoViewholder> {
 
     private ArrayList<CryptoModel> CryptoModels;
+    //stores crypto data that is  being obtained
     public CryptoAdaptor(ArrayList<CryptoModel> CryptoModels){
         this.CryptoModels = CryptoModels;
     }

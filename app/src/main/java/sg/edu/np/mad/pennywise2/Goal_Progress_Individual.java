@@ -368,7 +368,7 @@ public class Goal_Progress_Individual extends AppCompatActivity implements Navig
     @Override
     public void onResume() {
         super.onResume();
-
+        navigationView.setCheckedItem(R.id.nav_goal);
 
 
     }

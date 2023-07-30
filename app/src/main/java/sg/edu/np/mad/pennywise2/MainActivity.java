@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
+    // 3 buttons in the middle to go to other pages
     public void threeMiddleButtons(){
         ImageButton addtrans = findViewById(R.id.home_addtran);
         addtrans.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    // get card number from firebase
     public void getCardNum() {
         SharedPreferences prefs = getSharedPreferences(GLOBAL_PREFS, MODE_PRIVATE);
         String uid = prefs.getString(MY_UID, "");
@@ -369,7 +370,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void Message(){
-        FirebaseMessaging.getInstance().subscribeToTopic("News")
+        // SUBSCRIBE TO NEWS
+        //WILL RECEIVE MESSAGE FROM FIREBASE
+        FirebaseMessaging.getInstance().subscribeToTopic("News")//TOPIC SUBSCRIBED
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

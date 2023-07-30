@@ -23,6 +23,7 @@ public class CryptoViewholder extends RecyclerView.ViewHolder {
 
 
         symbol.setOnClickListener(new View.OnClickListener(){
+            //get the details everytime the different currencies are clicked and proceeds to the next page
                                       public void onClick(View v){
                                           Intent profile = new Intent(itemView.getContext(),CryptoDetails.class);
                                           CryptoModel cryptoObject = CryptoModels.get(getAdapterPosition());

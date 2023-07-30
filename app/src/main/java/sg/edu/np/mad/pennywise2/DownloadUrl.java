@@ -9,9 +9,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+// Retrieve locations data from URL
 public class DownloadUrl {
     public String retrieveUrl(String url) throws IOException{
-        String urlData = "";
+        String urlData = ""; // Store the retrieved data
         HttpURLConnection httpURLConnection = null;
         InputStream inputStream = null;
         try{
@@ -25,13 +26,14 @@ public class DownloadUrl {
 
             String line = "";
             while ((line = bufferedReader.readLine())!=null){
-                sb.append(line);
+                sb.append(line); // Append each line of data to the StringBuffer
             }
             urlData = sb.toString();
             bufferedReader.close();
         } catch (Exception e){
             Log.d("Exception", e.toString());
         }finally{
+            // Ensure that the InputStream and HttpURLConnection are closed properly
             if (inputStream != null) {
                 inputStream.close();
             }

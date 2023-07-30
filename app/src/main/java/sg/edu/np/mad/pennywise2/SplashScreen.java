@@ -43,6 +43,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //displays the splash page
                 Intent intent = new Intent(SplashScreen.this, Login.class);
                 startActivity(intent);
                 finish();

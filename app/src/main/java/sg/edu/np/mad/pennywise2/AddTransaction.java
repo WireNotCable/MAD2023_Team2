@@ -178,6 +178,8 @@ public class AddTransaction extends AppCompatActivity implements NavigationView.
         // Set the selected item every time the activity is brought to the foreground
         navigationView.setCheckedItem(R.id.nav_add_transactions);
     }
+
+    // NAVBAR
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

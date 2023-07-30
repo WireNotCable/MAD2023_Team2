@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -49,6 +50,7 @@ public class Login extends AppCompatActivity {
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
         signupRedirectText = findViewById(R.id.signupRedirectText);
+        signupRedirectText.setPaintFlags(signupRedirectText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         loginLayout = findViewById(R.id.login_Layout);
         cardView = findViewById(R.id.card);
         // When login button is clicked
