@@ -68,6 +68,7 @@ Tasks/features of each student:
 * Ong Xin Yin - S10243745
     * Google maps to locate nearby banks/atms and find route
     * improve ui
+    * Firebase Firestore clean up
       
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
@@ -78,8 +79,13 @@ Tasks/features of each student:
     * Smart notifications remind user to use the app
       
 * Koay Yeow Teik - S10242544
-    * Improve the account sign up interface
-    * financial goal tracking 
+    * Improve UI
+    * Ability to screenshot and share to social media
+    * Access contacts and photos with read write
+    * Goal Progress feature with progress bar, line chart and subsequent animations
+    * Usage of AlertDialog and Fragment 
+    * External libraries such as chart, progress bar and confetti animation.
+    * More firebase firestore data handling and manipulation
 
 
 ## Acknowledgments
