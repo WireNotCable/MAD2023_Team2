@@ -66,13 +66,10 @@ Tasks/features of each student:
 
 ## Stage 2
 * Ong Xin Yin - S10243745
-    * Export transactions as csv
-    * Dark/Light mode
-    * Recurring transaction record
+    * Google maps to locate nearby banks/atms and find route
 * Kenan Chia - S10242837
     * Crypto Currency Tracker
     * Splash Screen
-    * Multiple cards feature (still undecided)
 
 * Koh Wen Bin - S10242132
     * View Income/Expense Statistics
@@ -81,7 +78,6 @@ Tasks/features of each student:
     * Improve the account sign up interface/make sure user email is legit by sending an actual email
     * financial goal tracking with milestones to track ( may require a savings feature )
     * Rewards programme
-    * Text recognition 
 
 
 ## Acknowledgments
