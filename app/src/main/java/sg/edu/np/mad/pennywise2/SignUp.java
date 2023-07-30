@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -74,7 +75,7 @@ public class SignUp extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_button);
         loginRedirectText = findViewById(R.id.loginRedirectText);
 
-
+        loginRedirectText.setPaintFlags(loginRedirectText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

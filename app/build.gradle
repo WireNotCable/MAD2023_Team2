@@ -66,6 +66,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:4.0.0'
     implementation 'nl.dionsegijn:konfetti-xml:2.0.0@aar'
     implementation 'nl.dionsegijn:konfetti-core:2.0.2'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.0'
+
     //Bar Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Add the dependencies for the Firebase Cloud Messaging and Analytics libraries
